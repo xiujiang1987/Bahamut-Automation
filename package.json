@@ -3,10 +3,11 @@
     "version": "1.0.0",
     "description": "",
     "main": "index.js",
-    "type": "module",
+    "type": "commonjs",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "build": "rollup action.js --file action.bundled.js"
+        "build": "rollup action.js --file action.bundled.js",
+        "ncc": "ncc build action.js"
     },
     "repository": {
         "type": "git",
@@ -25,6 +26,7 @@
         "puppeteer-core": "^10.0.0"
     },
     "devDependencies": {
+        "@vercel/ncc": "^0.28.6",
         "rollup": "^2.52.3"
     }
 }
