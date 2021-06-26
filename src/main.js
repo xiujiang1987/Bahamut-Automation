@@ -27,7 +27,7 @@ async function main(args) {
         browser = await puppeteer.launch({
             executablePath: "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
             userDataDir: "./.data",
-            headless: HEADLESS,
+            headless: true,
             defaultViewport: {
                 width: 1000,
                 height: 800,
