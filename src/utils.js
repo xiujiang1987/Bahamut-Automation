@@ -1,4 +1,4 @@
-import fs from "fs";
+const fs = require("fs");
 
 function sleep(t = 1000) {
     return new Promise((r) => {

@@ -5,7 +5,8 @@
     "main": "index.js",
     "type": "module",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "build": "rollup action.js --file action.bundled.js"
     },
     "repository": {
         "type": "git",
@@ -22,5 +23,8 @@
         "@actions/core": "^1.4.0",
         "@actions/github": "^5.0.0",
         "puppeteer-core": "^10.0.0"
+    },
+    "devDependencies": {
+        "rollup": "^2.52.3"
     }
 }

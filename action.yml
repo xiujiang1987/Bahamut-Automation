@@ -27,4 +27,4 @@ inputs:
     default: "false"
 runs:
   using: "node12"
-  main: "action.js --experimental-modules"
+  main: "action.bundled.js"

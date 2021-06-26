@@ -1,5 +1,5 @@
-import puppeteer from "puppeteer";
-import fs from "fs";
+const puppeteer = require("puppeteer");
+const fs = require("fs");
 import { bahamut_login } from "./login.js";
 import { sign_automation } from "./sign.js";
 import { draw_automation } from "./fuli.js";
