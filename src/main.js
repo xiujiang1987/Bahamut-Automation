@@ -1,0 +1,55 @@
+import puppeteer from "puppeteer";
+import fs from "fs";
+import { bahamut_login } from "./login.js";
+import { sign_automation } from "./sign.js";
+import { draw_automation } from "./fuli.js";
+
+let browser;
+
+async function main(args) {
+    if (!fs.existsSync("./log/")) fs.mkdirSync("./log/");
+    if (!fs.existsSync("./screenshot/")) fs.mkdirSync("./screenshot/");
+    log("\n==========\n");
+
+    let { USERNAME, PASSWORD, AUTO_SIGN, AUTO_SIGN_DOUBLE, AUTO_DRAW, AUTO_ANSWER_ANIME } = args;
+
+    if (!USERNAME) console.error(`缺少巴哈姆特帳號`);
+    if (!PASSWORD) console.error(`缺少巴哈姆特密碼`);
+
+    AUTO_SIGN = AUTO_SIGN == "true" || AUTO_SIGN == "1" || false;
+    AUTO_SIGN_DOUBLE = AUTO_SIGN_DOUBLE == "true" || AUTO_SIGN_DOUBLE == "1" || false;
+    AUTO_DRAW = AUTO_DRAW == "true" || AUTO_DRAW == "1" || false;
+    AUTO_ANSWER_ANIME = AUTO_ANSWER_ANIME == "true" || AUTO_ANSWER_ANIME == "1" || false;
+
+    console.log(JSON.stringify({ AUTO_SIGN, AUTO_SIGN_DOUBLE, AUTO_DRAW, AUTO_ANSWER_ANIME }, null, 4));
+
+    if (AUTO_SIGN || AUTO_DRAW || AUTO_ANSWER_ANIME) {
+        browser = await puppeteer.launch({
+            executablePath: "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+            userDataDir: "./.data",
+            headless: HEADLESS,
+            defaultViewport: {
+                width: 1000,
+                height: 800,
+                isMobile: false,
+            },
+            args: ["--disable-web-security", "--disable-features=IsolateOrigins,site-per-process"],
+        });
+
+        await bahamut_login({ browser, USERNAME, PASSWORD });
+    }
+
+    if (AUTO_SIGN) {
+        await sign_automation({ browser, AUTO_SIGN_DOUBLE });
+    }
+
+    if (AUTO_ANSWER_ANIME) {
+        null;
+    }
+
+    if (AUTO_DRAW) {
+        await draw_automation({ browser });
+    }
+}
+
+export { main };
