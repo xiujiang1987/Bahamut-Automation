@@ -1,4 +1,4 @@
-import { log, err_handler } from "./utils.js";
+const { log, err_handler } = require("./utils.js");
 
 async function sign_automation({ browser, AUTO_SIGN_DOUBLE }) {
     log(`開始執行自動簽到程序`);
@@ -56,4 +56,4 @@ async function sign_automation({ browser, AUTO_SIGN_DOUBLE }) {
     log(`自動簽到程序已完成`);
 }
 
-export { sign_automation };
+exports.sign_automation = sign_automation;

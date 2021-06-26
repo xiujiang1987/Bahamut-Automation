@@ -17,4 +17,5 @@ async function err_handler(err, page = null) {
     if (page) await page.screenshot({ path: `./screenshot/.err.${time}.jpg`, type: "jpeg" });
 }
 
-export { log, err_handler };
+exports.log = log;
+exports.err_handler = err_handler;

@@ -1,6 +1,6 @@
 const core = require("@actions/core");
 // const github = require("@actions/github");
-import { main } from "./src/main.js";
+const { main } = require("./src/main.js");
 
 (async () => {
     try {

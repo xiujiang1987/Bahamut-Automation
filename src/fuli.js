@@ -1,4 +1,4 @@
-import { log, err_handler } from "./utils.js";
+const { log, err_handler } = require("./utils.js");
 
 async function draw_automation({ browser }) {
     log(`開始執行福利社自動抽抽樂程序`);
@@ -83,4 +83,4 @@ async function draw_automation({ browser }) {
     log(`福利社自動抽抽樂程序已完成`);
 }
 
-export { draw_automation };
+exports.draw_automation = draw_automation;

@@ -1,4 +1,4 @@
-import { log, err_handler } from "./utils.js";
+const { log, err_handler } = require("./utils.js");
 
 async function bahamut_login({ browser, USERNAME, PASSWORD }) {
     log(`開始執行帳號登入程序`);
@@ -31,4 +31,4 @@ async function bahamut_login({ browser, USERNAME, PASSWORD }) {
     log(`帳號登入程序已完成`);
 }
 
-export { bahamut_login };
+exports.bahamut_login = bahamut_login;

@@ -1,8 +1,8 @@
-const puppeteer = require("puppeteer");
+const puppeteer = require("puppeteer-core");
 const fs = require("fs");
-import { bahamut_login } from "./login.js";
-import { sign_automation } from "./sign.js";
-import { draw_automation } from "./fuli.js";
+const { bahamut_login } = require("./login.js");
+const { sign_automation } = require("./sign.js");
+const { draw_automation } = require("./fuli.js");
 
 let browser;
 
@@ -52,4 +52,4 @@ async function main(args) {
     }
 }
 
-export { main };
+exports.main = main;
