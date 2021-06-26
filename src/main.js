@@ -1,5 +1,6 @@
 const puppeteer = require("puppeteer-core");
 const fs = require("fs");
+const { log, err_handler } = require("./utils.js");
 const { bahamut_login } = require("./login.js");
 const { sign_automation } = require("./sign.js");
 const { draw_automation } = require("./fuli.js");
