@@ -12,7 +12,6 @@ async function answer_anime_automation({ browser }) {
     let question = await page.evaluate(() => {
         return fetch("/ajax/animeGetQuestion.php?t=" + Date.now()).then((r) => r.json());
     });
-    console.log(question);
 
     if (question.question) {
         log("尚未回答今日題目，嘗試答題中");
