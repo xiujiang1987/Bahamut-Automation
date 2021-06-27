@@ -14,7 +14,7 @@ async function sign_automation({ browser, AUTO_SIGN_DOUBLE }) {
     log("已簽到！");
 
     await page.waitForTimeout(1000);
-    log(`自動簽到程序已完成`);
+    log(`自動簽到程序已完成\n`);
 
     if (AUTO_SIGN_DOUBLE) {
         log(`開始執行自動觀看雙倍簽到獎勵廣告程序`);
@@ -49,11 +49,10 @@ async function sign_automation({ browser, AUTO_SIGN_DOUBLE }) {
             log("雙倍簽到獎勵狀態: 已獲得雙倍簽到獎勵");
         }
 
-        log(`自動觀看雙倍簽到獎勵廣告程序已完成`);
+        log(`自動觀看雙倍簽到獎勵廣告程序已完成\n`);
     }
 
     await page.close();
-    log(`自動簽到程序已完成`);
 }
 
 exports.sign_automation = sign_automation;

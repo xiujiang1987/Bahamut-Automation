@@ -28,7 +28,7 @@ async function bahamut_login({ browser, USERNAME, PASSWORD }) {
     }
 
     await page.close();
-    log(`帳號登入程序已完成`);
+    log(`帳號登入程序已完成\n`);
 }
 
 exports.bahamut_login = bahamut_login;

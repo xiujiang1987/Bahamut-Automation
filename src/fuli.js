@@ -71,17 +71,17 @@ async function draw_automation({ browser }) {
                 await page.waitForTimeout(800);
                 await page.click("#dialogify_1 > form > div > div > div.btn-box.text-right > button.btn.btn-insert.btn-primary");
                 await page.waitForNavigation().catch(err_handler);
-                log("等待中");
                 await page.waitForTimeout(1500);
                 await page.click("div.wrapper.wrapper-prompt > div > div > div.form__buttonbar > button");
-                await page.waitForNavigation().catch(err_handler);
+                await page.waitForTimeout(3000);
                 log("已完成一次抽抽樂：" + name);
             }
         }
     }
 
     await page.waitForTimeout(2000);
-    log(`福利社自動抽抽樂程序已完成`);
+    await page.close();
+    log(`福利社自動抽抽樂程序已完成\n`);
 }
 
 exports.draw_automation = draw_automation;
