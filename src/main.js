@@ -51,6 +51,8 @@ async function main(args) {
     if (AUTO_DRAW) {
         await draw_automation({ browser });
     }
+
+    if (browser) await browser.close();
 }
 
 exports.main = main;
