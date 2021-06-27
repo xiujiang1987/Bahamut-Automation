@@ -71,6 +71,7 @@ async function draw_automation({ browser }) {
                 await page.waitForTimeout(800);
                 await page.click("#dialogify_1 > form > div > div > div.btn-box.text-right > button.btn.btn-insert.btn-primary");
                 await page.waitForNavigation().catch(err_handler);
+                log("等待中");
                 await page.waitForTimeout(1500);
                 await page.click("div.wrapper.wrapper-prompt > div > div > div.form__buttonbar > button");
                 await page.waitForNavigation().catch(err_handler);
