@@ -1,5 +1,12 @@
 name: "Bahamut Automation"
 description: "巴哈姆特自動化！"
+author: "JacobLinCool"
+branding:
+  icon: "check-square"
+  color: "blue"
+runs:
+  using: "node12"
+  main: "action.js"
 inputs:
   username:
     description: "巴哈姆特帳號 (建議使用 Secret)"
@@ -25,6 +32,3 @@ inputs:
     description: "啟用動畫瘋自動答題"
     required: true
     default: "false"
-runs:
-  using: "node12"
-  main: "action.js"
