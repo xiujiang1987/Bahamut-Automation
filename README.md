@@ -1,6 +1,8 @@
 # Bahamut Automation Action
 巴哈姆特自動化！
 
+使用 GitHub 來幫你自動簽到、自動回答動畫瘋問題、自動抽抽樂！
+
 ## 使用方法
 
 1. [使用 Template 來建立 Repository](https://github.com/JacobLinCool/Bahamut-Automation-Template/generate)
@@ -46,3 +48,8 @@
 **Required** 啟用動畫瘋自動答題
 
 預設：`false`
+
+## 聲明
+我不能保證程式一定會如期執行，也不能保證程式會成功執行，有時 GitHub 會自己吃掉。
+
+如果你發現什麼 Bug 之類的東西，或是有新的想法，歡迎[到 Action 的 Repo 發 Issue](https://github.com/JacobLinCool/Bahamut-Automation/issues)。
