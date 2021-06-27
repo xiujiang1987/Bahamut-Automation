@@ -2,10 +2,11 @@ const { log, err_handler } = require("./utils.js");
 
 async function draw_automation({ browser }) {
     log(`開始執行福利社自動抽抽樂程序`);
+    let count = 0;
 
     log("正在尋找抽抽樂");
     let page = await browser.newPage();
-    await page.goto("https://fuli.gamer.com.tw/");
+    await page.goto("https://fuli.gamer.com.tw/shop.php");
     let items = await page.$$(".type-tag ");
     for (let i = items.length - 1; i >= 0; i--) {
         let is_draw = await items[i].evaluate((node) => node.innerHTML === "抽抽樂");
@@ -15,7 +16,7 @@ async function draw_automation({ browser }) {
 
     for (let idx = 0; idx < items.length; idx++) {
         log(`正在嘗試執行第 ${idx + 1} 個抽抽樂`);
-        await page.goto("https://fuli.gamer.com.tw/").catch(err_handler);
+        await page.goto("https://fuli.gamer.com.tw/shop.php").catch(err_handler);
         items = await page.$$(".type-tag ");
         for (let i = items.length - 1; i >= 0; i--) {
             let is_draw = await items[i].evaluate((node) => node.innerHTML === "抽抽樂");
@@ -24,7 +25,8 @@ async function draw_automation({ browser }) {
         items[idx].click().catch(err_handler);
         await page.waitForNavigation().catch(err_handler);
 
-        while (true) {
+        let limitation = 100;
+        while (limitation--) {
             await page.waitForTimeout(2000);
 
             if (await page.$(".btn-base.c-accent-o.is-disable")) {
@@ -75,6 +77,7 @@ async function draw_automation({ browser }) {
                 await page.click("div.wrapper.wrapper-prompt > div > div > div.form__buttonbar > button");
                 await page.waitForTimeout(3000);
                 log("已完成一次抽抽樂：" + name);
+                count++;
             }
         }
     }
@@ -82,6 +85,8 @@ async function draw_automation({ browser }) {
     await page.waitForTimeout(2000);
     await page.close();
     log(`福利社自動抽抽樂程序已完成\n`);
+
+    return { count };
 }
 
 exports.draw_automation = draw_automation;
