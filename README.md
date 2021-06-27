@@ -3,37 +3,11 @@
 
 ## 使用方法
 
-1. 在 GitHub 上建立一個新的 Repository
-2. 於 Repo 的 Settings 頁面中的 Secrets 分頁新增兩個 `Secret`
+1. [使用 Template 來建立 Repository](https://github.com/JacobLinCool/Bahamut-Automation-Template/generate)
+2. 於新建立的 Repo 的 Settings > Secrets 分頁新增兩個 `Secret`
    1. `USERNAME`: 你的巴哈姆特帳號
    2. `PASSWORD`: 你的巴哈姆特密碼
-3. 在 Repo Root 建立 `.github` 資料夾
-4. 在 `.github` 資料夾中建立 `workflows` 資料夾
-5. 在 `workflows` 資料夾中建立 `automation.yml` 並在其中貼上以下程式碼
-
-```
-name: 自動化
-
-on:
-  schedule:
-    - cron: "0 17 * * *"
-  workflow_dispatch:
-
-jobs:
-  automation:
-    name: 自動化
-    runs-on: macos-latest
-    steps:
-      - name: Bahamut Automation
-        uses: JacobLinCool/Bahamut-Automation@v0.1
-        with:
-          username: ${{ secrets.USERNAME }}
-          password: ${{ secrets.PASSWORD }}
-          auto_sign: "true"
-          auto_sign_double: "true"
-          auto_draw: "true"
-          auto_answer_anime: "true"
-```
+3. 完成，詳細內容可以看看新建立的 Repo 的 README.md
 
 ## 輸入參數
 
