@@ -9,6 +9,7 @@ const { draw_automation } = require("./fuli.js");
 let browser;
 
 async function main(args) {
+    const result = {};
     if (!fs.existsSync("./log/")) fs.mkdirSync("./log/");
     if (!fs.existsSync("./screenshot/")) fs.mkdirSync("./screenshot/");
     log("\n==========");
@@ -18,7 +19,7 @@ async function main(args) {
 
     if (!USERNAME) console.error(`缺少巴哈姆特帳號`);
     if (!PASSWORD) console.error(`缺少巴哈姆特密碼`);
-    
+
     if (USERNAME && PASSWORD) {
         AUTO_SIGN = AUTO_SIGN == "true" || AUTO_SIGN == "1" || false;
         AUTO_SIGN_DOUBLE = AUTO_SIGN_DOUBLE == "true" || AUTO_SIGN_DOUBLE == "1" || false;
@@ -53,13 +54,14 @@ async function main(args) {
         }
 
         if (AUTO_DRAW) {
-            await draw_automation({ browser });
+            result.draws = (await draw_automation({ browser })).count;
         }
 
         if (browser) await browser.close();
     }
 
     log("巴哈姆特自動化已執行完畢！感謝您的使用！\n");
+    return result;
 }
 
 exports.main = main;

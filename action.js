@@ -18,7 +18,9 @@ const { main } = require("./src/main.js");
             AUTO_SIGN_DOUBLE,
             AUTO_DRAW,
             AUTO_ANSWER_ANIME,
-        }).catch((error) => core.setFailed(error.message));
+        })
+            .then(console.log)
+            .catch((error) => core.setFailed(error.message));
     } catch (error) {
         core.setFailed(error.message);
     }
