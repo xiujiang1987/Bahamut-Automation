@@ -1,11 +1,10 @@
 const fetch = require("node-fetch");
 const { log, err_handler } = require("./utils.js");
 
-async function answer_anime_automation({ browser }) {
+async function answer_anime_automation({ page }) {
     log(`開始執行動畫瘋自動答題程序`);
 
     log("正在檢測答題狀態");
-    let page = await browser.newPage();
     await page.goto("https://ani.gamer.com.tw/");
     await page.waitForTimeout(500);
 
@@ -62,7 +61,6 @@ async function answer_anime_automation({ browser }) {
     }
 
     await page.waitForTimeout(1000);
-    await page.close();
     log(`動畫瘋自動答題程序已完成\n`);
 }
 

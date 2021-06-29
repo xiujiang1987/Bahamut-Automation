@@ -6,7 +6,7 @@ const { sign_automation } = require("./sign.js");
 const { answer_anime_automation } = require("./anser_anime.js");
 const { draw_automation } = require("./fuli.js");
 
-let browser;
+let browser, UserAgent;
 
 async function main(args) {
     const result = {};
@@ -41,20 +41,29 @@ async function main(args) {
                 },
                 args: ["--disable-web-security", "--disable-features=IsolateOrigins,site-per-process"],
             });
+            UserAgent = (await browser.userAgent()).replace("HeadlessChrome", "Chrome");
 
-            await bahamut_login({ browser, USERNAME, PASSWORD });
+            let page = await new_page();
+            await bahamut_login({ page, USERNAME, PASSWORD });
+            await page.close();
         }
 
         if (AUTO_SIGN) {
-            await sign_automation({ browser, AUTO_SIGN_DOUBLE });
+            let page = await new_page();
+            await sign_automation({ page, AUTO_SIGN_DOUBLE });
+            await page.close();
         }
 
         if (AUTO_ANSWER_ANIME) {
-            await answer_anime_automation({ browser });
+            let page = await new_page();
+            await answer_anime_automation({ page });
+            await page.close();
         }
 
         if (AUTO_DRAW) {
-            result.draws = (await draw_automation({ browser })).count;
+            let page = await new_page();
+            result.draws = (await draw_automation({ page })).count;
+            await page.close();
         }
 
         if (browser) await browser.close();
@@ -62,6 +71,12 @@ async function main(args) {
 
     log("巴哈姆特自動化已執行完畢！感謝您的使用！\n");
     return result;
+}
+
+async function new_page() {
+    let page = await browser.newPage();
+    await page.setUserAgent(UserAgent);
+    return page;
 }
 
 exports.main = main;

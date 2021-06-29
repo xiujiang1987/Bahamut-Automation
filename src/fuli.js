@@ -1,11 +1,10 @@
 const { log, err_handler } = require("./utils.js");
 
-async function draw_automation({ browser }) {
+async function draw_automation({ page }) {
     log(`開始執行福利社自動抽抽樂程序`);
     let count = 0;
 
     log("正在尋找抽抽樂");
-    let page = await browser.newPage();
     await page.goto("https://fuli.gamer.com.tw/shop.php");
     let items = await page.$$(".type-tag ");
     for (let i = items.length - 1; i >= 0; i--) {
@@ -83,7 +82,6 @@ async function draw_automation({ browser }) {
     }
 
     await page.waitForTimeout(2000);
-    await page.close();
     log(`福利社自動抽抽樂程序已完成\n`);
 
     return { count };

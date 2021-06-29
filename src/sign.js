@@ -1,10 +1,9 @@
 const { log, err_handler } = require("./utils.js");
 
-async function sign_automation({ browser, AUTO_SIGN_DOUBLE }) {
+async function sign_automation({ page, AUTO_SIGN_DOUBLE }) {
     log(`開始執行自動簽到程序`);
 
     log("正在嘗試簽到");
-    let page = await browser.newPage();
     await page.goto("https://www.gamer.com.tw/");
     await page.waitForTimeout(2000);
 
@@ -51,8 +50,6 @@ async function sign_automation({ browser, AUTO_SIGN_DOUBLE }) {
 
         log(`自動觀看雙倍簽到獎勵廣告程序已完成\n`);
     }
-
-    await page.close();
 }
 
 exports.sign_automation = sign_automation;

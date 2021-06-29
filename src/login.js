@@ -1,10 +1,9 @@
 const { log, err_handler } = require("./utils.js");
 
-async function bahamut_login({ browser, USERNAME, PASSWORD }) {
+async function bahamut_login({ page, USERNAME, PASSWORD }) {
     log(`開始執行帳號登入程序`);
 
     log("正在檢測登入狀態");
-    let page = await browser.newPage();
     await page.goto("https://www.gamer.com.tw/");
     await page.waitForTimeout(2000);
 
@@ -27,7 +26,6 @@ async function bahamut_login({ browser, USERNAME, PASSWORD }) {
         log("登入狀態: 已登入");
     }
 
-    await page.close();
     log(`帳號登入程序已完成\n`);
 }
 
