@@ -83,7 +83,7 @@ async function draw_automation({ page }) {
                 await page.waitForTimeout(5000);
             }
 
-            let cost = await page.$eval("#buyD", (node) => !node.innerText.includes("廣告抽獎券"));
+            let cost = false; //await page.$eval("#buyD", (node) => !node.innerText.includes("廣告抽獎券"));
             if (!cost) {
                 await page.click("#agree-confirm").catch(err_handler);
                 await page.waitForTimeout(500);
