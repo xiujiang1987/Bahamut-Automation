@@ -83,7 +83,7 @@ async function draw_automation({ page }) {
                 await page.waitForTimeout(5000);
             }
 
-            let cost = await page.$eval("#buyD > div:nth-child(3) > p.pbox-content-r > #total-gold", (node) => !node.innerText.includes("廣告抽獎券"));
+            let cost = await page.$eval("#buyD", (node) => !node.innerText.includes("廣告抽獎券"));
             if (!cost) {
                 await page.click("#agree-confirm").catch(err_handler);
                 await page.waitForTimeout(500);
@@ -96,7 +96,10 @@ async function draw_automation({ page }) {
                 await page.waitForTimeout(3000);
                 log("已完成一次抽抽樂：" + name);
                 count++;
+                continue;
             }
+
+            await page.goto(draws[idx].link).catch(err_handler);
         }
     }
 
