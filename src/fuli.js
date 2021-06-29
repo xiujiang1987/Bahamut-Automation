@@ -5,44 +5,61 @@ async function draw_automation({ page }) {
     let count = 0;
 
     log("正在尋找抽抽樂");
-    await page.goto("https://fuli.gamer.com.tw/shop.php");
-    let items = await page.$$(".type-tag ");
+    let draws = [];
+    await page.goto("https://fuli.gamer.com.tw/shop.php?page=1");
+    let items = await page.$$("a.items-card");
     for (let i = items.length - 1; i >= 0; i--) {
-        let is_draw = await items[i].evaluate((node) => node.innerHTML === "抽抽樂");
-        if (!is_draw) items.splice(i, 1);
-    }
-    log(`找到 ${items.length} 個抽抽樂`);
-
-    for (let idx = 0; idx < items.length; idx++) {
-        log(`正在嘗試執行第 ${idx + 1} 個抽抽樂`);
-        await page.goto("https://fuli.gamer.com.tw/shop.php").catch(err_handler);
-        items = await page.$$(".type-tag ");
-        for (let i = items.length - 1; i >= 0; i--) {
-            let is_draw = await items[i].evaluate((node) => node.innerHTML === "抽抽樂");
-            if (!is_draw) items.splice(i, 1);
+        let is_draw = await items[i].evaluate((node) => node.innerHTML.includes("抽抽樂"));
+        if (is_draw) {
+            draws.push({
+                name: await items[i].evaluate((node) => node.querySelector(".items-title").innerHTML),
+                link: await items[i].evaluate((node) => node.href),
+            });
         }
-        items[idx].click().catch(err_handler);
-        await page.waitForNavigation().catch(err_handler);
+    }
 
-        let limitation = 100;
-        while (limitation--) {
-            await page.waitForTimeout(2000);
+    while (await page.$eval("a.pagenow", (node) => (node.nextSibling ? true : false))) {
+        await page.goto("https://fuli.gamer.com.tw/shop.php?page=" + (await page.$eval("a.pagenow", (node) => node.nextSibling.innerText)));
+        let items = await page.$$("a.items-card");
+        for (let i = items.length - 1; i >= 0; i--) {
+            let is_draw = await items[i].evaluate((node) => node.innerHTML.includes("抽抽樂"));
+            if (is_draw) {
+                draws.push({
+                    name: await items[i].evaluate((node) => node.querySelector(".items-title").innerHTML),
+                    link: await items[i].evaluate((node) => node.href),
+                });
+            }
+        }
+    }
+
+    log(`找到 ${draws.length} 個抽抽樂`);
+    draws.forEach(({ name }, i) => {
+        log(`${i + 1}: ${name}`);
+    });
+
+    for (let idx = 0; idx < draws.length; idx++) {
+        log(`正在嘗試執行第 ${idx + 1} 個抽抽樂： ${draws[idx].name}`);
+        await page.goto(draws[idx].link).catch(err_handler);
+
+        let limitation = 20;
+        for (let time = 1; time <= limitation; time++) {
+            await page.waitForTimeout(1000);
+            let name = await page.$eval("#BH-master > .BH-lbox.fuli-pbox h1", (node) => node.innerHTML);
 
             if (await page.$(".btn-base.c-accent-o.is-disable")) {
-                log(`第 ${idx + 1} 個抽抽樂的廣告免費次數已用完`);
+                log(`第 ${idx + 1} 個抽抽樂（${draws[idx].name}）的廣告免費次數已用完`);
                 break;
             }
 
-            let name = (await page.title()).replace("勇者福利社 - ", "").replace(" - 巴哈姆特", "");
-            log("正在執行：" + name);
-            log("可能需要多達 1 分鐘");
+            log(`正在執行第 ${time} 次抽獎，可能需要多達 1 分鐘`);
 
             await page.click(".btn-base.c-accent-o").catch(err_handler);
             await page.waitForTimeout(8000);
 
             if (!(await page.$("button[type=submit].btn.btn-insert.btn-primary"))) {
                 await err_handler(`廣告能量不足？`);
-                break;
+                await page.reload().catch(err_handler);
+                continue;
             }
 
             await page.click("button[type=submit].btn.btn-insert.btn-primary").catch(err_handler);
