@@ -1,3 +1,4 @@
+const process = require("process");
 const core = require("@actions/core");
 // const github = require("@actions/github");
 const { main } = require("./src/main.js");
@@ -10,6 +11,7 @@ const { main } = require("./src/main.js");
         const AUTO_SIGN_DOUBLE = core.getInput("auto_sign_double");
         const AUTO_DRAW = core.getInput("auto_draw");
         const AUTO_ANSWER_ANIME = core.getInput("auto_answer_anime");
+        const PARALLEL = core.getInput("parallel");
 
         await main({
             USERNAME,
@@ -18,9 +20,13 @@ const { main } = require("./src/main.js");
             AUTO_SIGN_DOUBLE,
             AUTO_DRAW,
             AUTO_ANSWER_ANIME,
+            PARALLEL,
         })
             .then(console.log)
-            .catch((error) => core.setFailed(error.message));
+            .catch((error) => {
+                core.setFailed(error.message);
+                process.exit(1);
+            });
     } catch (error) {
         core.setFailed(error.message);
     }

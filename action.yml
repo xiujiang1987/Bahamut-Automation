@@ -32,3 +32,7 @@ inputs:
     description: "啟用動畫瘋自動答題"
     required: true
     default: "false"
+  parallel:
+    description: "啟用平行處理（縮短執行時間，但可能會出問題）"
+    required: false
+    default: "false"

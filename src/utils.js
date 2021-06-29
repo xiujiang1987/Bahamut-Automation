@@ -15,6 +15,7 @@ async function err_handler(err, page = null) {
     let time = Date.now();
     log(`\n<ERROR ${time}> ` + err);
     if (page) await page.screenshot({ path: `./screenshot/.err.${time}.jpg`, type: "jpeg" });
+    return false;
 }
 
 exports.log = log;
