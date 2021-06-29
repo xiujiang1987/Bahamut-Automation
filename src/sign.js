@@ -28,8 +28,9 @@ async function sign_automation({ page, AUTO_SIGN_DOUBLE }) {
         while (retries--) {
             log("正在檢測雙倍簽到獎勵狀態");
             await page.reload();
+            await page.waitForTimeout(1000);
             await page.click("a#signin-btn").catch(err_handler);
-            await page.waitForTimeout(5000);
+            await page.waitForTimeout(3000);
             let reward_doubled = await page.$("a.popoup-ctrl-btn.is-disable");
             if (!reward_doubled) {
                 log("雙倍簽到獎勵狀態: 尚未獲得雙倍簽到獎勵");
