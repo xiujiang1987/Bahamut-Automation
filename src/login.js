@@ -6,6 +6,8 @@ async function bahamut_login({ page, USERNAME, PASSWORD }) {
     log("正在檢測登入狀態");
     await page.goto("https://www.gamer.com.tw/");
     await page.waitForTimeout(2000);
+    await page.goto("https://www.gamer.com.tw/");
+    await page.waitForTimeout(2000);
 
     let not_login_signal = await page.$("div.TOP-my.TOP-nologin");
     if (not_login_signal) {
