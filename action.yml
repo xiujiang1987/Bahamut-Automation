@@ -36,3 +36,7 @@ inputs:
     description: "啟用平行處理（縮短執行時間，但可能會出問題）"
     required: false
     default: "false"
+  gh_pat:
+    description: "GitHub Personal Access Token，提供會啟用 Issuer（測試中）"
+    required: false
+    default: ""
