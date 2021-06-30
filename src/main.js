@@ -42,6 +42,7 @@ async function main(args) {
                 args: ["--disable-web-security", "--disable-features=IsolateOrigins,site-per-process"],
             });
             UserAgent = (await browser.userAgent()).replace("HeadlessChrome", "Chrome");
+            console.log(`User Agent: ${UserAgent}`);
 
             let page = await new_page();
             await bahamut_login({ page, USERNAME, PASSWORD });
