@@ -7,7 +7,7 @@ let octokit;
 
 class Issuer {
     constructor(data) {
-        this.id = data.id;
+        this.number = data.number;
         this.octokit = octokit;
         this.title = data.title;
         this.tasks = {};
@@ -27,7 +27,7 @@ class Issuer {
         await octokit.request("PATCH /repos/{owner}/{repo}/issues/{issue_number}", {
             owner: this.owner,
             repo: this.repo,
-            issue_number: this.id,
+            issue_number: this.number,
             title: this.title,
             body: this.gen_body(),
         });
@@ -50,9 +50,8 @@ async function create_issuer(pat, title = null) {
         title: title || "Automation " + new Date(),
         body: `**Created. (${new Date()})**\n\n`,
     });
-    console.log(res);
 
-    return new Issuer(res);
+    return new Issuer(res.data);
 }
 
 exports.create_issuer = create_issuer;
