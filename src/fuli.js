@@ -39,10 +39,10 @@ async function draw_automation({ page }) {
 
     for (let idx = 0; idx < draws.length; idx++) {
         log(`正在嘗試執行第 ${idx + 1} 個抽抽樂： ${draws[idx].name}`);
-        await page.goto(draws[idx].link).catch(err_handler);
 
         let limitation = 20;
         for (let time = 1; time <= limitation; time++) {
+            await page.goto(draws[idx].link).catch(err_handler);
             await page.waitForTimeout(1000);
             let name = await page.$eval("#BH-master > .BH-lbox.fuli-pbox h1", (node) => node.innerHTML);
 
@@ -55,14 +55,13 @@ async function draw_automation({ page }) {
 
             await page.click(".btn-base.c-accent-o").catch(err_handler);
             await page.waitForTimeout(8000);
+            let ad_status = await page.$eval("#dialogify_2 .dialogify__body p", (node) => node.innerText).catch(err_handler);
 
-            if (!(await page.$("#buyD > div:nth-child(3) > p.pbox-content-r > #total-gold"))) {
-                if (!(await page.$("button[type=submit].btn.btn-insert.btn-primary"))) {
-                    await err_handler(`廣告能量不足？`);
-                    await page.reload().catch(err_handler);
-                    continue;
-                }
-
+            if (ad_status.includes("能量不足")) {
+                await err_handler(`廣告能量不足？`);
+                await page.reload().catch(err_handler);
+                continue;
+            } else if (ad_status.includes("觀看廣告")) {
                 await page.click("button[type=submit].btn.btn-insert.btn-primary").catch(err_handler);
                 await page.waitForTimeout(3000);
                 await page.waitForSelector("ins iframe").catch(err_handler);
@@ -92,14 +91,13 @@ async function draw_automation({ page }) {
                 await page.click("#dialogify_1 > form > div > div > div.btn-box.text-right > button.btn.btn-insert.btn-primary").catch(err_handler);
                 await page.waitForNavigation().catch(err_handler);
                 await page.waitForTimeout(1500);
-                await page.click("div.wrapper.wrapper-prompt > div > div > div.form__buttonbar > button").catch(err_handler);
-                await page.waitForTimeout(3000);
-                log("已完成一次抽抽樂：" + name);
-                count++;
-                continue;
+                if ((await page.$(".card > .section > p")) && (await page.$eval(".card > .section > p", (node) => node.innerText.includes("成功")))) {
+                    log("已完成一次抽抽樂：" + name);
+                    count++;
+                } else {
+                    log("發生錯誤，重試中");
+                }
             }
-
-            await page.goto(draws[idx].link).catch(err_handler);
         }
     }
 
