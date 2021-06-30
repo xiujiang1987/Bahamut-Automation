@@ -55,7 +55,7 @@ async function draw_automation({ page }) {
 
             await page.click(".btn-base.c-accent-o").catch(err_handler);
             await page.waitForTimeout(8000);
-            let ad_status = await page.$eval("#dialogify_2 .dialogify__body p", (node) => node.innerText).catch(err_handler);
+            let ad_status = (await page.$eval("#dialogify_2 .dialogify__body p", (node) => node.innerText).catch(err_handler)) || "";
 
             if (ad_status.includes("能量不足")) {
                 await err_handler(`廣告能量不足？`);
