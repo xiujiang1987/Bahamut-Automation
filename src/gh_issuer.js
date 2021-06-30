@@ -50,6 +50,7 @@ async function create_issuer(pat, title = null) {
         title: title || "Automation " + new Date(),
         body: `**Created. (${new Date()})**\n\n`,
     });
+    console.log(res);
 
     return new Issuer(res);
 }
