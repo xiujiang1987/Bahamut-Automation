@@ -33,10 +33,11 @@ async function main(args) {
         let issuer = null;
         if (GH_PAT) {
             issuer = await create_issuer(GH_PAT);
-            issuer.task("登入", "等待中");
-            issuer.task("簽到", "等待中");
-            issuer.task("答題", "等待中");
-            issuer.task("抽獎", "等待中");
+            issuer.create_task("登入");
+            issuer.create_task("簽到");
+            issuer.create_task("答題");
+            issuer.create_task("抽獎");
+            issuer.update();
         }
 
         if (AUTO_SIGN || AUTO_DRAW || AUTO_ANSWER_ANIME) {
@@ -53,51 +54,53 @@ async function main(args) {
             });
             UserAgent = (await browser.userAgent()).replace("HeadlessChrome", "Chrome");
 
-            if (GH_PAT) issuer.task("登入", "執行中");
+            if (GH_PAT) issuer.update_task("登入", { status: "執行中" });
             let page = await new_page();
-            await bahamut_login({ page, USERNAME, PASSWORD });
+            await bahamut_login({ page, USERNAME, PASSWORD, logger: GH_PAT ? issuer.logger("登入") : null });
             await page.close();
-            if (GH_PAT) issuer.task("登入", "完成");
+            if (GH_PAT) issuer.update_task("登入", { status: "完成" });
         }
 
         let parallel_tasks = [];
 
         if (AUTO_SIGN) {
-            if (GH_PAT) issuer.task("簽到", "執行中");
+            if (GH_PAT) issuer.update_task("簽到", { status: "執行中" });
             let page = await new_page();
-            let task = sign_automation({ page, AUTO_SIGN_DOUBLE }).then(() => {
+            let task = sign_automation({ page, AUTO_SIGN_DOUBLE, logger: GH_PAT ? issuer.logger("簽到") : null }).then(() => {
                 return page.close();
             });
             if (PARALLEL) parallel_tasks.push(task);
             else await task;
-            if (GH_PAT) issuer.task("簽到", "完成");
+            if (GH_PAT) issuer.update_task("簽到", { status: "完成" });
         }
 
         if (AUTO_ANSWER_ANIME) {
-            if (GH_PAT) issuer.task("答題", "執行中");
+            if (GH_PAT) issuer.update_task("答題", { status: "執行中" });
             let page = await new_page();
-            let task = answer_anime_automation({ page }).then(() => {
+            let task = answer_anime_automation({ page, logger: GH_PAT ? issuer.logger("答題") : null }).then(() => {
                 return page.close();
             });
             if (PARALLEL) parallel_tasks.push(task);
             else await task;
-            if (GH_PAT) issuer.task("答題", "完成");
+            if (GH_PAT) issuer.update_task("答題", { status: "完成" });
         }
 
         if (AUTO_DRAW) {
-            if (GH_PAT) issuer.task("抽獎", "執行中");
+            if (GH_PAT) issuer.update_task("抽獎", { status: "執行中" });
             let page = await new_page();
-            let task = draw_automation({ page }).then(() => {
+            let task = draw_automation({ page, logger: GH_PAT ? issuer.logger("抽獎") : null }).then(() => {
                 return page.close();
             });
             if (PARALLEL) parallel_tasks.push(task);
             else await task;
-            if (GH_PAT) issuer.task("抽獎", "完成");
+            if (GH_PAT) issuer.update_task("抽獎", { status: "完成" });
         }
 
         if (PARALLEL) await Promise.all(parallel_tasks);
 
         if (browser) await browser.close();
+
+        if (GH_PAT) await issuer.end();
     }
 
     log("巴哈姆特自動化已執行完畢！感謝您的使用！\n");

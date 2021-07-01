@@ -1,41 +1,46 @@
 const { log, err_handler } = require("./utils.js");
 
-async function sign_automation({ page, AUTO_SIGN_DOUBLE }) {
-    log(`開始執行自動簽到程序`);
+async function sign_automation({ page, AUTO_SIGN_DOUBLE, logger }) {
+    let log2 = (msg) => {
+        log(msg);
+        if (logger) logger(msg);
+    };
 
-    log("正在檢測簽到狀態");
+    log2(`開始執行自動簽到程序`);
+
+    log2("正在檢測簽到狀態");
     await page.goto("https://www.gamer.com.tw/");
     await page.waitForTimeout(2000);
     let signed = await page.$eval("a#signin-btn", (node) => node.innerText.includes("每日簽到已達成")).catch(err_handler);
     if (!signed) {
-        log("簽到狀態: 尚未簽到");
-        log("正在嘗試簽到");
+        log2("簽到狀態: 尚未簽到");
+        log2("正在嘗試簽到");
         await page.click("a#signin-btn").catch(err_handler);
         await page.waitForTimeout(5000);
         await page.screenshot({ path: `./screenshot/${Date.now()}.jpg`, type: "jpeg" });
-        log("成功簽到！");
+        log2("成功簽到！");
     } else {
-        log("簽到狀態: 已簽到");
+        log2("簽到狀態: 已簽到");
     }
 
     await page.waitForTimeout(1000);
-    log(`自動簽到程序已完成\n`);
+    log2(`自動簽到程序已完成\n`);
 
     if (AUTO_SIGN_DOUBLE) {
-        log(`開始執行自動觀看雙倍簽到獎勵廣告程序`);
+        log2(`開始執行自動觀看雙倍簽到獎勵廣告程序`);
 
         let retries = 3;
         while (retries--) {
-            log("正在檢測雙倍簽到獎勵狀態");
+            log2("正在檢測雙倍簽到獎勵狀態");
             await page.reload();
             await page.waitForTimeout(1000);
             await page.click("a#signin-btn").catch(err_handler);
             await page.waitForTimeout(3000);
             let reward_doubled = await page.$("a.popoup-ctrl-btn.is-disable");
             if (!reward_doubled) {
-                log("雙倍簽到獎勵狀態: 尚未獲得雙倍簽到獎勵");
+                log2("雙倍簽到獎勵狀態: 尚未獲得雙倍簽到獎勵");
 
-                log("嘗試觀看廣告以獲得雙倍獎勵，可能需要多達 1 分鐘");
+                log2("嘗試觀看廣告以獲得雙倍獎勵，可能需要多達 1 分鐘");
                 await page.click("a.popoup-ctrl-btn").catch(err_handler);
                 await page.waitForTimeout(5000);
                 await page.click("button[type=submit]").catch(err_handler);
@@ -57,18 +62,18 @@ async function sign_automation({ page, AUTO_SIGN_DOUBLE }) {
                     await ad_frame.click("#google-rewarded-video > img:nth-child(4)").catch(err_handler);
 
                 if (await page.$("a.popoup-ctrl-btn.is-disable")) {
-                    log("已觀看雙倍獎勵廣告");
+                    log2("已觀看雙倍獎勵廣告");
                     break;
                 }
 
-                log(`觀看雙倍獎勵廣告過程發生錯誤，將再重試 ${retries} 次`);
+                log2(`觀看雙倍獎勵廣告過程發生錯誤，將再重試 ${retries} 次`);
             } else {
-                log("雙倍簽到獎勵狀態: 已獲得雙倍簽到獎勵");
+                log2("雙倍簽到獎勵狀態: 已獲得雙倍簽到獎勵");
                 break;
             }
         }
 
-        log(`自動觀看雙倍簽到獎勵廣告程序已完成\n`);
+        log2(`自動觀看雙倍簽到獎勵廣告程序已完成\n`);
     }
 }
 

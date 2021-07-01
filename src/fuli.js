@@ -1,10 +1,15 @@
 const { log, err_handler } = require("./utils.js");
 
-async function draw_automation({ page }) {
-    log(`開始執行福利社自動抽抽樂程序`);
+async function draw_automation({ page, logger }) {
+    let log2 = (msg) => {
+        log(msg);
+        if (logger) logger(msg);
+    };
+
+    log2(`開始執行福利社自動抽抽樂程序`);
     let count = 0;
 
-    log("正在尋找抽抽樂");
+    log2("正在尋找抽抽樂");
     let draws = [];
     await page.goto("https://fuli.gamer.com.tw/shop.php?page=1");
     let items = await page.$$("a.items-card");
@@ -32,13 +37,13 @@ async function draw_automation({ page }) {
         }
     }
 
-    log(`找到 ${draws.length} 個抽抽樂`);
+    log2(`找到 ${draws.length} 個抽抽樂`);
     draws.forEach(({ name }, i) => {
-        log(`${i + 1}: ${name}`);
+        log2(`${i + 1}: ${name}`);
     });
 
     for (let idx = 0; idx < draws.length; idx++) {
-        log(`正在嘗試執行第 ${idx + 1} 個抽抽樂： ${draws[idx].name}`);
+        log2(`正在嘗試執行第 ${idx + 1} 個抽抽樂： ${draws[idx].name}`);
 
         let limitation = 20;
         for (let time = 1; time <= limitation; time++) {
@@ -47,11 +52,11 @@ async function draw_automation({ page }) {
             let name = await page.$eval("#BH-master > .BH-lbox.fuli-pbox h1", (node) => node.innerHTML);
 
             if (await page.$(".btn-base.c-accent-o.is-disable")) {
-                log(`第 ${idx + 1} 個抽抽樂（${draws[idx].name}）的廣告免費次數已用完`);
+                log2(`第 ${idx + 1} 個抽抽樂（${draws[idx].name}）的廣告免費次數已用完`);
                 break;
             }
 
-            log(`正在執行第 ${time} 次抽獎，可能需要多達 1 分鐘`);
+            log2(`正在執行第 ${time} 次抽獎，可能需要多達 1 分鐘`);
 
             await page.click(".btn-base.c-accent-o").catch(err_handler);
             await page.waitForTimeout(8000);
@@ -62,6 +67,7 @@ async function draw_automation({ page }) {
                 await page.reload().catch(err_handler);
                 continue;
             } else if (ad_status.includes("觀看廣告")) {
+                log2(`正在觀看廣告`);
                 await page.click("button[type=submit].btn.btn-insert.btn-primary").catch(err_handler);
                 await page.waitForTimeout(3000);
                 await page.waitForSelector("ins iframe").catch(err_handler);
@@ -75,19 +81,20 @@ async function draw_automation({ page }) {
 
             let cost = false; //await page.$eval("#buyD", (node) => !node.innerText.includes("廣告抽獎券"));
             if (!cost) {
+                log2(`正在確認結算頁面`);
                 await confirm(page).catch(err_handler);
                 if ((await page.$(".card > .section > p")) && (await page.$eval(".card > .section > p", (node) => node.innerText.includes("成功")))) {
-                    log("已完成一次抽抽樂：" + name);
+                    log2("已完成一次抽抽樂：" + name);
                     count++;
                 } else {
-                    log("發生錯誤，重試中");
+                    log2("發生錯誤，重試中");
                 }
             }
         }
     }
 
     await page.waitForTimeout(2000);
-    log(`福利社自動抽抽樂程序已完成\n`);
+    log2(`福利社自動抽抽樂程序已完成\n`);
 
     return { count };
 }
