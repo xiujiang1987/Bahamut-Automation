@@ -68,29 +68,14 @@ async function draw_automation({ page }) {
                 const ad_iframe = await page.$("ins iframe").catch(err_handler);
                 const ad_frame = await ad_iframe.contentFrame().catch(err_handler);
 
-                await page.waitForTimeout(5000);
-                if (await ad_frame.$(".rewardDialogueWrapper:not([style*=none]) .rewardResumebutton"))
-                    await ad_frame.click(".rewardDialogueWrapper:not([style*=none]) .rewardResumebutton").catch(err_handler);
+                await ad_handler(ad_frame);
 
-                await page.waitForTimeout(35000);
-                if (await ad_frame.$(".videoAdUiSkipContainer.html5-stop-propagation > button"))
-                    await ad_frame.click(".videoAdUiSkipContainer.html5-stop-propagation > button").catch(err_handler);
-                else if (await ad_frame.$("div#close_button_icon")) await ad_frame.click("div#close_button_icon").catch(err_handler);
-                else if (await ad_frame.$("#google-rewarded-video > img:nth-child(4)"))
-                    await ad_frame.click("#google-rewarded-video > img:nth-child(4)").catch(err_handler);
-
-                await page.waitForTimeout(5000);
+                await page.waitForTimeout(2000);
             }
 
             let cost = false; //await page.$eval("#buyD", (node) => !node.innerText.includes("廣告抽獎券"));
             if (!cost) {
-                await page.click("#agree-confirm").catch(err_handler);
-                await page.waitForTimeout(500);
-                await page.click("#buyD > div.pbox-btn > a").catch(err_handler);
-                await page.waitForTimeout(800);
-                await page.click("#dialogify_1 > form > div > div > div.btn-box.text-right > button.btn.btn-insert.btn-primary").catch(err_handler);
-                await page.waitForNavigation().catch(err_handler);
-                await page.waitForTimeout(1500);
+                await confirm(page).catch(err_handler);
                 if ((await page.$(".card > .section > p")) && (await page.$eval(".card > .section > p", (node) => node.innerText.includes("成功")))) {
                     log("已完成一次抽抽樂：" + name);
                     count++;
@@ -105,6 +90,31 @@ async function draw_automation({ page }) {
     log(`福利社自動抽抽樂程序已完成\n`);
 
     return { count };
+}
+
+async function confirm(page) {
+    await page.click("#agree-confirm");
+    await page.waitForTimeout(500);
+    await page.click("#buyD > div.pbox-btn > a");
+    await page.waitForTimeout(800);
+    await page.click("#dialogify_1 > form > div > div > div.btn-box.text-right > button.btn.btn-insert.btn-primary");
+    await page.waitForNavigation();
+    await page.waitForTimeout(1500);
+}
+
+async function ad_handler(ad_frame) {
+    await ad_frame.waitForTimeout(5000);
+    if (await ad_frame.$(".rewardDialogueWrapper:not([style*=none]) .rewardResumebutton"))
+        await ad_frame.click(".rewardDialogueWrapper:not([style*=none]) .rewardResumebutton").catch(err_handler);
+
+    await ad_frame.waitForTimeout(35000);
+    if (await ad_frame.$(".videoAdUiSkipContainer.html5-stop-propagation > button"))
+        await ad_frame.click(".videoAdUiSkipContainer.html5-stop-propagation > button").catch(err_handler);
+    else if (await ad_frame.$("div#close_button_icon")) await ad_frame.click("div#close_button_icon").catch(err_handler);
+    else if (await ad_frame.$("#google-rewarded-video > img:nth-child(4)"))
+        await ad_frame.click("#google-rewarded-video > img:nth-child(4)").catch(err_handler);
+
+    await ad_frame.waitForTimeout(3000);
 }
 
 exports.draw_automation = draw_automation;
