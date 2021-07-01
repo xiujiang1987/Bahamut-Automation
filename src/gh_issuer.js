@@ -15,7 +15,7 @@ class Issuer {
         this.owner = context.repo.owner;
         this.repo = context.repo.repo;
 
-        console.log(`Issuer Set. OWNER: ${this.owner}, REPO: ${this.repo}, ID: ${this.id}`);
+        console.log(`Issuer Set. OWNER: ${this.owner}, REPO: ${this.repo}, ID: ${this.number}`);
     }
 
     task(name, status) {
@@ -38,6 +38,7 @@ class Issuer {
         Object.entries(this.tasks).forEach(([key, val]) => {
             body += `## ${key}: ${val} \n\n`;
         });
+        return body;
     }
 }
 
