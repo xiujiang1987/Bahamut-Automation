@@ -55,6 +55,12 @@
 
 預設：`false`
 
+### `gh_pat`
+
+**Optional** GitHub Personal Access Token，提供會啟用 Issuer（測試中）
+
+預設：`""`
+
 ## 聲明
 我不能保證程式一定會如期執行，也不能保證程式會成功執行，有時 GitHub 會自己吃掉。
 
