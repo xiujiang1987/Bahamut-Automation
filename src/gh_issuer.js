@@ -67,6 +67,7 @@ class Issuer {
             issue_number: this.number,
             title: "[Finished] " + this.title,
             body: this.gen_body(true),
+            labels: ["automation", "finished"],
         });
     }
 }
@@ -81,6 +82,7 @@ async function create_issuer(pat, title = null) {
         repo: context.repo.repo,
         title: title || `Automation (${time[0]}/${time[1]}/${time[2]} ${time[3]}:${time[4]}:${time[5]})`,
         body: `**Created.** (${time[0]}/${time[1]}/${time[2]} ${time[3]}:${time[4]}:${time[5]})\n\n`,
+        labels: ["automation", "running"],
     });
 
     return new Issuer(res.data);
