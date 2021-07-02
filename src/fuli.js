@@ -59,8 +59,19 @@ async function draw_automation({ page, logger }) {
             log2(`正在執行第 ${time} 次抽獎，可能需要多達 1 分鐘`);
 
             await page.click(".btn-base.c-accent-o").catch(err_handler);
-            await page.waitForTimeout(8000);
-            let ad_status = (await page.$eval("#dialogify_2 .dialogify__body p", (node) => node.innerText).catch(err_handler)) || "";
+            await page.waitForTimeout(4000);
+
+            if ((await page.$eval(".dialogify", (node) => node.innerText.includes("勇者問答考驗")).catch(err_handler)) || null) {
+                log2(`需要回答問題，正在回答問題`);
+                await page.$$eval("#dialogify_1 .dialogify__body a", (options) => {
+                    options.forEach((option) => {
+                        if (option.dataset.option == option.dataset.answer) option.click();
+                    });
+                });
+                await page.waitForTimeout(1000);
+            }
+
+            let ad_status = (await page.$eval(".dialogify .dialogify__body p", (node) => node.innerText).catch(err_handler)) || "";
 
             if (ad_status.includes("能量不足")) {
                 await err_handler(`廣告能量不足？`);
@@ -73,9 +84,7 @@ async function draw_automation({ page, logger }) {
                 await page.waitForSelector("ins iframe").catch(err_handler);
                 const ad_iframe = await page.$("ins iframe").catch(err_handler);
                 const ad_frame = await ad_iframe.contentFrame().catch(err_handler);
-
                 await ad_handler(ad_frame);
-
                 await page.waitForTimeout(2000);
             }
 
