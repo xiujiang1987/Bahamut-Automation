@@ -32,7 +32,7 @@ async function sign_automation({ page, AUTO_SIGN_DOUBLE, logger }) {
         let retries = 3;
         while (retries--) {
             log2("正在檢測雙倍簽到獎勵狀態");
-            await page.reload();
+            await page.reload().catch(err_handler);
             await page.waitForTimeout(1000);
             await page.click("a#signin-btn").catch(err_handler);
             await page.waitForTimeout(3000);
