@@ -66,9 +66,14 @@ async function main(args) {
         if (AUTO_SIGN) {
             if (GH_PAT) issuer.update_task("簽到", { status: "執行中" });
             let page = await new_page();
-            let task = sign_automation({ page, AUTO_SIGN_DOUBLE, logger: GH_PAT ? issuer.logger("簽到") : null }).then(() => {
-                return page.close();
-            });
+            let task = timeout(
+                async () => {
+                    await sign_automation({ page, AUTO_SIGN_DOUBLE, logger: GH_PAT ? issuer.logger("簽到") : null });
+                    await page.close();
+                },
+                10 * 60 * 1000,
+                "Sign"
+            );
             if (PARALLEL) parallel_tasks.push(task);
             else await task;
             if (GH_PAT) issuer.update_task("簽到", { status: "完成" });
@@ -77,9 +82,14 @@ async function main(args) {
         if (AUTO_ANSWER_ANIME) {
             if (GH_PAT) issuer.update_task("答題", { status: "執行中" });
             let page = await new_page();
-            let task = answer_anime_automation({ page, logger: GH_PAT ? issuer.logger("答題") : null }).then(() => {
-                return page.close();
-            });
+            let task = timeout(
+                async () => {
+                    await answer_anime_automation({ page, logger: GH_PAT ? issuer.logger("答題") : null });
+                    await page.close();
+                },
+                10 * 60 * 1000,
+                "Answer"
+            );
             if (PARALLEL) parallel_tasks.push(task);
             else await task;
             if (GH_PAT) issuer.update_task("答題", { status: "完成" });
@@ -88,9 +98,14 @@ async function main(args) {
         if (AUTO_DRAW) {
             if (GH_PAT) issuer.update_task("抽獎", { status: "執行中" });
             let page = await new_page();
-            let task = draw_automation({ page, logger: GH_PAT ? issuer.logger("抽獎") : null }).then(() => {
-                return page.close();
-            });
+            let task = timeout(
+                async () => {
+                    await draw_automation({ page, logger: GH_PAT ? issuer.logger("抽獎") : null });
+                    await page.close();
+                },
+                2 * 60 * 60 * 1000,
+                "Draw"
+            );
             if (PARALLEL) parallel_tasks.push(task);
             else await task;
             if (GH_PAT) issuer.update_task("抽獎", { status: "完成" });
@@ -104,12 +119,23 @@ async function main(args) {
     }
 
     log("巴哈姆特自動化已執行完畢！感謝您的使用！\n");
+    return true;
 }
 
 async function new_page() {
     let page = await browser.newPage();
     await page.setUserAgent(UserAgent);
     return page;
+}
+
+function timeout(func, time = 2 * 60 * 60 * 1000, name = "") {
+    return new Promise((r) => {
+        setTimeout(() => {
+            log("[Timed Out] " + name);
+            r();
+        }, time);
+        func().then(r);
+    });
 }
 
 exports.main = main;

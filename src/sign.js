@@ -50,16 +50,7 @@ async function sign_automation({ page, AUTO_SIGN_DOUBLE, logger }) {
                 const ad_iframe = await page.$("ins iframe").catch(err_handler);
                 const ad_frame = await ad_iframe.contentFrame().catch(err_handler);
 
-                await ad_frame.waitForSelector(".rewardDialogueWrapper:not([style*=none]) .rewardResumebutton").catch(err_handler);
-                await page.waitForTimeout(3000);
-                await ad_frame.click(".rewardDialogueWrapper:not([style*=none]) .rewardResumebutton").catch(err_handler);
-
-                await page.waitForTimeout(35000);
-                if (await ad_frame.$(".videoAdUiSkipContainer.html5-stop-propagation > button"))
-                    await ad_frame.click(".videoAdUiSkipContainer.html5-stop-propagation > button").catch(err_handler);
-                else if (await ad_frame.$("div#close_button_icon")) await ad_frame.click("div#close_button_icon").catch(err_handler);
-                else if (await ad_frame.$("#google-rewarded-video > img:nth-child(4)"))
-                    await ad_frame.click("#google-rewarded-video > img:nth-child(4)").catch(err_handler);
+                await ad_handler(ad_frame).catch(err_handler);
 
                 if (await page.$("a.popoup-ctrl-btn.is-disable")) {
                     log2("已觀看雙倍獎勵廣告");
@@ -75,6 +66,21 @@ async function sign_automation({ page, AUTO_SIGN_DOUBLE, logger }) {
 
         log2(`自動觀看雙倍簽到獎勵廣告程序已完成\n`);
     }
+}
+
+async function ad_handler(ad_frame) {
+    await ad_frame.waitForTimeout(5000);
+    if (await ad_frame.$(".rewardDialogueWrapper:not([style*=none]) .rewardResumebutton"))
+        await ad_frame.click(".rewardDialogueWrapper:not([style*=none]) .rewardResumebutton").catch(err_handler);
+
+    await ad_frame.waitForTimeout(35000);
+    if (await ad_frame.$(".videoAdUiSkipContainer.html5-stop-propagation > button"))
+        await ad_frame.click(".videoAdUiSkipContainer.html5-stop-propagation > button").catch(err_handler);
+    else if (await ad_frame.$("div#close_button_icon")) await ad_frame.click("div#close_button_icon").catch(err_handler);
+    else if (await ad_frame.$("#google-rewarded-video > img:nth-child(4)"))
+        await ad_frame.click("#google-rewarded-video > img:nth-child(4)").catch(err_handler);
+
+    await ad_frame.waitForTimeout(3000);
 }
 
 exports.sign_automation = sign_automation;

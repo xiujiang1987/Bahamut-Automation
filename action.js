@@ -24,7 +24,10 @@ const { main } = require("./src/main.js");
             PARALLEL,
             GH_PAT,
         })
-            .then(console.log)
+            .then((msg) => {
+                console.log(msg);
+                process.exit(0);
+            })
             .catch((error) => {
                 core.setFailed(error.message);
                 process.exit(1);
