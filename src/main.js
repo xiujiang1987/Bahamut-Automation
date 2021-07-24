@@ -1,7 +1,7 @@
 const puppeteer = require("puppeteer-core");
 const fs = require("fs");
 const { log, err_handler } = require("./utils.js");
-const { bahamut_login } = require("./login.js");
+const { bahamut_login, bahamut_logout } = require("./login.js");
 const { sign_automation } = require("./sign.js");
 const { answer_anime_automation } = require("./anser_anime.js");
 const { draw_automation } = require("./fuli.js");
@@ -20,6 +20,7 @@ async function main(args) {
     if (!PASSWORD) console.error(`缺少巴哈姆特密碼`);
 
     if (USERNAME && PASSWORD) {
+        // 參數標準化
         AUTO_SIGN = AUTO_SIGN == "true" || AUTO_SIGN == "1" || false;
         AUTO_SIGN_DOUBLE = AUTO_SIGN_DOUBLE == "true" || AUTO_SIGN_DOUBLE == "1" || false;
         AUTO_DRAW = AUTO_DRAW == "true" || AUTO_DRAW == "1" || false;
@@ -113,7 +114,14 @@ async function main(args) {
 
         if (PARALLEL) await Promise.all(parallel_tasks);
 
-        if (browser) await browser.close();
+        if (browser) {
+            // 登出帳號
+            let page = await new_page();
+            await bahamut_logout({ page, logger: GH_PAT ? issuer.logger("登入") : null });
+            await page.close();
+
+            await browser.close();
+        }
 
         if (GH_PAT) await issuer.end();
     }
