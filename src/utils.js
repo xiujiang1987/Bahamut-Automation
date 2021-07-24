@@ -1,8 +1,8 @@
 const fs = require("fs");
 
-function sleep(t = 1000) {
+function sleep(t = 1000, msg) {
     return new Promise((r) => {
-        setTimeout(r, t);
+        setTimeout(() => r(msg), t);
     });
 }
 
@@ -20,3 +20,4 @@ async function err_handler(err, page = null) {
 
 exports.log = log;
 exports.err_handler = err_handler;
+exports.sleep = sleep;

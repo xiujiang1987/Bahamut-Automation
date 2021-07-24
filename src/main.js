@@ -1,6 +1,6 @@
 const puppeteer = require("puppeteer-core");
 const fs = require("fs");
-const { log, err_handler } = require("./utils.js");
+const { log, sleep } = require("./utils.js");
 const { bahamut_login, bahamut_logout } = require("./login.js");
 const { sign_automation } = require("./sign.js");
 const { answer_anime_automation } = require("./anser_anime.js");
@@ -31,6 +31,7 @@ async function main(args) {
 
         console.log(JSON.stringify({ AUTO_SIGN, AUTO_SIGN_DOUBLE, AUTO_DRAW, AUTO_ANSWER_ANIME, HEADLESS, PARALLEL, GH_PAT }, null, 4) + "\n");
 
+        // issuer 是用來發 GitHub Issue Report 的，範例請至 https://github.com/JacobLinCool/BA/issues 查看
         let issuer = null;
         if (GH_PAT) {
             issuer = await create_issuer(GH_PAT);
@@ -43,7 +44,9 @@ async function main(args) {
 
         if (AUTO_SIGN || AUTO_DRAW || AUTO_ANSWER_ANIME) {
             browser = await puppeteer.launch({
+                // 使用 Chrome ， Chromium 沒有支援 mp4 格式，不同作業系統請自行更改 Chrome 位置
                 executablePath: "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+                // 把 userDataDir 移除將不會儲存瀏覽器的紀錄，每次皆會重新登入
                 userDataDir: "./.data",
                 headless: HEADLESS,
                 defaultViewport: {
@@ -62,53 +65,51 @@ async function main(args) {
             if (GH_PAT) issuer.update_task("登入", { status: "完成" });
         }
 
+        // 平行處理用的，非常不穩定！
         let parallel_tasks = [];
 
         if (AUTO_SIGN) {
             if (GH_PAT) issuer.update_task("簽到", { status: "執行中" });
             let page = await new_page();
-            let task = timeout(
-                async () => {
-                    await sign_automation({ page, AUTO_SIGN_DOUBLE, logger: GH_PAT ? issuer.logger("簽到") : null });
-                    await page.close();
-                },
-                10 * 60 * 1000,
-                "Sign"
-            );
+            let task = Promise.race([
+                sign_automation({ page, AUTO_SIGN_DOUBLE, logger: GH_PAT ? issuer.logger("簽到") : null }),
+                sleep(10 * 60 * 1000, "[Timed Out] 簽到"),
+            ]);
             if (PARALLEL) parallel_tasks.push(task);
-            else await task;
+            else {
+                const result = await task;
+                if (result) log(result);
+                page.close();
+            }
             if (GH_PAT) issuer.update_task("簽到", { status: "完成" });
         }
 
         if (AUTO_ANSWER_ANIME) {
             if (GH_PAT) issuer.update_task("答題", { status: "執行中" });
             let page = await new_page();
-            let task = timeout(
-                async () => {
-                    await answer_anime_automation({ page, logger: GH_PAT ? issuer.logger("答題") : null });
-                    await page.close();
-                },
-                10 * 60 * 1000,
-                "Answer"
-            );
+            let task = Promise.race([
+                answer_anime_automation({ page, logger: GH_PAT ? issuer.logger("答題") : null }),
+                sleep(10 * 60 * 1000, "[Timed Out] 答題"),
+            ]);
             if (PARALLEL) parallel_tasks.push(task);
-            else await task;
+            else {
+                const result = await task;
+                if (result) log(result);
+                page.close();
+            }
             if (GH_PAT) issuer.update_task("答題", { status: "完成" });
         }
 
         if (AUTO_DRAW) {
             if (GH_PAT) issuer.update_task("抽獎", { status: "執行中" });
             let page = await new_page();
-            let task = timeout(
-                async () => {
-                    await draw_automation({ page, logger: GH_PAT ? issuer.logger("抽獎") : null });
-                    await page.close();
-                },
-                2 * 60 * 60 * 1000,
-                "Draw"
-            );
+            let task = Promise.race([draw_automation({ page, logger: GH_PAT ? issuer.logger("抽獎") : null }), sleep(2 * 60 * 60 * 1000, "[Timed Out] 抽獎")]);
             if (PARALLEL) parallel_tasks.push(task);
-            else await task;
+            else {
+                const result = await task;
+                if (result) log(result);
+                page.close();
+            }
             if (GH_PAT) issuer.update_task("抽獎", { status: "完成" });
         }
 
@@ -134,16 +135,6 @@ async function new_page() {
     let page = await browser.newPage();
     await page.setUserAgent(UserAgent);
     return page;
-}
-
-function timeout(func, time = 2 * 60 * 60 * 1000, name = "") {
-    return new Promise((r) => {
-        setTimeout(() => {
-            log("[Timed Out] " + name);
-            r();
-        }, time);
-        func().then(r);
-    });
 }
 
 exports.main = main;
