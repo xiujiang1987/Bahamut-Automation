@@ -61,7 +61,7 @@ async function draw_automation({ page, logger }) {
             await page.click(".btn-base.c-accent-o").catch(err_handler);
             await page.waitForTimeout(2000);
 
-            if ((await page.$eval(".dialogify", (node) => node.innerText.includes("勇者問答考驗")).catch(err_handler)) || null) {
+            if ((await page.$eval(".dialogify", (node) => node.innerText.includes("勇者問答考驗")).catch(() => {})) || null) {
                 log2(`需要回答問題，正在回答問題`);
                 await page.$$eval("#dialogify_1 .dialogify__body a", (options) => {
                     options.forEach((option) => {
@@ -73,7 +73,7 @@ async function draw_automation({ page, logger }) {
             }
             await page.waitForTimeout(4000);
 
-            let ad_status = (await page.$eval(".dialogify .dialogify__body p", (node) => node.innerText).catch(err_handler)) || "";
+            let ad_status = (await page.$eval(".dialogify .dialogify__body p", (node) => node.innerText).catch(() => {})) || "";
 
             if (ad_status.includes("能量不足")) {
                 await err_handler(`廣告能量不足？`);
@@ -121,11 +121,17 @@ async function confirm(page) {
 }
 
 async function ad_handler(ad_frame) {
-    await ad_frame.waitForTimeout(5000);
+    await ad_frame.waitForTimeout(3000);
     if (await ad_frame.$(".rewardDialogueWrapper:not([style*=none]) .rewardResumebutton"))
         await ad_frame.click(".rewardDialogueWrapper:not([style*=none]) .rewardResumebutton").catch(err_handler);
 
-    await ad_frame.waitForTimeout(35000);
+    await Promise.race([
+        ad_frame.waitForSelector(".videoAdUiSkipContainer.html5-stop-propagation > button", { visible: true, timeout: 35000 }),
+        ad_frame.waitForSelector("div#close_button_icon", { visible: true, timeout: 35000 }),
+        // ad_frame.waitForSelector("#google-rewarded-video > img:nth-child(4)", { visible: true, timeout: 35000 }),
+    ]).catch(err_handler);
+    await ad_frame.waitForTimeout(3000);
+
     if (await ad_frame.$(".videoAdUiSkipContainer.html5-stop-propagation > button"))
         await ad_frame.click(".videoAdUiSkipContainer.html5-stop-propagation > button").catch(err_handler);
     else if (await ad_frame.$("div#close_button_icon")) await ad_frame.click("div#close_button_icon").catch(err_handler);
