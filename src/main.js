@@ -6,12 +6,17 @@ const { sign_automation } = require("./sign.js");
 const { answer_anime_automation } = require("./anser_anime.js");
 const { draw_automation } = require("./fuli.js");
 const { create_issuer } = require("./gh_issuer.js");
+const { sentryInit, finishTransaction } = require("./sentry.js");
 
 let browser, UserAgent;
 
 async function main(args) {
     if (!fs.existsSync("./log/")) fs.mkdirSync("./log/");
     if (!fs.existsSync("./screenshot/")) fs.mkdirSync("./screenshot/");
+
+    // Initialize Sentry
+    sentryInit();
+
     log("\n==========");
     log("開始執行巴哈姆特自動化！\n");
     let { USERNAME, PASSWORD, AUTO_SIGN, AUTO_SIGN_DOUBLE, AUTO_DRAW, AUTO_ANSWER_ANIME, HEADLESS, PARALLEL, GH_PAT } = args;
@@ -128,6 +133,7 @@ async function main(args) {
     }
 
     log("巴哈姆特自動化已執行完畢！感謝您的使用！\n");
+    finishTransaction();
     return true;
 }
 

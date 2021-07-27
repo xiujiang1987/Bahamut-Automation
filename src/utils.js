@@ -1,4 +1,5 @@
 const fs = require("fs");
+const { sentryCaptureException } = require("./sentry");
 
 function sleep(t = 1000, msg) {
     return new Promise((r) => {
@@ -14,6 +15,7 @@ function log(msg) {
 async function err_handler(err, page = null) {
     let time = Date.now();
     log(`\n<ERROR ${time}> ` + err);
+    sentryCaptureException(err);
     if (page) await page.screenshot({ path: `./screenshot/.err.${time}.jpg`, type: "jpeg" });
     return false;
 }

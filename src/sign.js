@@ -1,4 +1,4 @@
-const { log, err_handler } = require("./utils.js");
+const { log, err_handler, sleep } = require("./utils.js");
 
 async function sign_automation({ page, AUTO_SIGN_DOUBLE, logger }) {
     let log2 = (msg) => {
@@ -32,10 +32,15 @@ async function sign_automation({ page, AUTO_SIGN_DOUBLE, logger }) {
         let retries = 3;
         while (retries--) {
             log2("正在檢測雙倍簽到獎勵狀態");
-            await page.reload().catch(err_handler);
-            await page.waitForTimeout(1000);
-            await page.click("a#signin-btn").catch(err_handler);
-            await page.waitForTimeout(3000);
+            await Promise.race([
+                (async () => {
+                    await page.reload().catch(err_handler);
+                    await page.waitForTimeout(1000);
+                    await page.click("a#signin-btn").catch(err_handler);
+                    await page.waitForTimeout(3000);
+                })(),
+                sleep(30 * 1000),
+            ]);
             let reward_doubled = await page.$("a.popoup-ctrl-btn.is-disable");
             if (!reward_doubled) {
                 log2("雙倍簽到獎勵狀態: 尚未獲得雙倍簽到獎勵");
