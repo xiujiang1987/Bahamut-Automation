@@ -41,7 +41,7 @@
    2. `PASSWORD`: 你的巴哈姆特密碼
 3. 完成，詳細內容可以看看新建立的 Repo 的 README.md
 
-> 如果遇到問題歡迎發 Issue 詢問喔
+> 如果遇到問題歡迎[發 Issue 詢問](https://github.com/JacobLinCool/Bahamut-Automation/issues/new)喔
 
 ### 在自己電腦上執行
 1. 安裝 `Node.js` v14+
