@@ -35,7 +35,7 @@
 
 ## 使用方法
 ### 使用 GitHub Action （建議）
-1. [使用 Template 來建立 Repository](https://github.com/JacobLinCool/Bahamut-Automation-Template/generate)
+1. [使用 Template 來建立 Repository](https://github.com/JacobLinCool/Bahamut-Automation-Template/generate)，建議建立 **Public** Repository 可以無上限使用，GitHub 有給 Private Repository 每月 2000 分鐘執行限制
 2. 於新建立的 Repo 的 Settings > Secrets 分頁新增兩個 `Secret`
    1. `USERNAME`: 你的巴哈姆特帳號
    2. `PASSWORD`: 你的巴哈姆特密碼
