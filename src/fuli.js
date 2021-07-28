@@ -111,13 +111,19 @@ async function draw_automation({ page, logger }) {
 }
 
 async function confirm(page) {
-    await page.click("#agree-confirm");
-    await page.waitForTimeout(500);
-    await page.click("#buyD > div.pbox-btn > a");
-    await page.waitForTimeout(800);
-    await page.click("#dialogify_1 > form > div > div > div.btn-box.text-right > button.btn.btn-insert.btn-primary");
-    await page.waitForNavigation();
-    await page.waitForTimeout(1000);
+    try {
+        await page.click("#agree-confirm");
+        await page.waitForTimeout(500);
+        await page.click("#buyD > div.pbox-btn > a");
+        await page.waitForTimeout(800);
+        await page.click("#dialogify_1 > form > div > div > div.btn-box.text-right > button.btn.btn-insert.btn-primary");
+        await page.waitForNavigation();
+        await page.waitForTimeout(1000);
+    } catch (err) {
+        const page_content = await page.evaluate(() => document.body.innerHTML).catch(() => null);
+        console.debug(page_content);
+        err_handler(err);
+    }
 }
 
 async function ad_handler(ad_frame) {
