@@ -1,4 +1,4 @@
-const { log, err_handler, sleep } = require("./utils.js");
+const { log, err_handler } = require("./utils.js");
 
 async function sign_automation({ page, AUTO_SIGN_DOUBLE, logger }) {
     let log2 = (msg) => {
@@ -32,15 +32,14 @@ async function sign_automation({ page, AUTO_SIGN_DOUBLE, logger }) {
         let retries = 3;
         while (retries--) {
             log2("正在檢測雙倍簽到獎勵狀態");
-            await Promise.race([
-                (async () => {
-                    await page.goto("https://www.gamer.com.tw/").catch(err_handler);
-                    await page.waitForTimeout(1000);
-                    await page.click("a#signin-btn").catch(err_handler);
-                    await page.waitForTimeout(3000);
-                })(),
-                sleep(30 * 1000),
-            ]);
+
+            await page.goto("https://www.gamer.com.tw/").catch(err_handler);
+            log2("Reload Passed.");
+            await page.waitForTimeout(1000);
+            await page.click("a#signin-btn").catch(err_handler);
+            log2("Sign Button Clicked.");
+            await page.waitForTimeout(2000);
+
             let reward_doubled = await page.$("a.popoup-ctrl-btn.is-disable");
             if (!reward_doubled) {
                 log2("雙倍簽到獎勵狀態: 尚未獲得雙倍簽到獎勵");
@@ -74,18 +73,29 @@ async function sign_automation({ page, AUTO_SIGN_DOUBLE, logger }) {
 }
 
 async function ad_handler(ad_frame) {
-    await ad_frame.waitForTimeout(5000);
+    await ad_frame.waitForTimeout(2000);
     if (await ad_frame.$(".rewardDialogueWrapper:not([style*=none]) .rewardResumebutton"))
         await ad_frame.click(".rewardDialogueWrapper:not([style*=none]) .rewardResumebutton").catch(err_handler);
 
-    await ad_frame.waitForTimeout(35000);
+    await Promise.race([
+        ad_frame.waitForSelector(".videoAdUiSkipContainer.html5-stop-propagation > button", { visible: true, timeout: 35000 }),
+        ad_frame.waitForSelector("div#close_button_icon", { visible: true, timeout: 35000 }),
+        // ad_frame.waitForSelector("#google-rewarded-video > img:nth-child(4)", { visible: true, timeout: 35000 }),
+    ]).catch(() => {});
+    await ad_frame.waitForTimeout(1000);
+
     if (await ad_frame.$(".videoAdUiSkipContainer.html5-stop-propagation > button"))
         await ad_frame.click(".videoAdUiSkipContainer.html5-stop-propagation > button").catch(err_handler);
     else if (await ad_frame.$("div#close_button_icon")) await ad_frame.click("div#close_button_icon").catch(err_handler);
     else if (await ad_frame.$("#google-rewarded-video > img:nth-child(4)"))
         await ad_frame.click("#google-rewarded-video > img:nth-child(4)").catch(err_handler);
+    else {
+        const ad_frame_content = await ad_frame.evaluate(() => document.body.innerHTML).catch(() => null);
+        console.debug(ad_frame_content);
+        err_handler("發現未知類型的廣告");
+    }
 
-    await ad_frame.waitForTimeout(3000);
+    await ad_frame.waitForTimeout(2000);
 }
 
 exports.sign_automation = sign_automation;

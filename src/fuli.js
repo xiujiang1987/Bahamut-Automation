@@ -137,6 +137,11 @@ async function ad_handler(ad_frame) {
     else if (await ad_frame.$("div#close_button_icon")) await ad_frame.click("div#close_button_icon").catch(err_handler);
     else if (await ad_frame.$("#google-rewarded-video > img:nth-child(4)"))
         await ad_frame.click("#google-rewarded-video > img:nth-child(4)").catch(err_handler);
+    else {
+        const ad_frame_content = await ad_frame.evaluate(() => document.body.innerHTML).catch(() => null);
+        console.debug(ad_frame_content);
+        err_handler("發現未知類型的廣告");
+    }
 
     await ad_frame.waitForTimeout(2000);
 }
