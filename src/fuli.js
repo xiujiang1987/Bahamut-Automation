@@ -140,7 +140,7 @@ async function ad_handler(ad_frame) {
     else {
         const ad_frame_content = await ad_frame.evaluate(() => document.body.innerHTML).catch(() => null);
         console.debug(ad_frame_content);
-        err_handler("發現未知類型的廣告");
+        err_handler(new Error("發現未知類型的廣告"));
     }
 
     await ad_frame.waitForTimeout(2000);

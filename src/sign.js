@@ -34,10 +34,10 @@ async function sign_automation({ page, AUTO_SIGN_DOUBLE, logger }) {
             log2("正在檢測雙倍簽到獎勵狀態");
 
             await page.goto("https://www.gamer.com.tw/").catch(err_handler);
-            log2("Reload Passed.");
+            log("Reload Passed.");
             await page.waitForTimeout(1000);
             await page.click("a#signin-btn").catch(err_handler);
-            log2("Sign Button Clicked.");
+            log("Sign Button Clicked.");
             await page.waitForTimeout(2000);
 
             let reward_doubled = await page.$("a.popoup-ctrl-btn.is-disable");
