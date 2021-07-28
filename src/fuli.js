@@ -121,26 +121,27 @@ async function confirm(page) {
 }
 
 async function ad_handler(ad_frame) {
-    await ad_frame.waitForTimeout(2000);
-    if (await ad_frame.$(".rewardDialogueWrapper:not([style*=none]) .rewardResumebutton"))
-        await ad_frame.click(".rewardDialogueWrapper:not([style*=none]) .rewardResumebutton").catch(err_handler);
+    try {
+        await ad_frame.waitForTimeout(2000);
+        if (await ad_frame.$(".rewardDialogueWrapper:not([style*=none]) .rewardResumebutton"))
+            await ad_frame.click(".rewardDialogueWrapper:not([style*=none]) .rewardResumebutton");
 
-    await Promise.race([
-        ad_frame.waitForSelector(".videoAdUiSkipContainer.html5-stop-propagation > button", { visible: true, timeout: 35000 }),
-        ad_frame.waitForSelector("div#close_button_icon", { visible: true, timeout: 35000 }),
-        // ad_frame.waitForSelector("#google-rewarded-video > img:nth-child(4)", { visible: true, timeout: 35000 }),
-    ]).catch(() => {});
-    await ad_frame.waitForTimeout(1000);
+        await Promise.race([
+            ad_frame.waitForSelector(".videoAdUiSkipContainer.html5-stop-propagation > button", { visible: true, timeout: 35000 }),
+            ad_frame.waitForSelector("div#close_button_icon", { visible: true, timeout: 35000 }),
+            // ad_frame.waitForSelector("#google-rewarded-video > img:nth-child(4)", { visible: true, timeout: 35000 }),
+        ]).catch(() => {});
+        await ad_frame.waitForTimeout(1000);
 
-    if (await ad_frame.$(".videoAdUiSkipContainer.html5-stop-propagation > button"))
-        await ad_frame.click(".videoAdUiSkipContainer.html5-stop-propagation > button").catch(err_handler);
-    else if (await ad_frame.$("div#close_button_icon")) await ad_frame.click("div#close_button_icon").catch(err_handler);
-    else if (await ad_frame.$("#google-rewarded-video > img:nth-child(4)"))
-        await ad_frame.click("#google-rewarded-video > img:nth-child(4)").catch(err_handler);
-    else {
+        if (await ad_frame.$(".videoAdUiSkipContainer.html5-stop-propagation > button"))
+            await ad_frame.click(".videoAdUiSkipContainer.html5-stop-propagation > button");
+        else if (await ad_frame.$("div#close_button_icon")) await ad_frame.click("div#close_button_icon");
+        else if (await ad_frame.$("#google-rewarded-video > img:nth-child(4)")) await ad_frame.click("#google-rewarded-video > img:nth-child(4)");
+        else throw new Error("發現未知類型的廣告");
+    } catch (err) {
         const ad_frame_content = await ad_frame.evaluate(() => document.body.innerHTML).catch(() => null);
         console.debug(ad_frame_content);
-        err_handler(new Error("發現未知類型的廣告"));
+        err_handler(err);
     }
 
     await ad_frame.waitForTimeout(2000);

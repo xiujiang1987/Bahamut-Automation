@@ -1,6 +1,6 @@
 const puppeteer = require("puppeteer-core");
 const fs = require("fs");
-const { log, sleep } = require("./utils.js");
+const { log, err_handler, sleep } = require("./utils.js");
 const { bahamut_login, bahamut_logout } = require("./login.js");
 const { sign_automation } = require("./sign.js");
 const { answer_anime_automation } = require("./anser_anime.js");
@@ -65,7 +65,7 @@ async function main(args) {
 
             if (GH_PAT) issuer.update_task("登入", { status: "執行中" });
             let page = await new_page();
-            await bahamut_login({ page, USERNAME, PASSWORD, logger: GH_PAT ? issuer.logger("登入") : null });
+            await bahamut_login({ page, USERNAME, PASSWORD, logger: GH_PAT ? issuer.logger("登入") : null }).catch(err_handler);
             await page.close();
             if (GH_PAT) issuer.update_task("登入", { status: "完成" });
         }
@@ -77,7 +77,7 @@ async function main(args) {
             if (GH_PAT) issuer.update_task("簽到", { status: "執行中" });
             let page = await new_page();
             let task = Promise.race([
-                sign_automation({ page, AUTO_SIGN_DOUBLE, logger: GH_PAT ? issuer.logger("簽到") : null }),
+                sign_automation({ page, AUTO_SIGN_DOUBLE, logger: GH_PAT ? issuer.logger("簽到") : null }).catch(err_handler),
                 sleep(10 * 60 * 1000, "[Timed Out] 簽到"),
             ]);
             if (PARALLEL) parallel_tasks.push(task);
@@ -93,7 +93,7 @@ async function main(args) {
             if (GH_PAT) issuer.update_task("答題", { status: "執行中" });
             let page = await new_page();
             let task = Promise.race([
-                answer_anime_automation({ page, logger: GH_PAT ? issuer.logger("答題") : null }),
+                answer_anime_automation({ page, logger: GH_PAT ? issuer.logger("答題") : null }).catch(err_handler),
                 sleep(10 * 60 * 1000, "[Timed Out] 答題"),
             ]);
             if (PARALLEL) parallel_tasks.push(task);
@@ -108,7 +108,10 @@ async function main(args) {
         if (AUTO_DRAW) {
             if (GH_PAT) issuer.update_task("抽獎", { status: "執行中" });
             let page = await new_page();
-            let task = Promise.race([draw_automation({ page, logger: GH_PAT ? issuer.logger("抽獎") : null }), sleep(2 * 60 * 60 * 1000, "[Timed Out] 抽獎")]);
+            let task = Promise.race([
+                draw_automation({ page, logger: GH_PAT ? issuer.logger("抽獎") : null }),
+                sleep(2 * 60 * 60 * 1000, "[Timed Out] 抽獎").catch(err_handler),
+            ]);
             if (PARALLEL) parallel_tasks.push(task);
             else {
                 const result = await task;
@@ -123,7 +126,7 @@ async function main(args) {
         if (browser) {
             // 登出帳號
             let page = await new_page();
-            await bahamut_logout({ page, logger: GH_PAT ? issuer.logger("登入") : null });
+            await bahamut_logout({ page, logger: GH_PAT ? issuer.logger("登入") : null }).catch(err_handler);
             await page.close();
 
             await browser.close();
