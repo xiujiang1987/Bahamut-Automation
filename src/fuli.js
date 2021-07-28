@@ -82,7 +82,7 @@ async function draw_automation({ page, logger }) {
             } else if (ad_status.includes("觀看廣告")) {
                 log2(`正在觀看廣告`);
                 await page.click("button[type=submit].btn.btn-insert.btn-primary").catch(err_handler);
-                await page.waitForTimeout(3000);
+                await page.waitForTimeout(1000);
                 await page.waitForSelector("ins iframe").catch(err_handler);
                 const ad_iframe = await page.$("ins iframe").catch(err_handler);
                 const ad_frame = await ad_iframe.contentFrame().catch(err_handler);
@@ -117,11 +117,11 @@ async function confirm(page) {
     await page.waitForTimeout(800);
     await page.click("#dialogify_1 > form > div > div > div.btn-box.text-right > button.btn.btn-insert.btn-primary");
     await page.waitForNavigation();
-    await page.waitForTimeout(1500);
+    await page.waitForTimeout(1000);
 }
 
 async function ad_handler(ad_frame) {
-    await ad_frame.waitForTimeout(3000);
+    await ad_frame.waitForTimeout(2000);
     if (await ad_frame.$(".rewardDialogueWrapper:not([style*=none]) .rewardResumebutton"))
         await ad_frame.click(".rewardDialogueWrapper:not([style*=none]) .rewardResumebutton").catch(err_handler);
 
@@ -129,8 +129,8 @@ async function ad_handler(ad_frame) {
         ad_frame.waitForSelector(".videoAdUiSkipContainer.html5-stop-propagation > button", { visible: true, timeout: 35000 }),
         ad_frame.waitForSelector("div#close_button_icon", { visible: true, timeout: 35000 }),
         // ad_frame.waitForSelector("#google-rewarded-video > img:nth-child(4)", { visible: true, timeout: 35000 }),
-    ]).catch(err_handler);
-    await ad_frame.waitForTimeout(3000);
+    ]).catch(() => {});
+    await ad_frame.waitForTimeout(1000);
 
     if (await ad_frame.$(".videoAdUiSkipContainer.html5-stop-propagation > button"))
         await ad_frame.click(".videoAdUiSkipContainer.html5-stop-propagation > button").catch(err_handler);
@@ -138,7 +138,7 @@ async function ad_handler(ad_frame) {
     else if (await ad_frame.$("#google-rewarded-video > img:nth-child(4)"))
         await ad_frame.click("#google-rewarded-video > img:nth-child(4)").catch(err_handler);
 
-    await ad_frame.waitForTimeout(3000);
+    await ad_frame.waitForTimeout(2000);
 }
 
 exports.draw_automation = draw_automation;

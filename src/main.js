@@ -14,9 +14,6 @@ async function main(args) {
     if (!fs.existsSync("./log/")) fs.mkdirSync("./log/");
     if (!fs.existsSync("./screenshot/")) fs.mkdirSync("./screenshot/");
 
-    // Initialize Sentry
-    sentryInit();
-
     log("\n==========");
     log("開始執行巴哈姆特自動化！\n");
     let { USERNAME, PASSWORD, AUTO_SIGN, AUTO_SIGN_DOUBLE, AUTO_DRAW, AUTO_ANSWER_ANIME, HEADLESS, PARALLEL, GH_PAT } = args;
@@ -35,6 +32,9 @@ async function main(args) {
         GH_PAT = GH_PAT || "";
 
         console.log(JSON.stringify({ AUTO_SIGN, AUTO_SIGN_DOUBLE, AUTO_DRAW, AUTO_ANSWER_ANIME, HEADLESS, PARALLEL, GH_PAT }, null, 4) + "\n");
+
+        // Initialize Sentry
+        sentryInit();
 
         // issuer 是用來發 GitHub Issue Report 的，範例請至 https://github.com/JacobLinCool/BA/issues 查看
         let issuer = null;
@@ -140,6 +140,7 @@ async function main(args) {
 async function new_page() {
     let page = await browser.newPage();
     await page.setUserAgent(UserAgent);
+    await page.setDefaultNavigationTimeout(10 * 1000);
     return page;
 }
 
