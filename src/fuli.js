@@ -75,6 +75,7 @@ async function draw_automation({ page, logger }) {
 
             let ad_status = (await page.$eval(".dialogify .dialogify__body p", (node) => node.innerText).catch(() => {})) || "";
 
+            let ad_frame;
             if (ad_status.includes("能量不足")) {
                 await err_handler(`廣告能量不足？`);
                 await page.reload().catch(err_handler);
@@ -85,7 +86,7 @@ async function draw_automation({ page, logger }) {
                 await page.waitForTimeout(1000);
                 await page.waitForSelector("ins iframe").catch(err_handler);
                 const ad_iframe = await page.$("ins iframe").catch(err_handler);
-                const ad_frame = await ad_iframe.contentFrame().catch(err_handler);
+                ad_frame = await ad_iframe.contentFrame().catch(err_handler);
                 await ad_handler(ad_frame);
                 await page.waitForTimeout(2000);
             }
@@ -102,6 +103,7 @@ async function draw_automation({ page, logger }) {
                 }
             } else {
                 console.debug(url);
+                console.debug(await ad_frame.url().catch(() => null));
                 log2("未進入結算頁面，重試中");
                 err_handler(new Error("抽抽樂未進入結算頁面"));
             }
