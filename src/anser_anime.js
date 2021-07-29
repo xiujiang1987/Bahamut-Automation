@@ -23,7 +23,7 @@ async function answer_anime_automation({ page, logger }) {
 
         log2("[動畫瘋答題] 尚未回答今日題目，嘗試答題中");
         log2(`[動畫瘋答題] 今天的問題：${question.question}`);
-        log2(`[動畫瘋答題] 選項：${options.fillter(Boolean).join(", ")}`);
+        log2(`[動畫瘋答題] 選項：${options.filter(Boolean).join(", ")}`);
 
         log2(`[動畫瘋答題] 正在尋找答案`);
         let token = question.token;

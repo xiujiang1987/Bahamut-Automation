@@ -107,7 +107,7 @@ async function draw_automation({ page, logger }) {
                 }
             } else {
                 console.debug(url);
-                console.debug(await ad_frame.url().catch(() => null));
+                console.debug((await ad_frame.url()).catch(() => null));
                 log2("[抽抽樂] 未進入結算頁面，重試中 ✘");
                 err_handler(new Error("抽抽樂未進入結算頁面"));
             }
