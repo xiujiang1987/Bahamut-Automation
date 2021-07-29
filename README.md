@@ -1,3 +1,5 @@
+![Bahamut Automation Preview.png](Bahamut Automation Preview.png)
+
 # Bahamut Automation Action
 巴哈姆特自動化！
 
