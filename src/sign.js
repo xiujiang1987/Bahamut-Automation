@@ -64,14 +64,14 @@ async function sign_automation({ page, AUTO_SIGN_DOUBLE, logger }) {
         }
     }
 
-    let { days, finishedAd, prjSigninDays, signin } = await sign_status(page);
+    const final = await sign_status(page);
 
     log2(`[簽到] 執行完畢 ✨\n`);
 
     return {
-        days,
-        signed: !!signin,
-        doubled: !!finishedAd,
+        days: final.days,
+        signed: !!final.signin,
+        doubled: !!final.finishedAd,
     };
 }
 
