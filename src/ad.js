@@ -1,3 +1,5 @@
+const { err_handler } = require("./utils.js");
+
 async function ad_handler(ad_frame) {
     try {
         await ad_frame.waitForTimeout(2000);
