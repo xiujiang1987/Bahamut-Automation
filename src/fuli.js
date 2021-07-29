@@ -90,8 +90,8 @@ async function draw_automation({ page, logger }) {
                 await page.waitForTimeout(2000);
             }
 
-            let cost = false; //await page.$eval("#buyD", (node) => !node.innerText.includes("廣告抽獎券"));
-            if (!cost) {
+            let url = await page.url();
+            if (url.includes("/buyD.php") && url.includes("ad=1")) {
                 log2(`正在確認結算頁面`);
                 await confirm(page).catch(err_handler);
                 if ((await page.$(".card > .section > p")) && (await page.$eval(".card > .section > p", (node) => node.innerText.includes("成功")))) {
@@ -100,6 +100,8 @@ async function draw_automation({ page, logger }) {
                 } else {
                     log2("發生錯誤，重試中");
                 }
+            } else {
+                log2("未進入結算頁面，重試中");
             }
         }
     }
@@ -120,8 +122,7 @@ async function confirm(page) {
         await page.waitForNavigation();
         await page.waitForTimeout(1000);
     } catch (err) {
-        const page_content = await page.evaluate(() => document.body.innerHTML).catch(() => null);
-        console.debug(page_content);
+        console.debug(await page.url());
         err_handler(err);
     }
 }
@@ -145,8 +146,7 @@ async function ad_handler(ad_frame) {
         else if (await ad_frame.$("#google-rewarded-video > img:nth-child(4)")) await ad_frame.click("#google-rewarded-video > img:nth-child(4)");
         else throw new Error("發現未知類型的廣告");
     } catch (err) {
-        const ad_frame_content = await ad_frame.evaluate(() => document.body.innerHTML).catch(() => null);
-        console.debug(ad_frame_content);
+        console.debug(await ad_frame.url());
         err_handler(err);
     }
 
