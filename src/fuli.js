@@ -101,7 +101,9 @@ async function draw_automation({ page, logger }) {
                     log2("發生錯誤，重試中");
                 }
             } else {
+                console.debug(url);
                 log2("未進入結算頁面，重試中");
+                err_handler(new Error("抽抽樂未進入結算頁面"));
             }
         }
     }
