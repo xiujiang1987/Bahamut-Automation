@@ -1,4 +1,4 @@
-![Bahamut Automation Preview.png](Bahamut Automation Preview.png)
+![Bahamut Automation Preview.png](https://github.com/JacobLinCool/Bahamut-Automation/raw/main/Bahamut%20Automation%20Preview.png)
 
 # Bahamut Automation Action
 巴哈姆特自動化！
