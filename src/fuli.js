@@ -56,7 +56,7 @@ async function draw_automation({ page, logger }) {
 
             if (await page.$(".btn-base.c-accent-o.is-disable")) {
                 log2(`[抽抽樂] 第 ${idx + 1} 個抽抽樂（${draws[idx].name}）的廣告免費次數已用完 ✔`);
-                finished[draws[idx].name] = undefined;
+                unfinished[draws[idx].name] = undefined;
                 break;
             }
 
