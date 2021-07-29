@@ -114,6 +114,8 @@ async function draw_automation({ page, logger }) {
         }
     }
 
+    Object.keys(unfinished).forEach((key) => unfinished[key] === undefined && delete unfinished[key]);
+
     await page.waitForTimeout(2000);
     log2(`[抽抽樂] 執行完畢 ✨\n`);
 
