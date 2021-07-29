@@ -6,6 +6,7 @@ async function bahamut_login({ page, USERNAME, PASSWORD, logger }) {
         if (logger) logger(msg);
     };
 
+    let success = false;
     log2(`開始執行帳號登入程序`);
     await page.goto("https://www.gamer.com.tw/");
     await page.waitForTimeout(2000);
@@ -35,11 +36,14 @@ async function bahamut_login({ page, USERNAME, PASSWORD, logger }) {
             log2("已嘗試登入，重新檢測登入狀態");
         } else {
             log2("登入狀態: 已登入");
+            success = true;
             break;
         }
     }
 
     log2(`帳號登入程序已完成\n`);
+
+    return { success };
 }
 
 async function bahamut_logout({ page, logger }) {

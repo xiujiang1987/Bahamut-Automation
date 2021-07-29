@@ -1,4 +1,5 @@
 const { log, err_handler } = require("./utils.js");
+const { ad_handler } = require("./ad.js");
 
 async function draw_automation({ page, logger }) {
     let log2 = (msg) => {
@@ -6,10 +7,10 @@ async function draw_automation({ page, logger }) {
         if (logger) logger(msg);
     };
 
-    log2(`開始執行福利社自動抽抽樂程序`);
-    let count = 0;
+    log2(`[抽抽樂] 開始執行`);
+    let lottery = 0;
 
-    log2("正在尋找抽抽樂");
+    log2("[抽抽樂] 正在尋找抽抽樂");
     let draws = [];
     await page.goto("https://fuli.gamer.com.tw/shop.php?page=1");
     let items = await page.$$("a.items-card");
@@ -37,13 +38,15 @@ async function draw_automation({ page, logger }) {
         }
     }
 
-    log2(`找到 ${draws.length} 個抽抽樂`);
+    log2(`[抽抽樂] 找到 ${draws.length} 個抽抽樂`);
+    const unfinished = {};
     draws.forEach(({ name }, i) => {
-        log2(`${i + 1}: ${name}`);
+        log2(`[抽抽樂] ${i + 1}: ${name}`);
+        unfinished[name] = true;
     });
 
     for (let idx = 0; idx < draws.length; idx++) {
-        log2(`正在嘗試執行第 ${idx + 1} 個抽抽樂： ${draws[idx].name}`);
+        log2(`[抽抽樂] 正在嘗試執行第 ${idx + 1} 個抽抽樂： ${draws[idx].name}`);
 
         let limitation = 20;
         for (let time = 1; time <= limitation; time++) {
@@ -52,17 +55,18 @@ async function draw_automation({ page, logger }) {
             let name = await page.$eval("#BH-master > .BH-lbox.fuli-pbox h1", (node) => node.innerHTML);
 
             if (await page.$(".btn-base.c-accent-o.is-disable")) {
-                log2(`第 ${idx + 1} 個抽抽樂（${draws[idx].name}）的廣告免費次數已用完`);
+                log2(`[抽抽樂] 第 ${idx + 1} 個抽抽樂（${draws[idx].name}）的廣告免費次數已用完 ✔`);
+                finished[draws[idx].name] = undefined;
                 break;
             }
 
-            log2(`正在執行第 ${time} 次抽獎，可能需要多達 1 分鐘`);
+            log2(`[抽抽樂] 正在執行第 ${time} 次抽獎，可能需要多達 1 分鐘`);
 
             await page.click(".btn-base.c-accent-o").catch(err_handler);
             await page.waitForTimeout(2000);
 
             if ((await page.$eval(".dialogify", (node) => node.innerText.includes("勇者問答考驗")).catch(() => {})) || null) {
-                log2(`需要回答問題，正在回答問題`);
+                log2(`[抽抽樂] 需要回答問題，正在回答問題`);
                 await page.$$eval("#dialogify_1 .dialogify__body a", (options) => {
                     options.forEach((option) => {
                         if (option.dataset.option == option.dataset.answer) option.click();
@@ -81,7 +85,7 @@ async function draw_automation({ page, logger }) {
                 await page.reload().catch(err_handler);
                 continue;
             } else if (ad_status.includes("觀看廣告")) {
-                log2(`正在觀看廣告`);
+                log2(`[抽抽樂] 正在觀看廣告`);
                 await page.click("button[type=submit].btn.btn-insert.btn-primary").catch(err_handler);
                 await page.waitForTimeout(1000);
                 await page.waitForSelector("ins iframe").catch(err_handler);
@@ -93,27 +97,27 @@ async function draw_automation({ page, logger }) {
 
             let url = await page.url();
             if (url.includes("/buyD.php") && url.includes("ad=1")) {
-                log2(`正在確認結算頁面`);
+                log2(`[抽抽樂] 正在確認結算頁面`);
                 await confirm(page).catch(err_handler);
                 if ((await page.$(".card > .section > p")) && (await page.$eval(".card > .section > p", (node) => node.innerText.includes("成功")))) {
-                    log2("已完成一次抽抽樂：" + name);
-                    count++;
+                    log2("[抽抽樂] 已完成一次抽抽樂：" + name + " ✔");
+                    lottery++;
                 } else {
-                    log2("發生錯誤，重試中");
+                    log2("[抽抽樂] 發生錯誤，重試中 ✘");
                 }
             } else {
                 console.debug(url);
                 console.debug(await ad_frame.url().catch(() => null));
-                log2("未進入結算頁面，重試中");
+                log2("[抽抽樂] 未進入結算頁面，重試中 ✘");
                 err_handler(new Error("抽抽樂未進入結算頁面"));
             }
         }
     }
 
     await page.waitForTimeout(2000);
-    log2(`福利社自動抽抽樂程序已完成\n`);
+    log2(`[抽抽樂] 執行完畢 ✨\n`);
 
-    return { count };
+    return { lottery, unfinished };
 }
 
 async function confirm(page) {
@@ -129,32 +133,6 @@ async function confirm(page) {
         console.debug(await page.url());
         err_handler(err);
     }
-}
-
-async function ad_handler(ad_frame) {
-    try {
-        await ad_frame.waitForTimeout(2000);
-        if (await ad_frame.$(".rewardDialogueWrapper:not([style*=none]) .rewardResumebutton"))
-            await ad_frame.click(".rewardDialogueWrapper:not([style*=none]) .rewardResumebutton");
-
-        await Promise.race([
-            ad_frame.waitForSelector(".videoAdUiSkipContainer.html5-stop-propagation > button", { visible: true, timeout: 35000 }),
-            ad_frame.waitForSelector("div#close_button_icon", { visible: true, timeout: 35000 }),
-            // ad_frame.waitForSelector("#google-rewarded-video > img:nth-child(4)", { visible: true, timeout: 35000 }),
-        ]).catch(() => {});
-        await ad_frame.waitForTimeout(1000);
-
-        if (await ad_frame.$(".videoAdUiSkipContainer.html5-stop-propagation > button"))
-            await ad_frame.click(".videoAdUiSkipContainer.html5-stop-propagation > button");
-        else if (await ad_frame.$("div#close_button_icon")) await ad_frame.click("div#close_button_icon");
-        else if (await ad_frame.$("#google-rewarded-video > img:nth-child(4)")) await ad_frame.click("#google-rewarded-video > img:nth-child(4)");
-        else throw new Error("發現未知類型的廣告");
-    } catch (err) {
-        console.debug(await ad_frame.url());
-        err_handler(err);
-    }
-
-    await ad_frame.waitForTimeout(2000);
 }
 
 exports.draw_automation = draw_automation;

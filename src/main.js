@@ -16,21 +16,9 @@ async function main(args) {
 
     log("\n==========");
     log("開始執行巴哈姆特自動化！\n");
-    let { USERNAME, PASSWORD, AUTO_SIGN, AUTO_SIGN_DOUBLE, AUTO_DRAW, AUTO_ANSWER_ANIME, HEADLESS, PARALLEL, GH_PAT } = args;
-
-    if (!USERNAME) console.error(`缺少巴哈姆特帳號`);
-    if (!PASSWORD) console.error(`缺少巴哈姆特密碼`);
+    const { USERNAME, PASSWORD, AUTO_SIGN, AUTO_SIGN_DOUBLE, AUTO_DRAW, AUTO_ANSWER_ANIME, HEADLESS, PARALLEL, GH_PAT } = await param_parser(args);
 
     if (USERNAME && PASSWORD) {
-        // 參數標準化
-        AUTO_SIGN = AUTO_SIGN == "true" || AUTO_SIGN == "1" || false;
-        AUTO_SIGN_DOUBLE = AUTO_SIGN_DOUBLE == "true" || AUTO_SIGN_DOUBLE == "1" || false;
-        AUTO_DRAW = AUTO_DRAW == "true" || AUTO_DRAW == "1" || false;
-        AUTO_ANSWER_ANIME = AUTO_ANSWER_ANIME == "true" || AUTO_ANSWER_ANIME == "1" || false;
-        HEADLESS = !(HEADLESS == "false" || HEADLESS == "0" || false);
-        PARALLEL = PARALLEL == "true" || PARALLEL == "1" || false;
-        GH_PAT = GH_PAT || "";
-
         console.log(JSON.stringify({ AUTO_SIGN, AUTO_SIGN_DOUBLE, AUTO_DRAW, AUTO_ANSWER_ANIME, HEADLESS, PARALLEL, GH_PAT }, null, 4) + "\n");
 
         // Initialize Sentry
@@ -145,6 +133,23 @@ async function new_page() {
     await page.setUserAgent(UserAgent);
     await page.setDefaultNavigationTimeout(10 * 1000);
     return page;
+}
+
+async function param_parser(args) {
+    let { USERNAME, PASSWORD, AUTO_SIGN, AUTO_SIGN_DOUBLE, AUTO_DRAW, AUTO_ANSWER_ANIME, HEADLESS, PARALLEL, GH_PAT } = args;
+
+    if (!USERNAME) throw new Error(`缺少巴哈姆特帳號`);
+    if (!PASSWORD) throw new Error(`缺少巴哈姆特密碼`);
+
+    AUTO_SIGN = AUTO_SIGN == "true" || AUTO_SIGN == "1" || false;
+    AUTO_SIGN_DOUBLE = AUTO_SIGN_DOUBLE == "true" || AUTO_SIGN_DOUBLE == "1" || false;
+    AUTO_DRAW = AUTO_DRAW == "true" || AUTO_DRAW == "1" || false;
+    AUTO_ANSWER_ANIME = AUTO_ANSWER_ANIME == "true" || AUTO_ANSWER_ANIME == "1" || false;
+    HEADLESS = !(HEADLESS == "false" || HEADLESS == "0" || false);
+    PARALLEL = PARALLEL == "true" || PARALLEL == "1" || false;
+    GH_PAT = GH_PAT || "";
+
+    return { USERNAME, PASSWORD, AUTO_SIGN, AUTO_SIGN_DOUBLE, AUTO_DRAW, AUTO_ANSWER_ANIME, HEADLESS, PARALLEL, GH_PAT };
 }
 
 exports.main = main;
