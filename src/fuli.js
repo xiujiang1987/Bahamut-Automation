@@ -10,7 +10,7 @@ async function draw_automation({ page, logger }) {
     log2(`[抽抽樂] 開始執行`);
     let lottery = 0;
 
-    log2("[抽抽樂] 正在尋找抽抽樂");
+    log("[抽抽樂] 正在尋找抽抽樂");
     let draws = [];
     await page.goto("https://fuli.gamer.com.tw/shop.php?page=1");
     let items = await page.$$("a.items-card");
@@ -40,9 +40,9 @@ async function draw_automation({ page, logger }) {
 
     log2(`[抽抽樂] 找到 ${draws.length} 個抽抽樂`);
     const unfinished = {};
-    draws.forEach(({ name }, i) => {
+    draws.forEach(({ name, link }, i) => {
         log2(`[抽抽樂] ${i + 1}: ${name}`);
-        unfinished[name] = true;
+        unfinished[name] = link;
     });
 
     for (let idx = 0; idx < draws.length; idx++) {
@@ -60,7 +60,7 @@ async function draw_automation({ page, logger }) {
                 break;
             }
 
-            log2(`[抽抽樂] 正在執行第 ${time} 次抽獎，可能需要多達 1 分鐘`);
+            log(`[抽抽樂] 正在執行第 ${time} 次抽獎，可能需要多達 1 分鐘`);
 
             await page.click(".btn-base.c-accent-o").catch(err_handler);
             await page.waitForTimeout(2000);
@@ -85,7 +85,7 @@ async function draw_automation({ page, logger }) {
                 await page.reload().catch(err_handler);
                 continue;
             } else if (ad_status.includes("觀看廣告")) {
-                log2(`[抽抽樂] 正在觀看廣告`);
+                log(`[抽抽樂] 正在觀看廣告`);
                 await page.click("button[type=submit].btn.btn-insert.btn-primary").catch(err_handler);
                 await page.waitForTimeout(1000);
                 await page.waitForSelector("ins iframe").catch(err_handler);
@@ -95,9 +95,9 @@ async function draw_automation({ page, logger }) {
                 await page.waitForTimeout(2000);
             }
 
-            let url = await page.url();
+            let url = page.url();
             if (url.includes("/buyD.php") && url.includes("ad=1")) {
-                log2(`[抽抽樂] 正在確認結算頁面`);
+                log(`[抽抽樂] 正在確認結算頁面`);
                 await confirm(page).catch(err_handler);
                 if ((await page.$(".card > .section > p")) && (await page.$eval(".card > .section > p", (node) => node.innerText.includes("成功")))) {
                     log2("[抽抽樂] 已完成一次抽抽樂：" + name + " ✔");
@@ -107,7 +107,7 @@ async function draw_automation({ page, logger }) {
                 }
             } else {
                 console.debug(url);
-                console.debug(await ad_frame.url());
+                console.debug(ad_frame.url());
                 log2("[抽抽樂] 未進入結算頁面，重試中 ✘");
                 err_handler(new Error("抽抽樂未進入結算頁面"));
             }
@@ -132,7 +132,7 @@ async function confirm(page) {
         await page.waitForNavigation();
         await page.waitForTimeout(1000);
     } catch (err) {
-        console.debug(await page.url());
+        console.debug(page.url());
         err_handler(err);
     }
 }

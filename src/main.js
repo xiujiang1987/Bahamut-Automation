@@ -72,6 +72,9 @@ async function main(args) {
             else {
                 const result = await task;
                 if (result) log(result);
+                if (typeof result === "object") {
+                    issuer.logger("簽到")(`[簽到] ✨✨✨ 已連續簽到天數: ${result.days} 天 ✨✨✨`);
+                }
                 page.close();
             }
             if (GH_PAT) issuer.update_task("簽到", { status: "完成" });
@@ -88,6 +91,9 @@ async function main(args) {
             else {
                 const result = await task;
                 if (result) log(result);
+                if (typeof result === "object") {
+                    issuer.logger("答題")(`[動畫瘋答題] ✨✨✨ 獲得 ${result.reward} 巴幣 ✨✨✨`);
+                }
                 page.close();
             }
             if (GH_PAT) issuer.update_task("答題", { status: "完成" });
@@ -104,6 +110,12 @@ async function main(args) {
             else {
                 const result = await task;
                 if (result) log(result);
+                if (typeof result === "object") {
+                    issuer.logger("抽獎")(`[抽抽樂] ✨✨✨ 獲得 ${result.lottery} 個抽獎機會 ✨✨✨`);
+                    if (Object.keys(result.unfinished).length) {
+                        issuer.logger("抽獎")(`[抽抽樂] 尚未完成: \n ${JSON.stringify(result.unfinished, null, 2)}`);
+                    }
+                }
                 page.close();
             }
             if (GH_PAT) issuer.update_task("抽獎", { status: "完成" });

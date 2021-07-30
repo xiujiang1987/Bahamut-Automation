@@ -1,6 +1,7 @@
-const { err_handler } = require("./utils.js");
+const { log, err_handler } = require("./utils.js");
 
 async function ad_handler(ad_frame) {
+    log("AD Handler: Start");
     try {
         await ad_frame.waitForTimeout(2000);
         if (await ad_frame.$(".rewardDialogueWrapper:not([style*=none]) .rewardResumebutton"))
@@ -19,11 +20,12 @@ async function ad_handler(ad_frame) {
         else if (await ad_frame.$("#google-rewarded-video > img:nth-child(4)")) await ad_frame.click("#google-rewarded-video > img:nth-child(4)");
         else throw new Error("發現未知類型的廣告");
     } catch (err) {
-        console.debug(await ad_frame.url());
+        console.debug(ad_frame.url());
         err_handler(err);
     }
 
     await ad_frame.waitForTimeout(2000);
+    log("AD Handler: Finished");
 }
 
 exports.ad_handler = ad_handler;

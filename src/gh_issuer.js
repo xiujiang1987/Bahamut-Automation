@@ -45,7 +45,7 @@ class Issuer {
 
     gen_body(end = false) {
         let time = time_info();
-        let body = `**${end ? "Finished" : "Updated"}.** (${time[0]}/${time[1]}/${time[2]} ${time[3]}:${time[4]}:${time[5]})\n\n`;
+        let body = `**${end ? "Finished" : "Updated"}.** (${time[0]}/${time[2]}/${time[1]} ${time[3]}:${time[4]}:${time[5]})\n\n`;
         Object.entries(this.tasks).forEach(([name, task]) => {
             body += `## ${name}: ${task.status} \n\n`;
             body += "```\n" + task.log + "\n```\n\n";
@@ -56,7 +56,7 @@ class Issuer {
     logger(task) {
         return (msg) => {
             let time = time_info();
-            this.update_task(task, { log: `[${time[0]}/${time[1]}/${time[2]} ${time[3]}:${time[4]}:${time[5]}] ${msg}` });
+            this.update_task(task, { log: `[${time[0]}/${time[2]}/${time[1]} ${time[3]}:${time[4]}:${time[5]}] ${msg}` });
         };
     }
 
@@ -80,8 +80,8 @@ async function create_issuer(pat, title = null) {
     let res = await octokit.request("POST /repos/{owner}/{repo}/issues", {
         owner: context.repo.owner,
         repo: context.repo.repo,
-        title: title || `Automation (${time[0]}/${time[1]}/${time[2]} ${time[3]}:${time[4]}:${time[5]})`,
-        body: `**Created.** (${time[0]}/${time[1]}/${time[2]} ${time[3]}:${time[4]}:${time[5]})\n\n`,
+        title: title || `Automation (${time[0]}/${time[2]}/${time[1]} ${time[3]}:${time[4]}:${time[5]})`,
+        body: `**Created.** (${time[0]}/${time[2]}/${time[1]} ${time[3]}:${time[4]}:${time[5]})\n\n`,
         labels: ["automation", "running"],
     });
 
