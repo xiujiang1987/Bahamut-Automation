@@ -120,8 +120,8 @@ async function main(args) {
                 if (result) log(result);
                 if (typeof result === "object" && GH_PAT) {
                     if (result.lottery) issuer.summary += `✨ 獲得 ${result.lottery} 個抽獎機會\n\n✨ 相當於 ${result.lottery * 500} 巴幣\n\n`;
-                    Object.keys(unfinished).forEach((key) => {
-                        issuer.summary += `❌ 未完成 <a href="${unfinished[key]}" target="_blank">${key}</a> 的全部抽獎\n\n`;
+                    Object.keys(result.unfinished).forEach((key) => {
+                        issuer.summary += `❌ 未完成 <a href="${result.unfinished[key]}" target="_blank">${key}</a> 的全部抽獎\n\n`;
                     });
                     issuer.logger("抽獎")(`[抽抽樂] ✨✨✨ 獲得 ${result.lottery} 個抽獎機會，相當於 ${result.lottery * 500} 巴幣 ✨✨✨`);
                     if (Object.keys(result.unfinished).length) {
