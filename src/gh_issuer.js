@@ -15,6 +15,8 @@ class Issuer {
         this.owner = context.repo.owner;
         this.repo = context.repo.repo;
 
+        this.summary = "";
+
         console.log(`Issuer Set. OWNER: ${this.owner}, REPO: ${this.repo}, ID: ${this.number}`);
     }
 
@@ -46,6 +48,7 @@ class Issuer {
     gen_body(end = false) {
         let time = time_info();
         let body = `**${end ? "Finished" : "Updated"}.** (${time[0]}/${time[2]}/${time[1]} ${time[3]}:${time[4]}:${time[5]})\n\n`;
+        body += `\n<hr>\n**${this.summary}**\n<hr>\n`;
         Object.entries(this.tasks).forEach(([name, task]) => {
             body += `## ${name}: ${task.status} \n\n`;
             body += "```\n" + task.log + "\n```\n\n";

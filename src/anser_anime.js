@@ -77,6 +77,7 @@ async function answer_anime_automation({ page, logger }) {
 
     return {
         reward,
+        answered: question.error === 1 || reward ? true : false,
     };
 }
 

@@ -72,8 +72,13 @@ async function main(args) {
             else {
                 const result = await task;
                 if (result) log(result);
-                if (typeof result === "object") {
-                    issuer.logger("簽到")(`[簽到] ✨✨✨ 已連續簽到天數: ${result.days} 天 ✨✨✨`);
+                if (typeof result === "object" && GH_PAT) {
+                    issuer.summary += `✨ 已連續簽到 ${result.days} 天\n\n`;
+                    if (result.signed) issuer.summary += `🍀 今日已簽到\n\n`;
+                    else issuer.summary += `❌ 今日尚未簽到\n\n`;
+                    if (result.doubled) issuer.summary += `🍀 已獲得雙倍簽到獎勵\n\n`;
+                    else issuer.summary += `❌ 尚未獲得雙倍簽到獎勵\n\n`;
+                    issuer.logger("簽到")(`[簽到] ✨✨✨ 已連續簽到 ${result.days} 天 ✨✨✨`);
                 }
                 page.close();
             }
@@ -91,7 +96,10 @@ async function main(args) {
             else {
                 const result = await task;
                 if (result) log(result);
-                if (typeof result === "object") {
+                if (typeof result === "object" && GH_PAT) {
+                    if (result.reward) issuer.summary += `✨ 獲得 ${result.reward} 巴幣\n\n`;
+                    if (result.answered) issuer.summary += `🍀 今日已答題\n\n`;
+                    else issuer.summary += `❌ 今日尚未答題\n\n`;
                     issuer.logger("答題")(`[動畫瘋答題] ✨✨✨ 獲得 ${result.reward} 巴幣 ✨✨✨`);
                 }
                 page.close();
@@ -110,7 +118,11 @@ async function main(args) {
             else {
                 const result = await task;
                 if (result) log(result);
-                if (typeof result === "object") {
+                if (typeof result === "object" && GH_PAT) {
+                    if (result.lottery) issuer.summary += `✨ 獲得 ${result.lottery} 個抽獎機會\n\n✨ 相當於 ${result.lottery * 500} 巴幣\n\n`;
+                    Object.keys(unfinished).forEach((key) => {
+                        issuer.summary += `❌ 未完成 <a href="${unfinished[key]}" target="_blank">${key}</a> 的全部抽獎\n\n`;
+                    });
                     issuer.logger("抽獎")(`[抽抽樂] ✨✨✨ 獲得 ${result.lottery} 個抽獎機會，相當於 ${result.lottery * 500} 巴幣 ✨✨✨`);
                     if (Object.keys(result.unfinished).length) {
                         issuer.logger("抽獎")(`[抽抽樂] 尚未完成: \n ${JSON.stringify(result.unfinished, null, 2)}`);
