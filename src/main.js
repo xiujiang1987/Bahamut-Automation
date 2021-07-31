@@ -119,7 +119,10 @@ async function main(args) {
                 const result = await task;
                 if (result) log(result);
                 if (typeof result === "object" && GH_PAT) {
-                    if (result.lottery) issuer.summary += `✨ 獲得 ${result.lottery} 個抽獎機會\n\n✨ 相當於 ${result.lottery * 500} 巴幣\n`;
+                    if (result.lottery) issuer.summary += `✨ 獲得 ${result.lottery} 個抽獎機會\n✨ 相當於 ${result.lottery * 500} 巴幣\n`;
+                    if (Object.keys(result.unfinished).length === 0) {
+                        issuer.summary += `🍀 全部抽獎皆已完成\n`;
+                    }
                     Object.keys(result.unfinished).forEach((key) => {
                         issuer.summary += `❌ 未完成 <a href="${result.unfinished[key]}" target="_blank">${key}</a> 的全部抽獎\n`;
                     });

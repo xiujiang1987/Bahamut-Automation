@@ -48,7 +48,7 @@ class Issuer {
     gen_body(end = false) {
         let time = time_info();
         let body = `**${end ? "Finished" : "Updated"}.** (${time[0]}/${time[2]}/${time[1]} ${time[3]}:${time[4]}:${time[5]})\n\n`;
-        body += `\n<hr>\n${this.summary}\n<hr>\n`;
+        body += `\n<hr>\n\n${this.summary}\n\n<hr>\n`;
         Object.entries(this.tasks).forEach(([name, task]) => {
             body += `## ${name}: ${task.status} \n\n`;
             body += "```\n" + task.log + "\n```\n\n";
