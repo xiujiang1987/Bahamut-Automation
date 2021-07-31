@@ -20,7 +20,8 @@ async function ad_handler(ad_frame) {
         else if (await ad_frame.$("#google-rewarded-video > img:nth-child(4)")) await ad_frame.click("#google-rewarded-video > img:nth-child(4)");
         else throw new Error("發現未知類型的廣告");
     } catch (err) {
-        console.debug(ad_frame.url());
+        if (ad_frame) console.debug(ad_frame.url());
+        else console.debug("No AD Frame");
         err_handler(err);
     }
 

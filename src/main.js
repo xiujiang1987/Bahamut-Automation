@@ -111,7 +111,7 @@ async function main(args) {
                 const result = await task;
                 if (result) log(result);
                 if (typeof result === "object") {
-                    issuer.logger("抽獎")(`[抽抽樂] ✨✨✨ 獲得 ${result.lottery} 個抽獎機會 ✨✨✨`);
+                    issuer.logger("抽獎")(`[抽抽樂] ✨✨✨ 獲得 ${result.lottery} 個抽獎機會，相當於 ${result.lottery * 500} 巴幣 ✨✨✨`);
                     if (Object.keys(result.unfinished).length) {
                         issuer.logger("抽獎")(`[抽抽樂] 尚未完成: \n ${JSON.stringify(result.unfinished, null, 2)}`);
                     }
