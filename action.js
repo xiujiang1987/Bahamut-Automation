@@ -5,8 +5,8 @@ const { main } = require("./src/main.js");
 
 (async () => {
     try {
-        const USERNAME = core.getInput("username");
-        const PASSWORD = core.getInput("password");
+        const username = core.getInput("username");
+        const password = core.getInput("password");
         const AUTO_SIGN = core.getInput("auto_sign");
         const AUTO_SIGN_DOUBLE = core.getInput("auto_sign_double");
         const AUTO_DRAW = core.getInput("auto_draw");
@@ -14,16 +14,14 @@ const { main } = require("./src/main.js");
         const PARALLEL = core.getInput("parallel");
         const GH_PAT = core.getInput("gh_pat");
 
-        await main({
-            USERNAME,
-            PASSWORD,
-            AUTO_SIGN,
-            AUTO_SIGN_DOUBLE,
-            AUTO_DRAW,
-            AUTO_ANSWER_ANIME,
-            PARALLEL,
-            GH_PAT,
-        })
+        const modules = ["login"];
+        if (AUTO_SIGN || AUTO_DRAW) modules.push("ad_handler");
+        if (AUTO_SIGN) modules.push("sign");
+        if (AUTO_ANSWER_ANIME) modules.push("answer");
+        if (AUTO_DRAW) modules.push("lottery");
+        modules.push("logout");
+
+        await main({ modules, username, password })
             .then((msg) => {
                 console.log(msg);
                 process.exit(0);
