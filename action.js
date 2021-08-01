@@ -20,8 +20,9 @@ const { main } = require("./src/main.js");
         if (AUTO_ANSWER_ANIME) modules.push("answer");
         if (AUTO_DRAW) modules.push("lottery");
         modules.push("logout");
+        if (GH_PAT) modules.push("report");
 
-        await main({ modules, username, password })
+        await main({ modules, username, password, gh_pat: GH_PAT || undefined })
             .then((msg) => {
                 console.log(msg);
                 process.exit(0);

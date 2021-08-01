@@ -47,7 +47,7 @@ exports.run = async ({ params, outputs, catchError, log }) => {
     if (typeof config.labels === "string") config.labels = config.labels.split(",");
     if (typeof config.ignore === "string") config.ignore = config.ignore.split(",");
 
-    const body = await gen_body(outputs, config.ignore, catchError);
+    const body = await gen_body(outputs, config.ignore, catchError, log);
 
     let res = await octokit.request("POST /repos/{owner}/{repo}/issues", {
         owner: context.repo.owner,
@@ -60,12 +60,15 @@ exports.run = async ({ params, outputs, catchError, log }) => {
     return { number: res.data.number };
 };
 
-async function gen_body(outputs, ignore, catchError) {
+async function gen_body(outputs, ignore, catchError, log) {
     let body = "";
     for (let key in outputs) {
         if (ignore.includes(key)) continue;
         try {
-            const output = outputs[key];
+            if (typeof outputs[key] === "function") continue;
+            const output = JSON.parse(JSON.stringify(outputs[key]));
+            if (!output) continue;
+
             if (output.report) {
                 if (typeof output.report === "string") {
                     body += `${output.report}\n\n`;
@@ -73,10 +76,9 @@ async function gen_body(outputs, ignore, catchError) {
                     body += (await output.report(JSON.parse(JSON.stringify(output)))) + "\n\n";
                 }
             } else {
-                const pairs = JSON.parse(JSON.stringify(output));
                 let b = `# ${key}\n\n`;
-                for (let k in pairs) {
-                    b += `- ${k}: ${pairs[k]}\n\n`;
+                for (let k in output) {
+                    b += `- ${k}: ${output[k]}\n\n`;
                 }
                 body += b;
             }
