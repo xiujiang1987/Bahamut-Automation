@@ -1,11 +1,13 @@
-const { sentryInit } = require("./sentry");
+const { sentryInit, finishTransaction } = require("./sentry");
 const { catchFatal, catchError, indentedCatchError } = require("./error");
 const { log, indentedLog } = require("./log");
 const { Browser, Page } = require("./browser");
 
+const VERSION = "v0.6";
+
 async function main({ config = {}, modules = [], ...params }) {
     try {
-        log("開始執行巴哈姆特自動化");
+        log("開始執行巴哈姆特自動化 " + VERSION);
 
         // 初始化錯誤追蹤
         sentryInit();
@@ -52,6 +54,8 @@ async function main({ config = {}, modules = [], ...params }) {
         await browser.close();
 
         log("巴哈姆特自動化執行完畢");
+
+        finishTransaction();
 
         // 輸出模組輸出
         return JSON.parse(JSON.stringify(outputs));

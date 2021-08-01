@@ -114,7 +114,7 @@ exports.run = async ({ page, outputs, catchError, log }) => {
     Object.keys(unfinished).forEach((key) => unfinished[key] === undefined && delete unfinished[key]);
 
     await page.waitForTimeout(2000);
-    log(`[抽抽樂] 執行完畢 ✨\n`);
+    log(`[抽抽樂] 執行完畢 ✨`);
 
     return { lottery, unfinished, report };
 };
@@ -135,12 +135,12 @@ async function confirm(page, catchError) {
 }
 
 function report({ lottery, unfinished }) {
-    let body = "";
+    let body = "# 福利社抽抽樂 \n\n";
 
     if (lottery) {
         body += `✨✨✨ 獲得 **${lottery}** 個抽獎機會，相當於 **${lottery * 500}** 巴幣 ✨✨✨\n`;
     } else if (Object.keys(unfinished).length === 0) {
-        body += "🍀 所有抽獎皆已完成\n";
+        body += "🟢 所有抽獎皆已完成\n";
     }
 
     Object.keys(unfinished).forEach((key) => {

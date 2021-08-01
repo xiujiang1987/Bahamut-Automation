@@ -89,11 +89,12 @@ async function sign_status(page) {
 }
 
 function report({ days, signed, doubled }) {
-    let body = `✨✨✨ 已連續簽到 ${days} 天 ✨✨✨\n`;
+    let body = `# 簽到\n\n`;
 
-    if (signed) body += `🍀 今日已簽到\n`;
+    body += `✨✨✨ 已連續簽到 ${days} 天 ✨✨✨\n`;
+    if (signed) body += `🟢 今日已簽到\n`;
     else body += `❌ 今日尚未簽到\n`;
-    if (doubled) body += `🍀 已獲得雙倍簽到獎勵\n`;
+    if (doubled) body += `🟢 已獲得雙倍簽到獎勵\n`;
     else body += `❌ 尚未獲得雙倍簽到獎勵\n`;
 
     body += "\n";

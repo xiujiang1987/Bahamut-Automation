@@ -20,10 +20,6 @@ inputs:
     description: "啟用自動簽到"
     required: true
     default: "false"
-  auto_sign_double:
-    description: "啟用自動觀看雙倍簽到獎勵廣告"
-    required: false
-    default: "false"
   auto_draw:
     description: "啟用福利社自動抽抽樂"
     required: true
@@ -32,11 +28,7 @@ inputs:
     description: "啟用動畫瘋自動答題"
     required: true
     default: "false"
-  parallel:
-    description: "啟用平行處理（縮短執行時間，但可能會出問題）"
-    required: false
-    default: "false"
   gh_pat:
-    description: "GitHub Personal Access Token，提供會啟用 Issuer（測試中）"
+    description: "GitHub Personal Access Token，提供會啟用 Issue Report"
     required: false
     default: ""

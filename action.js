@@ -8,10 +8,8 @@ const { main } = require("./src/main.js");
         const username = core.getInput("username");
         const password = core.getInput("password");
         const AUTO_SIGN = core.getInput("auto_sign");
-        const AUTO_SIGN_DOUBLE = core.getInput("auto_sign_double");
         const AUTO_DRAW = core.getInput("auto_draw");
         const AUTO_ANSWER_ANIME = core.getInput("auto_answer_anime");
-        const PARALLEL = core.getInput("parallel");
         const GH_PAT = core.getInput("gh_pat");
 
         const modules = ["login"];

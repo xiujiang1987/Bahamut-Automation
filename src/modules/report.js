@@ -66,7 +66,7 @@ async function gen_body(outputs, ignore, catchError, log) {
         if (ignore.includes(key)) continue;
         try {
             if (typeof outputs[key] === "function") continue;
-            const output = JSON.parse(JSON.stringify(outputs[key]));
+            const output = outputs[key];
             if (!output) continue;
 
             if (output.report) {
@@ -76,9 +76,10 @@ async function gen_body(outputs, ignore, catchError, log) {
                     body += (await output.report(JSON.parse(JSON.stringify(output)))) + "\n\n";
                 }
             } else {
+                const pairs = JSON.parse(JSON.stringify(output));
                 let b = `# ${key}\n\n`;
-                for (let k in output) {
-                    b += `- ${k}: ${output[k]}\n\n`;
+                for (let k in pairs) {
+                    b += `- ${k}: ${pairs[k]}\n\n`;
                 }
                 body += b;
             }
