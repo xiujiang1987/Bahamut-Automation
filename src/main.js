@@ -1,10 +1,14 @@
+const { sentryInit } = require("./sentry");
 const { catchFatal, catchError } = require("./error");
-const { log } = require("./log");
+const { log, indentedLog } = require("./log");
 const { Browser, Page } = require("./browser");
 
 async function main({ config = {}, modules = [], ...params }) {
     try {
         log("開始執行巴哈姆特自動化");
+
+        // 初始化錯誤追蹤
+        sentryInit();
 
         // 獲取瀏覽器
         const browser = await Browser(config);
@@ -32,15 +36,15 @@ async function main({ config = {}, modules = [], ...params }) {
                 });
 
                 // 執行模組
-                outputs[moduleName] = await module.run({ page, outputs, params: moduleParams, catchError, log });
+                outputs[moduleName] = await module.run({ page, outputs, params: moduleParams, catchError, log: indentedLog(2) });
 
                 // 關閉分頁
                 await page.close();
 
                 log(`模組 ${moduleName} 執行完畢\n`);
             } catch (err) {
-                catchError(`模組 ${moduleName} 執行失敗`);
                 catchError(err);
+                log(`模組 ${moduleName} 執行失敗`);
             }
         }
 

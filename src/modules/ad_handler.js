@@ -32,8 +32,8 @@ async function ad_handler(ad_frame, log = _log, catchError = _catchError) {
         else if (await checkVideoEnded(ad_frame)) {
         } else throw new Error("發現未知類型的廣告");
     } catch (err) {
-        if (ad_frame) console.debug(ad_frame.url());
-        else console.debug("No AD Frame");
+        if (ad_frame) log(ad_frame.url());
+        else log("No AD Frame");
         catchError(err);
     }
 
