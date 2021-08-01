@@ -23,39 +23,44 @@ exports.run = async ({ page, outputs, catchError, log }) => {
     if (outputs.ad_handler) {
         let retries = 3;
         while (retries--) {
-            log(`[簽到] 正在檢測雙倍簽到獎勵狀態`);
+            try {
+                log(`[簽到] 正在檢測雙倍簽到獎勵狀態`);
 
-            await page.goto("https://www.gamer.com.tw/").catch(catchError);
-            await page.waitForTimeout(1000);
-            await page.click("a#signin-btn").catch(catchError);
-            await page.waitForTimeout(2000);
+                await page.goto("https://www.gamer.com.tw/");
+                await page.waitForTimeout(1000);
+                await page.click("a#signin-btn");
+                await page.waitForTimeout(2000);
 
-            if (!finishedAd) {
-                log("[簽到] 尚未獲得雙倍簽到獎勵 ✘");
+                if (!finishedAd) {
+                    log("[簽到] 尚未獲得雙倍簽到獎勵 ✘");
 
-                log("[簽到] 嘗試觀看廣告以獲得雙倍獎勵，可能需要多達 1 分鐘");
-                await page.click("a.popoup-ctrl-btn").catch(catchError);
-                await page.waitForTimeout(5000);
-                await page.click("button[type=submit]").catch(catchError);
+                    log("[簽到] 嘗試觀看廣告以獲得雙倍獎勵，可能需要多達 1 分鐘");
+                    await page.click("a.popoup-ctrl-btn");
+                    await page.waitForTimeout(5000);
+                    await page.click("button[type=submit]");
 
-                await page.waitForTimeout(3000);
-                await page.waitForSelector("ins iframe").catch(catchError);
-                const ad_iframe = await page.$("ins iframe").catch(catchError);
-                const ad_frame = await ad_iframe.contentFrame().catch(catchError);
+                    await page.waitForTimeout(3000);
+                    await page.waitForSelector("ins iframe");
+                    const ad_iframe = await page.$("ins iframe");
+                    const ad_frame = await ad_iframe.contentFrame();
 
-                await outputs.ad_handler(ad_frame, log).catch(catchError);
+                    await outputs.ad_handler(ad_frame, log);
 
-                finishedAd = (await sign_status(page)).finishedAd;
+                    finishedAd = (await sign_status(page)).finishedAd;
 
-                if (finishedAd) {
-                    log("[簽到] 已觀看雙倍獎勵廣告 ✔");
+                    if (finishedAd) {
+                        log("[簽到] 已觀看雙倍獎勵廣告 ✔");
+                        break;
+                    } else {
+                        throw new Error("觀看雙倍獎勵廣告過程發生未知錯誤");
+                    }
+                } else {
+                    log("[簽到] 已獲得雙倍簽到獎勵 ✔");
                     break;
                 }
-
+            } catch (err) {
+                catchError(err);
                 log(`[簽到] 觀看雙倍獎勵廣告過程發生錯誤，將再重試 ${retries} 次 ✘`);
-            } else {
-                log("[簽到] 已獲得雙倍簽到獎勵 ✔");
-                break;
             }
         }
     } else {
