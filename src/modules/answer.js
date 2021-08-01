@@ -1,3 +1,5 @@
+const fetch = require("node-fetch");
+
 exports.parameters = [];
 
 exports.run = async ({ page, outputs, catchError, log }) => {
