@@ -70,6 +70,7 @@ exports.run = async ({ page, outputs, catchError, log }) => {
         days: final.days,
         signed: !!final.signin,
         doubled: !!final.finishedAd,
+        report,
     };
 };
 
@@ -85,4 +86,16 @@ async function sign_status(page) {
     });
 
     return data;
+}
+
+function report({ days, signed, doubled }) {
+    let body = `✨✨✨ 已連續簽到 ${days} 天 ✨✨✨\n`;
+
+    if (signed) body += `🍀 今日已簽到\n`;
+    else body += `❌ 今日尚未簽到\n`;
+    if (doubled) body += `🍀 已獲得雙倍簽到獎勵\n`;
+    else body += `❌ 尚未獲得雙倍簽到獎勵\n`;
+
+    body += "\n";
+    return body;
 }

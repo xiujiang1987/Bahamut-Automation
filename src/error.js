@@ -11,5 +11,13 @@ function catchError(err) {
     sentryCaptureException(err);
 }
 
+function indentedCatchError(space = 2) {
+    return (err) => {
+        console.error(" ".repeat(space) + err.message);
+        sentryCaptureException(err);
+    };
+}
+
 exports.catchFatal = catchFatal;
 exports.catchError = catchError;
+exports.indentedCatchError = indentedCatchError;

@@ -74,5 +74,17 @@ exports.run = async ({ page, outputs, catchError, log }) => {
     return {
         reward,
         answered: question.error === 1 || reward ? true : false,
+        report,
     };
 };
+
+function report({ reward, answered }) {
+    let body = "";
+
+    if (reward) body += `✨ 獲得 ${reward} 巴幣\n`;
+    if (answered) body += `🍀 今日已答題\n`;
+    else body += `❌ 今日尚未答題\n`;
+
+    body += "\n";
+    return body;
+}

@@ -116,7 +116,7 @@ exports.run = async ({ page, outputs, catchError, log }) => {
     await page.waitForTimeout(2000);
     log(`[抽抽樂] 執行完畢 ✨\n`);
 
-    return { lottery, unfinished };
+    return { lottery, unfinished, report };
 };
 
 async function confirm(page, catchError) {
@@ -132,4 +132,22 @@ async function confirm(page, catchError) {
         console.debug(page.url());
         catchError(err);
     }
+}
+
+function report({ lottery, unfinished }) {
+    let body = "";
+
+    if (lottery) {
+        body += `✨✨✨ 獲得 **${lottery}** 個抽獎機會，相當於 **${lottery * 500}** 巴幣 ✨✨✨\n`;
+    } else if (Object.keys(unfinished).length === 0) {
+        body += "🍀 所有抽獎皆已完成\n";
+    }
+
+    Object.keys(unfinished).forEach((key) => {
+        if (unfinished[key] === undefined) return;
+        body += `❌ 未能自動完成所有 ***<a href="${unfinished[key]}" target="_blank">${key}</a>*** 的抽獎\n`;
+    });
+
+    body += "\n";
+    return body;
 }

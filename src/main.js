@@ -1,5 +1,5 @@
 const { sentryInit } = require("./sentry");
-const { catchFatal, catchError } = require("./error");
+const { catchFatal, catchError, indentedCatchError } = require("./error");
 const { log, indentedLog } = require("./log");
 const { Browser, Page } = require("./browser");
 
@@ -36,7 +36,7 @@ async function main({ config = {}, modules = [], ...params }) {
                 });
 
                 // 執行模組
-                outputs[moduleName] = await module.run({ page, outputs, params: moduleParams, catchError, log: indentedLog(2) });
+                outputs[moduleName] = await module.run({ page, outputs, params: moduleParams, catchError: indentedCatchError(2), log: indentedLog(2) });
 
                 // 關閉分頁
                 await page.close();
