@@ -8,32 +8,7 @@ exports.run = async ({ page, outputs, catchError, log }) => {
     let lottery = 0;
 
     log("[抽抽樂] 正在尋找抽抽樂");
-    let draws = [];
-    await page.goto("https://fuli.gamer.com.tw/shop.php?page=1");
-    let items = await page.$$("a.items-card");
-    for (let i = items.length - 1; i >= 0; i--) {
-        let is_draw = await items[i].evaluate((node) => node.innerHTML.includes("抽抽樂"));
-        if (is_draw) {
-            draws.push({
-                name: await items[i].evaluate((node) => node.querySelector(".items-title").innerHTML),
-                link: await items[i].evaluate((node) => node.href),
-            });
-        }
-    }
-
-    while (await page.$eval("a.pagenow", (node) => (node.nextSibling ? true : false))) {
-        await page.goto("https://fuli.gamer.com.tw/shop.php?page=" + (await page.$eval("a.pagenow", (node) => node.nextSibling.innerText)));
-        let items = await page.$$("a.items-card");
-        for (let i = items.length - 1; i >= 0; i--) {
-            let is_draw = await items[i].evaluate((node) => node.innerHTML.includes("抽抽樂"));
-            if (is_draw) {
-                draws.push({
-                    name: await items[i].evaluate((node) => node.querySelector(".items-title").innerHTML),
-                    link: await items[i].evaluate((node) => node.href),
-                });
-            }
-        }
-    }
+    let draws = await getList({ page, catchError });
 
     log(`[抽抽樂] 找到 ${draws.length} 個抽抽樂`);
     const unfinished = {};
@@ -117,6 +92,48 @@ exports.run = async ({ page, outputs, catchError, log }) => {
 
     return { lottery, unfinished, report };
 };
+
+async function getList({ page, catchError }) {
+    let draws;
+
+    let attempts = 3;
+    while (attempts-- > 0) {
+        draws = [];
+        try {
+            await page.goto("https://fuli.gamer.com.tw/shop.php?page=1");
+            let items = await page.$$("a.items-card");
+            for (let i = items.length - 1; i >= 0; i--) {
+                let is_draw = await items[i].evaluate((node) => node.innerHTML.includes("抽抽樂"));
+                if (is_draw) {
+                    draws.push({
+                        name: await items[i].evaluate((node) => node.querySelector(".items-title").innerHTML),
+                        link: await items[i].evaluate((node) => node.href),
+                    });
+                }
+            }
+
+            while (await page.$eval("a.pagenow", (node) => (node.nextSibling ? true : false))) {
+                await page.goto("https://fuli.gamer.com.tw/shop.php?page=" + (await page.$eval("a.pagenow", (node) => node.nextSibling.innerText)));
+                let items = await page.$$("a.items-card");
+                for (let i = items.length - 1; i >= 0; i--) {
+                    let is_draw = await items[i].evaluate((node) => node.innerHTML.includes("抽抽樂"));
+                    if (is_draw) {
+                        draws.push({
+                            name: await items[i].evaluate((node) => node.querySelector(".items-title").innerHTML),
+                            link: await items[i].evaluate((node) => node.href),
+                        });
+                    }
+                }
+            }
+
+            break;
+        } catch (err) {
+            catchError(err);
+        }
+    }
+
+    return draws;
+}
 
 async function confirm(page, catchError) {
     try {
