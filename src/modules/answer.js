@@ -6,6 +6,7 @@ exports.run = async ({ page, outputs, catchError, log }) => {
     if (!outputs.login || !outputs.login.success) throw new Error("使用者未登入，無法答題");
 
     let reward = 0;
+    let question = {};
     log(`[動畫瘋答題] 開始執行`);
 
     let attempts = 3;
@@ -15,7 +16,7 @@ exports.run = async ({ page, outputs, catchError, log }) => {
             await page.goto("https://ani.gamer.com.tw/");
             await page.waitForTimeout(500);
 
-            let question = await page.evaluate(() => {
+            question = await page.evaluate(() => {
                 return fetch("/ajax/animeGetQuestion.php?t=" + Date.now()).then((r) => r.json());
             });
 

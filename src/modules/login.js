@@ -38,7 +38,7 @@ exports.run = async ({ page, params, catchError, log }) => {
                 await page.click("button[type=submit]").catch(catchError);
                 await page.waitForNavigation().catch(catchError);
                 await page.waitForTimeout(1000);
-                log("已嘗試登入，重新檢測登入狀態");
+                if (attempts > 0) log("已嘗試登入，重新檢測登入狀態");
             } else {
                 log("登入狀態: 已登入");
                 success = true;

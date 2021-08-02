@@ -57,6 +57,10 @@ exports.run = async ({ params, outputs, catchError, log }) => {
         labels: config.labels.map((x) => replace(x.trim())),
     });
 
+    if (res && res.data && res.data.number) {
+        log(`Report: https://github.com/${context.repo.owner}/${context.repo.repo}/issues/${res.data.number}`);
+    }
+
     return { number: res.data.number };
 };
 
