@@ -88,7 +88,7 @@ exports.run = async ({ page, outputs, catchError, log }) => {
                 await page.waitForSelector("ins iframe").catch(catchError);
                 const ad_iframe = await page.$("ins iframe").catch(catchError);
                 ad_frame = await ad_iframe.contentFrame().catch(catchError);
-                await outputs.ad_handler(ad_frame);
+                await outputs.ad_handler({ ad_frame });
                 await page.waitForTimeout(2000);
             }
 

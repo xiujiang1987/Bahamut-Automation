@@ -10,34 +10,39 @@ exports.run = async function ({ log, catchError }) {
     return ad_handler;
 };
 
-async function ad_handler(ad_frame, log = _log, catchError = _catchError) {
+async function ad_handler({ ad_frame, timeout = 60, log = _log, catchError = _catchError }) {
     log("Google AD 處理程式: Start");
-    try {
-        await ad_frame.waitForTimeout(1000);
-        if (await ad_frame.$(".rewardDialogueWrapper:not([style*=none]) .rewardResumebutton"))
-            await ad_frame.click(".rewardDialogueWrapper:not([style*=none]) .rewardResumebutton");
 
-        await Promise.race([
-            ad_frame.waitForSelector(".videoAdUiSkipContainer.html5-stop-propagation > button", { visible: true, timeout: 35000 }),
-            checkTopRightClose(ad_frame),
-            checkVideoEnded(ad_frame),
-            // ad_frame.waitForSelector("#google-rewarded-video > img:nth-child(4)", { visible: true, timeout: 35000 }),
-        ]).catch(() => {});
-        await ad_frame.waitForTimeout(1000);
+    await Promise.race([
+        sleep(timeout * 1000),
+        async () => {
+            try {
+                await ad_frame.waitForTimeout(1000);
+                if (await ad_frame.$(".rewardDialogueWrapper:not([style*=none]) .rewardResumebutton"))
+                    await ad_frame.click(".rewardDialogueWrapper:not([style*=none]) .rewardResumebutton");
 
-        if (await ad_frame.$(".videoAdUiSkipContainer.html5-stop-propagation > button"))
-            await ad_frame.click(".videoAdUiSkipContainer.html5-stop-propagation > button");
-        else if (await ad_frame.$("div#close_button_icon")) await ad_frame.click("div#close_button_icon");
-        else if (await ad_frame.$("#google-rewarded-video > img:nth-child(4)")) await ad_frame.click("#google-rewarded-video > img:nth-child(4)");
-        else if (await checkVideoEnded(ad_frame)) {
-        } else throw new Error("發現未知類型的廣告");
-    } catch (err) {
-        if (ad_frame) log(ad_frame.url());
-        else log("No AD Frame");
-        catchError(err);
-    }
+                await Promise.race([
+                    ad_frame.waitForSelector(".videoAdUiSkipContainer.html5-stop-propagation > button", { visible: true, timeout: 35000 }),
+                    checkTopRightClose(ad_frame),
+                    checkVideoEnded(ad_frame),
+                    // ad_frame.waitForSelector("#google-rewarded-video > img:nth-child(4)", { visible: true, timeout: 35000 }),
+                ]).catch(() => {});
+                await ad_frame.waitForTimeout(1000);
 
-    await ad_frame.waitForTimeout(2000);
+                if (await ad_frame.$(".videoAdUiSkipContainer.html5-stop-propagation > button"))
+                    await ad_frame.click(".videoAdUiSkipContainer.html5-stop-propagation > button");
+                else if (await ad_frame.$("div#close_button_icon")) await ad_frame.click("div#close_button_icon");
+                else if (await ad_frame.$("#google-rewarded-video > img:nth-child(4)")) await ad_frame.click("#google-rewarded-video > img:nth-child(4)");
+                else if (await checkVideoEnded(ad_frame)) {
+                } else throw new Error("發現未知類型的廣告");
+
+                await ad_frame.waitForTimeout(2000);
+            } catch (err) {
+                catchError(err);
+            }
+        },
+    ]);
+
     log("Google AD 處理程式: Finished");
 }
 
@@ -67,5 +72,11 @@ function checkTopRightClose(ad_frame) {
         } catch (err) {
             setTimeout(r, 35 * 1000);
         }
+    });
+}
+
+function sleep(t = 1000, msg) {
+    return new Promise((r) => {
+        setTimeout(() => r(msg), t);
     });
 }

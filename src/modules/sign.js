@@ -44,7 +44,7 @@ exports.run = async ({ page, outputs, catchError, log }) => {
                     const ad_iframe = await page.$("ins iframe");
                     const ad_frame = await ad_iframe.contentFrame();
 
-                    await outputs.ad_handler(ad_frame, log);
+                    await outputs.ad_handler({ ad_frame });
 
                     finishedAd = (await sign_status(page)).finishedAd;
 
