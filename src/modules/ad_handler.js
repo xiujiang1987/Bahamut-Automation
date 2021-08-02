@@ -15,7 +15,7 @@ async function ad_handler({ ad_frame, timeout = 60, log = _log, catchError = _ca
 
     await Promise.race([
         sleep(timeout * 1000),
-        async () => {
+        (async () => {
             try {
                 await ad_frame.waitForTimeout(1000);
                 if (await ad_frame.$(".rewardDialogueWrapper:not([style*=none]) .rewardResumebutton"))
@@ -40,7 +40,7 @@ async function ad_handler({ ad_frame, timeout = 60, log = _log, catchError = _ca
             } catch (err) {
                 catchError(err);
             }
-        },
+        })(),
     ]);
 
     log("Google AD 處理程式: Finished");

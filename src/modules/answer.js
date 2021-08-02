@@ -83,7 +83,7 @@ exports.run = async ({ page, outputs, catchError, log }) => {
 function report({ reward, answered }) {
     let body = "# 動畫瘋答題\n\n";
 
-    if (reward) body += `✨ 獲得 ${reward} 巴幣\n`;
+    if (reward) body += `✨✨✨ 獲得 ${reward} 巴幣 ✨✨✨\n`;
     if (answered) body += `🟢 今日已答題\n`;
     else body += `❌ 今日尚未答題\n`;
 

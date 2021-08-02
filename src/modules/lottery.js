@@ -104,7 +104,6 @@ exports.run = async ({ page, outputs, catchError, log }) => {
                 }
             } else {
                 console.debug(url);
-                console.debug(ad_frame.url());
                 log("[抽抽樂] 未進入結算頁面，重試中 ✘");
                 catchError(new Error("抽抽樂未進入結算頁面"));
             }
