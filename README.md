@@ -44,9 +44,14 @@
 ## 使用方法
 ### 使用 GitHub Action （建議）
 1. [使用 Template 來建立 Repository](https://github.com/JacobLinCool/Bahamut-Automation-Template/generate)，建議建立 **Public** Repository 可以無上限使用，GitHub 有給 Private Repository 每月 2000 分鐘執行限制
-2. 於新建立的 Repo 的 Settings > Secrets 分頁新增兩個 `Secret`
-   1. `USERNAME`: 你的巴哈姆特帳號
-   2. `PASSWORD`: 你的巴哈姆特密碼
+2. 於新建立的 Repo 的 Settings > Secrets 分頁新增一個名為`parameters` 的 `Secret`，修改以下程式碼後貼上作為 `parameters` 的值
+```json
+{
+  "username": "你的巴哈帳號",
+  "password": "你的巴哈密碼",
+  "gh_pat": "GitHub Personal Access Token (非必要)"
+}
+```
 3. 完成，詳細內容可以看看新建立的 Repo 的 README.md
 
 > 如果遇到問題歡迎[發 Issue 詢問](https://github.com/JacobLinCool/Bahamut-Automation/issues/new)喔
@@ -58,28 +63,19 @@
 4. 以 `Node.js` 執行 `test.js`
 
 ```shell
-$ node test.js 巴哈帳號 巴哈密碼 1 1 1 1 true
-
-# 前四個 1 分別是 自動登入, 雙倍簽到, 抽抽樂, 動畫瘋答題
-# 最後的 true 是表示在 Headless 模式執行，改成 false 可以看見瀏覽器行為，方便偵錯
+$ node test.js 巴哈帳號 巴哈密碼 GH_PAT
 ```
 
 ## 輸入參數
 
-| 參數                  | 預設值    | 說明         | 必要 |
-| -------------------- | -------- | ------------| ---- |
-| username             | `""`     | 巴哈姆特帳號 (建議使用 Secret) | 必要 |
-| password             | `""`     | 巴哈姆特密碼 (建議使用 Secret) | 必要 |
-| auto_sign            | `false`  | 啟用自動簽到                  | 必要 |
-| auto_sign_double     | `false`  | 啟用自動觀看雙倍簽到獎勵廣告    | 必要 |
-| auto_draw            | `false`  | 啟用福利社自動抽抽樂           | 必要 |
-| auto_answer_anime    | `false`  | 啟用動畫瘋自動答題             | 必要 |
-| parallel             | `false`  | 啟用平行處理（縮短執行時間，但可能會出問題，目前建議不要使用） | 選用 |
-| gh_pat               | `""`     | GitHub Personal Access Token，提供會啟用 Issue Report (建議使用 Secret) | 選用 |
+| 參數       | 預設值                                                                      | 說明       | 必要 |
+| ---------- | --------------------------------------------------------------------------- | ---------- | ---- |
+| modules    | `"login,ad_handler,sign,report,answer,report,lottery,report,logout,report"` | 使用的模組 | 必要 |
+| parameters | `"{}"`                                                                      | 帶入的參數 | 必要 |
 
 
 ## 技術細節
-所有程式碼都是使用 `JavaScript` 編寫，並以 `Node.js` 執行，以 `GitHub Action` 的形式發佈。
+所有程式碼都是使用 `JavaScript` 編寫，以 `Puppeteer` 模擬人的操作，使用 `Node.js` 執行，並以 `GitHub Action` 的形式發佈。
 
 可以於 `src` 資料夾中查看所有核心程式碼。
 

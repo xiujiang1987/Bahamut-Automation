@@ -154,11 +154,12 @@ function report({ lottery, unfinished }) {
     let body = "# 福利社抽抽樂 \n\n";
 
     if (lottery) {
-        body += `✨✨✨ 獲得 **${lottery}** 個抽獎機會，相當於 **${lottery * 500}** 巴幣 ✨✨✨\n`;
-    } else if (Object.keys(unfinished).length === 0) {
-        body += "🟢 所有抽獎皆已完成\n";
+        body += `✨✨✨ 獲得 **${lottery}** 個抽獎機會，相當於 **${(lottery * 500).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}** 巴幣 ✨✨✨\n`;
     }
 
+    if (Object.keys(unfinished).length === 0) {
+        body += "🟢 所有抽獎皆已完成\n";
+    }
     Object.keys(unfinished).forEach((key) => {
         if (unfinished[key] === undefined) return;
         body += `❌ 未能自動完成所有 ***<a href="${unfinished[key]}" target="_blank">${key}</a>*** 的抽獎\n`;

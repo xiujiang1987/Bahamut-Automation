@@ -84,8 +84,8 @@ exports.run = async ({ page, outputs, catchError, log }) => {
     log(`[動畫瘋答題] 執行完畢 ✨`);
 
     return {
-        reward,
         answered: question.error === 1 || reward ? true : false,
+        reward,
         report,
     };
 };

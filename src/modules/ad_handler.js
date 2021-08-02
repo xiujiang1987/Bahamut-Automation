@@ -13,8 +13,8 @@ exports.run = async function ({ log, catchError }) {
 async function ad_handler({ ad_frame, timeout = 60, log = _log, catchError = _catchError }) {
     log("Google AD 處理程式: Start");
 
-    await Promise.race([
-        sleep(timeout * 1000),
+    const result = await Promise.race([
+        sleep(timeout * 1000, "timed out"),
         (async () => {
             try {
                 await ad_frame.waitForTimeout(1000);
@@ -42,8 +42,8 @@ async function ad_handler({ ad_frame, timeout = 60, log = _log, catchError = _ca
             }
         })(),
     ]);
-
-    log("Google AD 處理程式: Finished");
+    if (result === "timed out") log("Google AD 處理程式: Timed Out");
+    else log("Google AD 處理程式: Finished");
 }
 
 async function checkVideoEnded(ad_frame) {

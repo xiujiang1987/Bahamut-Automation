@@ -9,7 +9,7 @@ main({
     config: {
         // 應該成你的電腦上 Google Chrome 的路徑
         path: "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
-        // false 可以觀察到每一個步驟
+        // false 可以觀察到瀏覽器每一個步驟
         headless: false,
     },
     modules: ["login", "ad_handler", "sign", "answer", "lottery", "logout", "report"],

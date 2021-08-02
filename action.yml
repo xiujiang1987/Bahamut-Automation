@@ -8,27 +8,11 @@ runs:
   using: "node12"
   main: "action.js"
 inputs:
-  username:
-    description: "巴哈姆特帳號 (建議使用 Secret)"
-    required: true
-    default: ""
-  password:
-    description: "巴哈姆特密碼 (建議使用 Secret)"
-    required: true
-    default: ""
-  auto_sign:
-    description: "啟用自動簽到"
-    required: true
-    default: "false"
-  auto_draw:
-    description: "啟用福利社自動抽抽樂"
-    required: true
-    default: "false"
-  auto_answer_anime:
-    description: "啟用動畫瘋自動答題"
-    required: true
-    default: "false"
-  gh_pat:
-    description: "GitHub Personal Access Token，提供會啟用 Issue Report"
+  modules:
+    description: "使用的模組"
     required: false
-    default: ""
+    default: "login,ad_handler,sign,report,answer,report,lottery,report,logout,report"
+  parameters:
+    description: "程式參數 (建議使用 Secret)"
+    required: false
+    default: "{}"

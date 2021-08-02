@@ -72,9 +72,9 @@ exports.run = async ({ page, outputs, catchError, log }) => {
     log(`[簽到] 執行完畢 ✨`);
 
     return {
-        days: final.days,
         signed: !!final.signin,
         doubled: !!final.finishedAd,
+        days: final.days,
         report,
     };
 };

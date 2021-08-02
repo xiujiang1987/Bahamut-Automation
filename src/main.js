@@ -48,6 +48,8 @@ async function main({ config = {}, modules = [], ...params }) {
                 catchError(err);
                 log(`模組 ${moduleName} 執行失敗`);
             }
+
+            await sleep(1000);
         }
 
         // 關閉瀏覽器
@@ -65,3 +67,7 @@ async function main({ config = {}, modules = [], ...params }) {
 }
 
 exports.main = main;
+
+async function sleep(ms) {
+    new Promise((r) => setTimeout(r, ms));
+}
