@@ -70,7 +70,8 @@ exports.run = async ({ page, outputs, catchError, log }) => {
             let url = page.url();
             if (url.includes("/buyD.php") && url.includes("ad=1")) {
                 log(`[抽抽樂] 正在確認結算頁面`);
-                await confirm(page, catchError).catch(catchError);
+                await checkInfo({ page, catchError }).catch(catchError);
+                await confirm({ page, catchError }).catch(catchError);
                 if ((await page.$(".card > .section > p")) && (await page.$eval(".card > .section > p", (node) => node.innerText.includes("成功")))) {
                     log("[抽抽樂] 已完成一次抽抽樂：" + name + " ✔");
                     lottery++;
@@ -135,7 +136,21 @@ async function getList({ page, catchError }) {
     return draws;
 }
 
-async function confirm(page, catchError) {
+async function checkInfo({ page, catchError }) {
+    try {
+        const name = await page.$eval("#name", (node) => node.value);
+        const tel = await page.$eval("#tel", (node) => node.value);
+        const city = await page.$eval("[name=city]", (node) => node.value);
+        const country = await page.$eval("[name=country]", (node) => node.value);
+        const address = await page.$eval("[name=address]", (node) => node.value);
+
+        if(!name || !tel || !city || !country || !address) throw new Error("收件人資料不齊全");Ｆ
+    } catch (err) {
+        catchError(new Error("警告：抽抽樂收件人資料不齊全，請先自行填寫一次並勾選「記住收件人資料」！"));
+    }
+}
+
+async function confirm({ page, catchError }) {
     try {
         await page.click("#agree-confirm");
         await page.waitForTimeout(500);

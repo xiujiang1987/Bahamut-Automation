@@ -3,7 +3,7 @@ const { catchFatal, catchError, indentedCatchError } = require("./error");
 const { log, indentedLog } = require("./log");
 const { Browser, Page } = require("./browser");
 
-const VERSION = "v0.6.1";
+const VERSION = "v0.6.2";
 
 async function main({ config = {}, modules = [], ...params }) {
     try {

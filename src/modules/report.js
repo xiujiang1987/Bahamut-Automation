@@ -120,15 +120,15 @@ function replace(str) {
     const rules = [
         [/\$time\$/g, `$year$/$month$/$day$ $hour$:$minute$:$second$`],
         [/\$year\$/g, t[0]],
-        [/\$month\$/g, t[1]],
-        [/\$day\$/g, t[2]],
+        [/\$month\$/g, t[2]],
+        [/\$day\$/g, t[1]],
         [/\$hour\$/g, t[3]],
         [/\$minute\$/g, t[4]],
         [/\$second\$/g, t[5]],
     ];
-    for (let i = 0; i < rules.length; i++) {
-        str = str.replace(rules[i][0], rules[i][1]);
-    }
+
+    for (let i = 0; i < rules.length; i++) str = str.replace(rules[i][0], rules[i][1]);
+
     return str;
 }
 
