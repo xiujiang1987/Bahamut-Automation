@@ -49,7 +49,7 @@
 
 
 ## telegram
-串接 telegram 的模組，詳細說明在 telegram 資料夾內
+串接 telegram 的模組，[詳細說明在 telegram 資料夾內](./telegram)
 - 作者： [JacobLinCool](https://github.com/JacobLinCool)
 - 必要參數： tg_id
 - 可選參數： tg_ignore

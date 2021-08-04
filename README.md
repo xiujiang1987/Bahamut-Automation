@@ -49,10 +49,13 @@
 {
   "username": "你的巴哈帳號",
   "password": "你的巴哈密碼",
-  "gh_pat": "GitHub Personal Access Token (非必要)"
+  "gh_pat": "GitHub Personal Access Token (非必要)",
+  "tg_id": "Telegram 訊息通道 ID (非必要)"
 }
 ```
-3. 完成，詳細內容可以看看新建立的 Repo 的 README.md
+`gh_pat` 是 `report` 模組必要參數；`tg_id` 是 `telegram` 模組必要參數
+
+3. 完成，詳細內容可以看看新建立的 Repo 的 README.md 及[模組說明文件](./src/modules)
 
 > 如果遇到問題歡迎[發 Issue 詢問](https://github.com/JacobLinCool/Bahamut-Automation/issues/new)喔
 
@@ -73,6 +76,9 @@ $ node test.js 巴哈帳號 巴哈密碼 GH_PAT
 | modules    | `"login,ad_handler,sign,report,answer,report,lottery,report,logout,report"` | 使用的模組 | 必要 |
 | parameters | `"{}"`                                                                      | 帶入的參數 | 必要 |
 
+
+## 模組
+[模組說明文件](./src/modules)
 
 ## 技術細節
 所有程式碼都是使用 `JavaScript` 編寫，以 `Puppeteer` 模擬人的操作，使用 `Node.js` 執行，並以 `GitHub Action` 的形式發佈。
