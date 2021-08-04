@@ -120,8 +120,8 @@ function replace(str) {
     const rules = [
         [/\$time\$/g, `$year$/$month$/$day$ $hour$:$minute$:$second$`],
         [/\$year\$/g, t[0]],
-        [/\$month\$/g, t[2]],
-        [/\$day\$/g, t[1]],
+        [/\$month\$/g, t[1]],
+        [/\$day\$/g, t[2]],
         [/\$hour\$/g, t[3]],
         [/\$minute\$/g, t[4]],
         [/\$second\$/g, t[5]],
@@ -133,11 +133,10 @@ function replace(str) {
 }
 
 function time() {
-    const [date, time] = new Date()
-        .toLocaleString("en-GB", { timeZone: "Asia/Taipei" })
-        .split(",")
-        .map((x) => x.trim());
-    const [dy, mt, yr] = date.split("/");
-    const [hr, mn, sc] = time.split(":");
-    return [yr, mt, dy, hr, mn, sc];
+    const date = new Date().toLocaleString("en", { timeZone: "Asia/Taipei" }).split(", ");
+    let [month, day, year] = date[0].split("/");
+    let [hour, minute, second] = date[1].match(/\d{1,2}/g);
+
+    if (date[1].toLowerCase().includes("pm")) hour += 12;
+    return [year, month, day, hour, minute, second];
 }

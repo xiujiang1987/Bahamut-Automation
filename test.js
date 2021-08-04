@@ -1,7 +1,7 @@
 const { argv, env } = require("process");
 const { main } = require("./src/main.js");
 
-[NODE, PROGRAM, username, password, gh_pat] = argv;
+[NODE, PROGRAM, username, password, gh_pat, tg_id] = argv;
 // 下面這行會決定 Issue Report 會發到哪裡，如要使用請改成你的
 // env.GITHUB_REPOSITORY = "JacobLinCool/BA";
 
@@ -12,10 +12,11 @@ main({
         // false 可以觀察到瀏覽器每一個步驟
         headless: false,
     },
-    modules: ["login", "ad_handler", "sign", "answer", "lottery", "logout", "report"],
+    modules: ["login", "ad_handler", "sign", "answer", "lottery", "logout", "report", "telegram"],
     username,
     password,
     gh_pat,
+    tg_id,
 }).then((msg) => {
     console.log(msg);
     process.exit(0);

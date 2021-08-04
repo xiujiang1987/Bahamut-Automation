@@ -48,6 +48,12 @@
 - 可選參數： report_title, report_labels, report_ignore
 
 
+## telegram
+串接 telegram 的模組，詳細說明在 telegram 資料夾內
+- 作者： [JacobLinCool](https://github.com/JacobLinCool)
+- 必要參數： tg_id
+- 可選參數： tg_ignore
+
 ## module
 說明模組格式的的模組
 - 作者： [JacobLinCool](https://github.com/JacobLinCool)
