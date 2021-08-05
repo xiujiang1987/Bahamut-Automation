@@ -15,7 +15,7 @@ exports.run = async ({ page, params, catchError, log }) => {
     await page.goto("https://www.gamer.com.tw/").catch(catchError);
     await page.waitForTimeout(1000);
 
-    let attempts = 3;
+    let attempts = 5;
     while (attempts-- > 0) {
         try {
             log("正在檢測登入狀態");
@@ -26,7 +26,7 @@ exports.run = async ({ page, params, catchError, log }) => {
             if (not_login_signal) {
                 log("登入狀態: 未登入");
 
-                await page.goto("https://user.gamer.com.tw/login.php");
+                await page.goto("https://user.gamer.com.tw/login.php").catch(catchError);
                 await page.waitForTimeout(2000);
                 log("嘗試登入中");
                 await page.$eval("input#uidh", (node) => (node.value = "")).catch(catchError);
