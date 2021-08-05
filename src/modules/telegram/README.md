@@ -5,3 +5,5 @@
 3. 在 Telegram 中與[此機器人](http://t.me/automia_bot)開始對話，獲取通道 ID
 4. 在 Secrets `parameters` 參數中加上 `tg_id`，其值為通道 ID
 
+## 附註
+不要亂搞我的機器人！不要傳一堆無意義的訊息！
