@@ -79,7 +79,7 @@ exports.run = async ({ page, outputs, catchError, log }) => {
                     log("[抽抽樂] 發生錯誤，重試中 ✘");
                 }
             } else {
-                console.debug(url);
+                log(url);
                 log("[抽抽樂] 未進入結算頁面，重試中 ✘");
                 catchError(new Error("抽抽樂未進入結算頁面"));
             }

@@ -55,6 +55,12 @@ async function message(outputs, config, catchError, log) {
                 } else if (typeof output.report === "function") {
                     let b = await output.report(JSON.parse(JSON.stringify(output)));
 
+                    try {
+                        b = b.replace(/\starget="[^"]*?"/g, "");
+                        b = b.replace(/<a\shref=\"([^"]*)">([^<]*)<\/a>/gim, `[$2]($1)`);
+                    } catch (err) {
+                        catchError(err);
+                    }
                     b = b.replace(/_/g, "\\_");
                     b = b.replace(/\*\*\*([^]+?)\*\*\*/g, "*_$1_*");
                     b = b.replace(/\*([^]+?)\*/g, "_$1_");
