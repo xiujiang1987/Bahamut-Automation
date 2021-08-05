@@ -55,7 +55,7 @@
 ```
 `gh_pat` 是 `report` 模組必要參數；`tg_id` 是 `telegram` 模組必要參數
 
-3. 完成，詳細內容可以看看新建立的 Repo 的 README.md 及[模組說明文件](./src/modules)
+3. 完成，詳細內容可以看看新建立的 Repo 的 README.md 及[模組說明文件](./src/modules#readme)
 
 > 如果遇到問題歡迎[發 Issue 詢問](https://github.com/JacobLinCool/Bahamut-Automation/issues/new)喔
 
@@ -78,7 +78,7 @@ $ node test.js 巴哈帳號 巴哈密碼 GH_PAT
 
 
 ## 模組
-[模組說明文件](./src/modules)
+[模組說明文件](./src/modules#readme)
 
 ## 技術細節
 所有程式碼都是使用 `JavaScript` 編寫，以 `Puppeteer` 模擬人的操作，使用 `Node.js` 執行，並以 `GitHub Action` 的形式發佈。
