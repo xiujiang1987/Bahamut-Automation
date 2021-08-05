@@ -67,6 +67,11 @@ async function message(outputs, config, catchError, log) {
                     b = b.replace(/\*\*([^]+?)\*\*/g, "*$1*");
                     b = b.replace(/# ([^]+?)\n/g, "*$1*");
                     b = b.replace(/\n\n/g, "\n");
+                    try {
+                        b = b.replace(/[^\\]([\~\>\+\-\=\|\{\}\.\!])/g, "\\$1");
+                    } catch (err) {
+                        catchError(err);
+                    }
 
                     body += b + "\n";
                 }
