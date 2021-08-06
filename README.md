@@ -43,6 +43,8 @@
 
 ## 使用方法
 ### 使用 GitHub Action （建議）
+[詳細的教學](https://jacoblincool.github.io/Bahamut-Automation/tutorial)
+
 1. [使用 Template 來建立 Repository](https://github.com/JacobLinCool/Bahamut-Automation-Template/generate) ([Fork Template 也行](https://github.com/JacobLinCool/Bahamut-Automation-Template/fork))，建議建立 **Public** Repository 可以無上限使用，GitHub 有給 Private Repository 每月 2000 分鐘執行限制
 2. 於新建立的 Repo 的 Settings > Secrets 分頁新增一個名為`parameters` 的 `Secret`，修改以下程式碼後貼上作為 `parameters` 的值
 ```json
