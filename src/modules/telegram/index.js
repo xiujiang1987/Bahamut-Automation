@@ -31,13 +31,19 @@ exports.run = async ({ outputs, params, catchError, log }) => {
     );
     if (typeof config.ignore === "string") config.ignore = config.ignore.split(",");
 
-    await fetch("https://automia.jacob.workers.dev/", {
+    const msg = await message(outputs, config, catchError, log);
+    const { ok } = await fetch("https://automia.jacob.workers.dev/", {
         method: "POST",
         body: JSON.stringify({
             id: tg_id,
-            send: await message(outputs, config, catchError, log),
+            send: msg,
         }),
-    });
+    }).then((r) => r.json());
+    if (ok) log("已發送 Telegram 報告！");
+    else {
+        log(msg);
+        catchError("發送 Telegram 報告失敗！");
+    }
 };
 
 async function message(outputs, config, catchError, log) {
