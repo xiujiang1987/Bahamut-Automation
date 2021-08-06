@@ -183,7 +183,7 @@ function report({ lottery, unfinished }) {
     }
     Object.keys(unfinished).forEach((key) => {
         if (unfinished[key] === undefined) return;
-        body += `❌ 未能自動完成所有 ***<a href="${unfinished[key]}" target="_blank">${key}</a>*** 的抽獎\n`;
+        body += `❌ 未能自動完成所有 ***[${key}](${unfinished[key]})*** 的抽獎\n`;
     });
 
     body += "\n";
