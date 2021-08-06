@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>巴哈姆特自動化！</title>
+        <title>巴哈姆特自動化！ 設定檔產生器</title>
     </head>
     <body>
         <div id="background">
@@ -11,18 +11,34 @@
         </div>
         <div id="container">
             <div class="wrap">
-                <h1 id="title"><a href="https://github.com/JacobLinCool/Bahamut-Automation" target="_blank">巴哈姆特自動化</a></h1>
+                <h1 id="title"><a href="https://github.com/JacobLinCool/Bahamut-Automation" target="_blank">巴哈姆特自動化</a> 設定檔產生器</h1>
             </div>
-            <div class="wrap"></div>
             <div class="wrap">
-                <ul>
-                    <li>
-                        <h2><a href="./tutorial.html">使用教學</a></h2>
-                    </li>
-                    <li>
-                        <h2><a href="./config.html">設定檔產生器</a></h2>
-                    </li>
-                </ul>
+                <label for="username" class="label">巴哈姆特用戶名稱</label><br />
+                <input id="username" placeholder="巴哈姆特用戶名稱" />
+            </div>
+            <div class="wrap">
+                <label for="password" class="label">巴哈姆特用戶密碼</label><br />
+                <input id="password" placeholder="巴哈姆特用戶密碼" />
+            </div>
+            <div class="wrap">
+                <label for="gh_pat" class="label"
+                    >GitHub Personal Access Token<br />
+                    (Report 模組) <a href="https://github.com/settings/tokens" target="_blank">產生</a></label
+                ><br />
+                <input id="gh_pat" placeholder="GitHub Personal Access Token" />
+            </div>
+            <div class="wrap">
+                <label for="tg_id" class="label"
+                    >Telegram 訊息通道 ID<br />
+                    (Telegram 模組, v0.6.3+) <a href="https://t.me/automia_bot" target="_blank">機器人</a></label
+                ><br />
+                <input id="tg_id" placeholder="Telegram 訊息通道 ID" />
+            </div>
+            <div class="wrap">
+                <label for="config" class="label">Secret 設定檔</label><button id="copy" data-clipboard-target="#config">複製</button>
+                <br />
+                <textarea id="config" placeholder="Secret 設定檔"></textarea>
             </div>
         </div>
         <style>
@@ -63,8 +79,7 @@
             }
             #container {
                 width: 100%;
-                max-width: 500px;
-                height: 100%;
+                max-width: 700px;
 
                 background-color: rgba(245, 245, 230, 0.8);
             }
@@ -110,6 +125,24 @@
                 cursor: pointer;
             }
         </style>
-        <script></script>
+        <script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.8/dist/clipboard.min.js"></script>
+        <script>
+            update();
+            new ClipboardJS("#copy");
+            [...document.querySelectorAll("input")].forEach((el) => {
+                el.addEventListener("input", update);
+            });
+
+            function update() {
+                let ta = document.querySelector("#config");
+                const config = {
+                    username: document.querySelector("#username").value,
+                    password: document.querySelector("#password").value,
+                    gh_pat: document.querySelector("#gh_pat").value,
+                    tg_id: document.querySelector("#tg_id").value,
+                };
+                ta.value = JSON.stringify(config, null, 4);
+            }
+        </script>
     </body>
 </html>
