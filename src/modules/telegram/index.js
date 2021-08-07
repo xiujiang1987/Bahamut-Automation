@@ -113,6 +113,7 @@ function time() {
     let [month, day, year] = date[0].split("/");
     let [hour, minute, second] = date[1].match(/\d{1,2}/g);
 
+    if (+hour === 12 && date[1].toLowerCase().includes("am")) hour = String(+hour - 12);
     if (+hour < 12 && date[1].toLowerCase().includes("pm")) hour = String(+hour + 12);
     return [year, month, day, hour, minute, second];
 }
