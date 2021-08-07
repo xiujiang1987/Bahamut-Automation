@@ -61,20 +61,18 @@ async function message(outputs, config, catchError, log) {
                 } else if (typeof output.report === "function") {
                     let b = await output.report(JSON.parse(JSON.stringify(output)));
 
-                    b = b.replace(/_/g, "\\_");
                     b = b.replace(/\*\*\*([^]+?)\*\*\*/g, "<bi>$1</bi>");
-                    b = b.replace(/\*([^]*?)\*/g, "<i>$1</i>");
                     b = b.replace(/\*\*([^]+?)\*\*/g, "<b>$1</b>");
+                    b = b.replace(/\*([^]*?)\*/g, "<i>$1</i>");
+                    b = b.replace(/\_([^]*?)\_/g, "<i>$1</i>");
                     b = b.replace(/# ([^]+?)\n/g, "*$1*");
                     b = b.replace(/\n\n/g, "\n");
+
+                    b = b.replace("!", "\\!");
+
                     b = b.replace(/\<bi>([^]*?)\<\/bi>/g, "*_$1_*");
                     b = b.replace(/\<i>([^]*?)\<\/i>/g, "_$1_");
                     b = b.replace(/\<b>([^]*?)\<\/b>/g, "*$1*");
-                    try {
-                        b = b.replace(/[^\\]([\~\>\+\-\=\|\{\}\.\!])/g, "\\$1");
-                    } catch (err) {
-                        catchError(err);
-                    }
 
                     body += b + "\n";
                 }
