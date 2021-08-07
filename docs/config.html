@@ -22,6 +22,10 @@
                 <input id="password" placeholder="巴哈姆特用戶密碼" />
             </div>
             <div class="wrap">
+                <label for="twofa" class="label">巴哈姆特兩步驟驗證種子碼</label><br />
+                <input id="twofa" placeholder="巴哈姆特兩步驟驗證種子碼" />
+            </div>
+            <div class="wrap">
                 <label for="gh_pat" class="label"
                     >GitHub Personal Access Token<br />
                     (Report 模組) <a href="https://github.com/settings/tokens" target="_blank">產生</a></label
@@ -138,6 +142,7 @@
                 const config = {
                     username: document.querySelector("#username").value,
                     password: document.querySelector("#password").value,
+                    twofa: document.querySelector("#twofa").value,
                     gh_pat: document.querySelector("#gh_pat").value,
                     tg_id: document.querySelector("#tg_id").value,
                 };

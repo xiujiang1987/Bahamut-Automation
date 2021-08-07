@@ -1,7 +1,7 @@
 const { argv, env } = require("process");
 const { main } = require("./src/main.js");
 
-[NODE, PROGRAM, username, password, gh_pat, tg_id] = argv;
+[NODE, PROGRAM, username, password, twofa, gh_pat, tg_id] = argv;
 // 下面這行會決定 Issue Report 會發到哪裡，如要使用請改成你的
 // env.GITHUB_REPOSITORY = "JacobLinCool/BA";
 
@@ -15,6 +15,7 @@ main({
     modules: ["login", "ad_handler", "sign", "answer", "lottery", "logout", "report", "telegram"],
     username,
     password,
+    twofa,
     gh_pat,
     tg_id,
 }).then((msg) => {

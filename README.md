@@ -51,6 +51,7 @@
 {
   "username": "你的巴哈帳號",
   "password": "你的巴哈密碼",
+  "twofa": "你的巴哈兩步驟驗證種子碼 (非必要)",
   "gh_pat": "GitHub Personal Access Token (非必要)",
   "tg_id": "Telegram 訊息通道 ID (非必要)"
 }
