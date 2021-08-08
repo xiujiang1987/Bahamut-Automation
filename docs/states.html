@@ -15,17 +15,24 @@
             </div>
             <div class="wrap"></div>
             <div class="wrap">
-                <ul>
-                    <li>
-                        <h2><a href="./tutorial.html">使用教學</a></h2>
-                    </li>
-                    <li>
-                        <h2><a href="./config.html">設定檔產生器</a></h2>
-                    </li>
-                    <li>
-                        <h2><a href="./states.html">匿名使用數據</a></h2>
-                    </li>
-                </ul>
+                <span>執行次數</span><br />
+                <div>大於 <span id="run" class="counter"></span> 次</div>
+            </div>
+            <div class="wrap">
+                <span>簽到次數</span><br />
+                <div>大於 <span id="sign" class="counter"></span> 次</div>
+            </div>
+            <div class="wrap">
+                <span>抽抽樂次數</span><br />
+                <div>大於 <span id="lottery" class="counter"></span> 次</div>
+            </div>
+            <div class="wrap">
+                <span>獲得的等價巴幣</span><br />
+                <div>大於 <span id="lottery-coin" class="counter"></span> 個</div>
+            </div>
+            <div class="wrap">
+                匿名數據從 v0.6.7 開始計算，使用 <a href="https://countapi.xyz/" target="_blank">countapi.xyz</a> 計數器。<br>
+                計數程式碼使用 countapi.xyz 的 <a href="https://www.npmjs.com/package/countapi-js" target="_blank">"countapi-js" NPM Package</a>。
             </div>
         </div>
         <style>
@@ -81,7 +88,34 @@
                 padding: 0;
                 margin: 4px 0;
             }
+            .counter {
+                font-size: 2.4rem;
+                font-weight: bold;
+            }
         </style>
-        <script></script>
+        <script>
+            Number.prototype.comma = function () {
+                return this.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            };
+            fetch("https://api.countapi.xyz/get/Bahamut-Automation/run")
+            .then(r => r.json())
+            .then(({ value }) => {
+                document.querySelector("#run").innerHTML = value.comma();
+            });
+            fetch("https://api.countapi.xyz/get/Bahamut-Automation/sign")
+            .then(r => r.json())
+            .then(({ value }) => {
+                document.querySelector("#sign").innerHTML = value.comma();
+            });
+            fetch("https://api.countapi.xyz/get/Bahamut-Automation/lottery")
+            .then(r => r.json())
+            .then(({ value }) => {
+                document.querySelector("#lottery").innerHTML = value.comma();
+                document.querySelector("#lottery-coin").innerHTML = (value * 500).comma();
+            });
+        </script>
+    </body>
+</html>
+        </script>
     </body>
 </html>

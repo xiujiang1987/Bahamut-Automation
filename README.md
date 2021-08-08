@@ -91,7 +91,11 @@ $ node test.js 巴哈帳號 巴哈密碼 GH_PAT
 ## 聲明
 我不能保證程式一定會如期執行，也不能保證程式會成功執行，有時 GitHub 會自己吃掉。
 
-如果你發現什麼 Bug 之類的東西，或是有新的想法，歡迎[到 Action 的 Repo 發 Issue](https://github.com/JacobLinCool/Bahamut-Automation/issues)。
+自 v0.6.7 版本開始，使用 [countapi.xyz](https://countapi.xyz/) 計數器匿名累積使用次數，方便估算成效，如有疑慮請不要使用本程式。
+
+本程式仰賴部分 NPM 外部程式庫，如果發生安全問題，由使用者自行承擔，如有疑慮請不要使用本程式。
+
+如果你發現什麼 Bug 之類的東西（尤其是安全問題），或是有新的想法，歡迎[到 Action 的 Repo 發 Issue](https://github.com/JacobLinCool/Bahamut-Automation/issues)。
 
 
 ## License Check
