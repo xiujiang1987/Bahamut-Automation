@@ -1,13 +1,15 @@
+const countapi = require("countapi-js");
 const { sentryInit, finishTransaction } = require("./sentry");
 const { catchFatal, catchError, indentedCatchError } = require("./error");
 const { log, indentedLog } = require("./log");
 const { Browser, Page } = require("./browser");
 
-const VERSION = "v0.6.6";
+const VERSION = "v0.6.7";
 
 async function main({ config = {}, modules = [], ...params }) {
     try {
         log("開始執行巴哈姆特自動化 " + VERSION);
+        countapi.update("Bahamut-Automation", "run", 1);
 
         // 初始化錯誤追蹤
         sentryInit();

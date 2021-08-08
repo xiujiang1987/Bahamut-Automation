@@ -1,3 +1,5 @@
+const countapi = require("countapi-js");
+
 exports.parameters = [];
 
 exports.run = async ({ page, outputs, catchError, log }) => {
@@ -8,6 +10,7 @@ exports.run = async ({ page, outputs, catchError, log }) => {
     await page.goto("https://www.gamer.com.tw/");
     await page.waitForTimeout(2000);
     let { days, finishedAd, prjSigninDays, signin } = await sign_status(page);
+    const initialSignin = signin;
     log(`[簽到] 已連續簽到天數: ${days}`);
 
     if (!signin) {
@@ -70,6 +73,8 @@ exports.run = async ({ page, outputs, catchError, log }) => {
     const final = await sign_status(page);
 
     log(`[簽到] 執行完畢 ✨`);
+
+    if (!initialSignin && final.signin) countapi.update("Bahamut-Automation", "sign", 1);
 
     return {
         signed: !!final.signin,

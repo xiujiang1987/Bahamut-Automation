@@ -1,3 +1,5 @@
+const countapi = require("countapi-js");
+
 exports.parameters = [];
 
 exports.run = async ({ page, outputs, catchError, log }) => {
@@ -90,6 +92,8 @@ exports.run = async ({ page, outputs, catchError, log }) => {
 
     await page.waitForTimeout(2000);
     log(`[抽抽樂] 執行完畢 ✨`);
+
+    if (lottery) countapi.update("Bahamut-Automation", "lottery", lottery);
 
     return { lottery, unfinished, report };
 };

@@ -1,4 +1,5 @@
 const fetch = require("node-fetch");
+const countapi = require("countapi-js");
 
 exports.parameters = [];
 
@@ -83,6 +84,8 @@ exports.run = async ({ page, outputs, catchError, log }) => {
     }
     log(`[動畫瘋答題] 執行完畢 ✨`);
 
+    if (reward) countapi.update("Bahamut-Automation", "answer", reward);
+    
     return {
         answered: question.error === 1 || reward ? true : false,
         reward,
