@@ -19,16 +19,20 @@
                 <div>大於 <span id="run" class="counter"></span> 次</div>
             </div>
             <div class="wrap">
-                <span>簽到次數</span><br />
+                <span>協助簽到次數</span><br />
                 <div>大於 <span id="sign" class="counter"></span> 次</div>
             </div>
             <div class="wrap">
-                <span>抽抽樂次數</span><br />
+                <span>獲得的動畫瘋答題獎勵</span><br />
+                <div>大於 <span id="answer" class="counter"></span> 巴幣</div>
+            </div>
+            <div class="wrap">
+                <span>獲得的抽抽樂次數</span><br />
                 <div>大於 <span id="lottery" class="counter"></span> 次</div>
             </div>
             <div class="wrap">
-                <span>獲得的等價巴幣</span><br />
-                <div>大於 <span id="lottery-coin" class="counter"></span> 個</div>
+                <span>獲得的抽抽樂的等價巴幣</span><br />
+                <div>大於 <span id="lottery-coin" class="counter"></span> 巴幣</div>
             </div>
             <div class="wrap">
                 匿名數據從 v0.6.7 開始計算，使用 <a href="https://countapi.xyz/" target="_blank">countapi.xyz</a> 計數器。<br>
@@ -74,7 +78,6 @@
             #container {
                 width: 100%;
                 max-width: 700px;
-                height: 100%;
 
                 background-color: rgba(245, 245, 230, 0.8);
             }
@@ -106,6 +109,11 @@
             .then(r => r.json())
             .then(({ value }) => {
                 document.querySelector("#sign").innerHTML = value.comma();
+            });
+            fetch("https://api.countapi.xyz/get/Bahamut-Automation/answer")
+            .then(r => r.json())
+            .then(({ value }) => {
+                document.querySelector("#answer").innerHTML = value.comma();
             });
             fetch("https://api.countapi.xyz/get/Bahamut-Automation/lottery")
             .then(r => r.json())
