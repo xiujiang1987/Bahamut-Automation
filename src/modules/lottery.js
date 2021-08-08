@@ -179,7 +179,7 @@ function report({ lottery, unfinished }) {
     let body = "# 福利社抽抽樂 \n\n";
 
     if (lottery) {
-        body += `✨✨✨ 獲得 **${lottery}** 個抽獎機會，相當於 **${(lottery * 500).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}** 巴幣 ✨✨✨\n`;
+        body += `✨✨✨ 獲得 **${lottery}** 個抽獎機會，價值 **${(lottery * 500).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}** 巴幣 ✨✨✨\n`;
     }
 
     if (Object.keys(unfinished).length === 0) {
