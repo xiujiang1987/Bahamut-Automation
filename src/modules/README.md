@@ -19,7 +19,6 @@
 - 必要參數： 無
 - 可選參數： 無
 
-
 ## sign
 巴哈簽到的模組，需先執行 login 模組，雙倍獎勵需先執行 ad_handler 模組
 - 作者： [JacobLinCool](https://github.com/JacobLinCool)
@@ -53,6 +52,18 @@
 - 作者： [JacobLinCool](https://github.com/JacobLinCool)
 - 必要參數： tg_id
 - 可選參數： tg_ignore
+
+## guild
+公會簽到的模組，需先執行 login 模組
+- 作者： [JacobLinCool](https://github.com/JacobLinCool)
+- 必要參數： 無
+- 可選參數： 無
+
+## sayloud
+勇者大聲說的模組，需先執行 login 模組
+- 作者： [JacobLinCool](https://github.com/JacobLinCool)
+- 必要參數： sayloud
+- 可選參數： 無
 
 ## module
 說明模組格式的的模組
