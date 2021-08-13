@@ -48,7 +48,7 @@
 
 
 ## telegram
-串接 telegram 的模組，[詳細說明在 telegram 資料夾內](./telegram)
+串接 telegram 的模組，[詳細說明在 telegram 資料夾內](./telegram#readme)
 - 作者： [JacobLinCool](https://github.com/JacobLinCool)
 - 必要參數： tg_id
 - 可選參數： tg_ignore
@@ -63,6 +63,12 @@
 勇者大聲說的模組，需先執行 login 模組
 - 作者： [JacobLinCool](https://github.com/JacobLinCool)
 - 必要參數： sayloud
+- 可選參數： 無
+
+## builder
+蓋樓（回文）模組，需先執行 login 模組，[詳細說明在 builder 資料夾內](./builder#readme)
+- 作者： [JacobLinCool](https://github.com/JacobLinCool)
+- 必要參數： builder
 - 可選參數： 無
 
 ## module
