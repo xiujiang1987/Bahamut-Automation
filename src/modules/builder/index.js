@@ -27,7 +27,7 @@ exports.run = async ({ page, outputs, params, catchError, log }) => {
 
             // 提示
             await page.evaluate(() => {
-                onTipsClick();
+                if (onTipsClick) onTipsClick();
             });
             await page.waitForTimeout(300);
 
