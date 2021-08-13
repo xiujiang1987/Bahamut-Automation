@@ -34,7 +34,7 @@ exports.run = async ({ page, outputs, params, catchError, log }) => {
             await page.waitForTimeout(300);
             await page.click("form[method=dialog] button[type=submit]");
             log(`已在 https://forum.gamer.com.tw/C.php?bsn=${bsn}&snA=${snA} 回文`);
-            if (i + 1 < build.length) {
+            if (i + 1 < builder.length) {
                 // 巴哈 1 分鐘發文限制
                 log(`等待發文冷卻 1 分鐘`);
                 await page.waitForTimeout(60 * 1000);
