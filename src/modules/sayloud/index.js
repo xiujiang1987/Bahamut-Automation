@@ -50,7 +50,12 @@ exports.run = async ({ page, outputs, params, catchError, log }) => {
         text
     );
 
-    if (status === 2) return { success: false, reason: "目前仍有大聲說在放送" };
+    if (status === 2) {
+        log("目前仍有大聲說在放送");
+        return { success: false, reason: "目前仍有大聲說在放送" };
+    } else {
+        log("放送成功 時間：" + status);
+    }
 
     return { success: true, time: status };
 };

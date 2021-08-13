@@ -9,12 +9,12 @@ exports.parameters = [
 exports.run = async ({ page, outputs, params, catchError, log }) => {
     if (!outputs.login || !outputs.login.success) throw new Error("使用者未登入，無法發佈勇者大聲說");
 
-    const { build } = params;
-    if (build.length < 1) return { success: false };
+    const { builder } = params;
+    if (builder.length < 1) return { success: false };
 
-    for (let i = 0; i < build.length; i++) {
+    for (let i = 0; i < builder.length; i++) {
         try {
-            const { bsn, snA, content } = build[i];
+            const { bsn, snA, content } = builder[i];
             log(`正嘗試在 https://forum.gamer.com.tw/C.php?bsn=${bsn}&snA=${snA} 回文`);
             await page.goto(`https://forum.gamer.com.tw/post1.php?bsn=${bsn}&snA=${snA}&type=2`);
             await page.waitForTimeout(2000);
