@@ -18,21 +18,39 @@ exports.run = async ({ page, outputs, params, catchError, log }) => {
             log(`正嘗試在 https://forum.gamer.com.tw/C.php?bsn=${bsn}&snA=${snA} 回文`);
             await page.goto(`https://forum.gamer.com.tw/post1.php?bsn=${bsn}&snA=${snA}&type=2`);
             await page.waitForTimeout(2000);
+
+            // 備份詢問
+            if (await page.$("dialog")) {
+                await page.click("dialog button");
+            }
+            await page.waitForTimeout(300);
+
+            // 提示
             await page.evaluate(() => {
                 onTipsClick();
             });
             await page.waitForTimeout(300);
+
+            // 切換模式
             await page.evaluate(() => {
-                bahaRte.toolbar.alternateView(true);
+                if (document.querySelector("#source").style.display === "none") bahaRte.toolbar.alternateView(true);
             });
             await page.waitForTimeout(300);
+
+            // 輸入內容
+            await page.$eval("#source", (node) => {
+                node.value = "";
+            });
             await page.type("#source", replace(content), { delay: 11 });
             await page.waitForTimeout(300);
+
+            // 發送
             await page.evaluate(() => {
                 Forum.Post.post();
             });
             await page.waitForTimeout(300);
             await page.click("form[method=dialog] button[type=submit]");
+
             log(`已在 https://forum.gamer.com.tw/C.php?bsn=${bsn}&snA=${snA} 回文`);
             if (i + 1 < builder.length) {
                 // 巴哈 1 分鐘發文限制
