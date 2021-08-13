@@ -6,11 +6,13 @@ const { main } = require("./src/main.js");
 (async () => {
     try {
         const modules = core.getInput("modules");
-        const parameters = JSON.parse(core.getInput("parameters") || "");
+        const parameters = JSON.parse(core.getInput("parameters") || "{}");
+        const secrets = JSON.parse(core.getInput("secrets") || "{}");
 
         await main({
             modules: modules.split(",").map((x) => x.trim()),
             ...parameters,
+            ...secrets,
         })
             .then((msg) => {
                 console.log(msg);
