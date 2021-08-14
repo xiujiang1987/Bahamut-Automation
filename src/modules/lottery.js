@@ -22,7 +22,7 @@ exports.run = async ({ page, outputs, catchError, log }) => {
     for (let idx = 0; idx < draws.length; idx++) {
         log(`[抽抽樂] 正在嘗試執行第 ${idx + 1} 個抽抽樂： ${draws[idx].name}`);
 
-        let limitation = 20;
+        let limitation = 30;
         for (let time = 1; time <= limitation; time++) {
             await page.goto(draws[idx].link).catch(catchError);
             await page.waitForTimeout(1000);
