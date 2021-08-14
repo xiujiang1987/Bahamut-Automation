@@ -39,3 +39,6 @@ workflows:
                  - main
     jobs:
       - automation
+  run_automation_on_push:
+    jobs:
+      - automation
