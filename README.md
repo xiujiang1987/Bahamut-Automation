@@ -114,6 +114,8 @@ $ node test.js 巴哈帳號 巴哈密碼
 
 本程式仰賴部分 NPM 外部程式庫，如果發生安全問題，由使用者自行承擔，如有疑慮請不要使用本程式。
 
+如果你執行這個程式，代表你必須自負所有風險，如有疑慮請不要使用本程式。
+
 如果你發現什麼 Bug 之類的東西（尤其是安全問題），或是有新的想法，歡迎[到 Action 的 Repo 發 Issue](https://github.com/JacobLinCool/Bahamut-Automation/issues)。
 
 
