@@ -6,13 +6,12 @@ orbs:
 
 jobs:
   automation:
-    machine:
-      image: ubuntu-1604:202007-01
+    docker:
+      - image: cimg/node:16.6
 
     steps:
       - checkout
       - browser-tools/install-chrome
-      - node/install
       - run:
           command: |
             google-chrome --version
