@@ -7,7 +7,7 @@ const DEFAULT_BROWSER_CONFIG = {
     headless: true,
     mobile: false,
     disposable: true,
-    args: ["--disable-web-security", "--disable-features=IsolateOrigins,site-per-process"],
+    args: ["--disable-web-security", "--disable-features=IsolateOrigins,site-per-process", "--disable-gpu"],
 };
 
 let browser = null;

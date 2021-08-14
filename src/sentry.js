@@ -6,7 +6,7 @@ let _transaction;
 function sentryInit() {
     Sentry.init({
         dsn: "https://4770c1462f1a493aaa7c840643020fd2@o923427.ingest.sentry.io/5870758",
-        tracesSampleRate: 1.0,
+        tracesSampleRate: 0.2,
     });
     _transaction = Sentry.startTransaction({
         op: "bahamut-automation",
@@ -15,7 +15,7 @@ function sentryInit() {
 }
 
 function sentryCaptureException(err) {
-    Sentry.captureException(err);
+    if (_transaction) Sentry.captureException(err);
 }
 
 function finishTransaction() {
