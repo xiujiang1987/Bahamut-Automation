@@ -11,6 +11,9 @@ const parameters = JSON.parse(Parameters || "{}");
 const secrets = JSON.parse(Secrets || "{}");
 
 main({
+    config: {
+        path: "/usr/bin/google-chrome"
+    },
     modules,
     ...parameters,
     ...secrets,

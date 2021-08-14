@@ -6,8 +6,8 @@ orbs:
 
 jobs:
   automation:
-    macos:
-      xcode: 11.3.0
+    machine:
+      image: ubuntu-1604:202007-01
 
     steps:
       - checkout
