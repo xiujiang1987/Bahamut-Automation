@@ -6,9 +6,11 @@ const { main } = require("./src/main.js");
 
 [NODE, PROGRAM, Modules, Secrets, Parameters] = argv;
 
-const modules = Modules.split(",").map((x) => x.trim());
-const parameters = JSON.parse(Parameters || "{}");
-const secrets = JSON.parse(Secrets || "{}");
+
+
+const modules = decodeURIComponent(Modules).split(",").map((x) => x.trim());
+const parameters = JSON.parse(decodeURIComponent(Parameters) || "{}");
+const secrets = JSON.parse(decodeURIComponent(Secrets) || "{}");
 
 main({
     config: {

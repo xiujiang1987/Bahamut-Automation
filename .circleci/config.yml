@@ -23,7 +23,7 @@ jobs:
           name: Install NPM Packages
       - run:
           command: |
-            node CircleCI.js '$MODULES' '$SECRETS' '$PARAMETERS'
+            node CircleCI.js $MODULES $SECRETS $PARAMETERS
           name: Run Automation
 
 workflows:
