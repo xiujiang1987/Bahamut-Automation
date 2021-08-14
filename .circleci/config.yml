@@ -12,8 +12,7 @@ jobs:
     steps:
       - checkout
       - browser-tools/install-chrome
-      - node/install:
-          node-version: "15.8"
+      - node/install
       - run:
           command: |
             google-chrome --version
