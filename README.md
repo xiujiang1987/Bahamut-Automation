@@ -5,7 +5,7 @@
 
 巴哈姆特自動化！
 
-自動簽到、自動動畫瘋答題、自動抽抽樂！
+自動簽到、自動動畫瘋答題、自動抽抽樂，以及其他更多！
 
 ## 特色
 ### 不需要任何硬體
@@ -42,12 +42,26 @@
 - 自動觀看廣告獲得免費抽抽樂機會
 - 自動檢測是否需要答題，如需要，自動答題
 
+### 自動蓋樓（回文）
+- 自動於指定文章回覆
+- 支援複數文章
+- 支援巴哈 BBCode（支援圖片連結等）
+- 支援時間變數（以執行時的時間替換）
+
+### 自動勇者大聲說
+- 自動發佈勇者大聲說
+- 支援隨機挑遠內容
+- 支援時間變數（以執行時的時間替換）
+
+### Telegram 通知
+- 以 Telegram 通知執行狀況
+
 ## 使用方法
 ### 使用 GitHub Action （建議）
 [**詳細的教學**](https://jacoblincool.github.io/Bahamut-Automation/tutorial)
 
 1. [Fork Template](https://github.com/JacobLinCool/Bahamut-Automation-Template/fork) ([使用 Template 來建立 Repository 也行](https://github.com/JacobLinCool/Bahamut-Automation-Template/generate))，建議使用 **Public** Repository 可以無上限使用，GitHub 有給 Private Repository 每月 2000 分鐘執行限制
-2. 於新建立的 Repo 的 Settings > Secrets 分頁新增一個名為`parameters` 的 `Secret`，修改以下程式碼後貼上作為 `parameters` 的值
+2. 於新建立的 Repo 的 Settings > Secrets 分頁新增一個名為`secrets` 的 `Secret`，修改以下程式碼後貼上作為 `secrets` 的值
 ```json
 {
   "username": "你的巴哈帳號",
@@ -61,6 +75,8 @@
 
 3. 完成，詳細內容可以看看新建立的 Repo 的 README.md 及[模組說明文件](./src/modules#readme)
 
+*注意：新辦帳號只執行巴哈自動化的情況，可能被 GitHub 視為濫用資源（lottery 模組執行時間可能要近 1 小時）*
+
 > 如果遇到問題歡迎[發 Issue 詢問](https://github.com/JacobLinCool/Bahamut-Automation/issues/new)喔
 
 ### 在自己電腦上執行
@@ -70,16 +86,18 @@
 4. 以 `Node.js` 執行 `test.js`
 
 ```shell
-$ node test.js 巴哈帳號 巴哈密碼 GH_PAT
+$ node test.js 巴哈帳號 巴哈密碼
 ```
 
 ## 輸入參數
 
-| 參數       | 預設值                                                                      | 說明       | 必要 |
-| ---------- | --------------------------------------------------------------------------- | ---------- | ---- |
-| modules    | `"login,ad_handler,sign,report,answer,report,lottery,report,logout,report"` | 使用的模組 | 必要 |
-| parameters | `"{}"`                                                                      | 帶入的參數 | 必要 |
+| 參數       | 預設值                                                                        | 說明      | 必要 |
+| ---------- | --------------------------------------------------------------------------- | --------- | ---- |
+| modules    | `"login,ad_handler,sign,report,answer,report,lottery,report,logout,report"` | 使用的模組 | 非必要 |
+| parameters | `"{}"`                                                                      | 帶入的參數 | 非必要 |
+| secrets    | `"{}"`                                                                      | 帶入的參數 | 非必要 |
 
+全部都是非必要參數，但你什麼都不放就什麼都不會發生，合理吧？
 
 ## 模組
 [模組說明文件](./src/modules#readme)
