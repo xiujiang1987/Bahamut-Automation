@@ -8,6 +8,7 @@ jobs:
   automation:
     docker:
       - image: cimg/node:16.6
+    resource_class: small
 
     steps:
       - checkout
@@ -27,6 +28,14 @@ jobs:
           name: Run Automation
 
 workflows:
+  version: 2
   run_automation:
+    triggers:
+       - schedule:
+           cron: "30 16 * * *"
+           filters:
+             branches:
+               only:
+                 - main
     jobs:
       - automation
