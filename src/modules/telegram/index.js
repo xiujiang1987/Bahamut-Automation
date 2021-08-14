@@ -77,12 +77,7 @@ async function message(outputs, config, catchError, log) {
                     body += b + "\n";
                 }
             } else {
-                const pairs = JSON.parse(JSON.stringify(output));
-                let b = `*${key}*\n`;
-                for (let k in pairs) {
-                    b += `- ${k}: ${pairs[k]}\n`;
-                }
-                body += b;
+                body += `${key} 模組未指定輸出報告`;
             }
         } catch (err) {
             catchError(err);

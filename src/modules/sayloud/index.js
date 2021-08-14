@@ -52,12 +52,12 @@ exports.run = async ({ page, outputs, params, catchError, log }) => {
 
     if (status === 2) {
         log("目前仍有大聲說在放送");
-        return { success: false, reason: "目前仍有大聲說在放送" };
+        return { success: false, reason: "目前仍有大聲說在放送", report: "勇者大聲說： 發送失敗 " + reason };
     } else {
         log("放送成功 時間：" + status);
     }
 
-    return { success: true, time: status };
+    return { success: true, time: status, report: "勇者大聲說： 發送成功 " + status };
 };
 
 function replace(str) {
