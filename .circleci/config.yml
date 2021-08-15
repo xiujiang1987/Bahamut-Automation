@@ -32,7 +32,7 @@ workflows:
   run_automation:
     triggers:
        - schedule:
-           cron: "30 16 * * *"
+           cron: "30 */4 * * *"
            filters:
              branches:
                only:
