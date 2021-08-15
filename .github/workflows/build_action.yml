@@ -33,4 +33,4 @@ jobs:
           user_name: "JacobLinCool"
           user_email: "jacoblincool@users.noreply.github.com"
           publish_branch: "action"
-          exclude_assets: ".github,.circleci,docs,CircleCI.js,test.js"
+          exclude_assets: ".github,.circleci,docs,CircleCI.js,test.js,.gitignore"
