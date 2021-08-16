@@ -1,4 +1,4 @@
-name: Build Action
+name: Build
 
 on:
   push:
@@ -7,8 +7,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  deploy:
-    name: Build
+  build_action:
+    name: Build Action
     runs-on: macos-latest
     steps:
       - name: Checkout
@@ -34,3 +34,32 @@ jobs:
           user_email: "jacoblincool@users.noreply.github.com"
           publish_branch: "action"
           exclude_assets: ".github,.circleci,docs,CircleCI.js,test.js,.gitignore"
+
+  build_binary:
+    name: Build Binary
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: "16"
+      - uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - name: Install Packages
+        run: npm install
+      - name: Build
+        run: npm run build
+      - name: Commit
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GH_TOKEN }}
+          publish_dir: "./dist"
+          user_name: "JacobLinCool"
+          user_email: "jacoblincool@users.noreply.github.com"
+          publish_branch: "binary"
