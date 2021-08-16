@@ -1,0 +1,20 @@
+{
+    "config": {
+        "path": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+        "headless": false
+    },
+    "modules": ["login", "ad_handler", "sign", "guild", "answer", "lottery", "sayloud", "builder", "logout", "telegram"],
+    "secrets": {
+        "username": "",
+        "password": "",
+        "twofa": "",
+        "tg_id": ""
+    },
+    "parameters": {
+        "builder": [
+            { "bsn": "60076", "snA": "6515182", "content": "$year$/$month$/$day$ $hour$:$minute$ OK!" },
+            { "bsn": "60111", "snA": "120687", "content": "$month$/$day$ $hour$:$minute$ Test! Test!" }
+        ],
+        "sayloud": [{ "to": "所有人", "text": "$year$/$month$/$day$ OK! https://forum.gamer.com.tw/C.php?bsn=60076&snA=6515182" }]
+    }
+}
