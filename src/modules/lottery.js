@@ -37,7 +37,7 @@ exports.run = async ({ page, outputs, catchError, log }) => {
             log(`[抽抽樂] 正在執行第 ${time} 次抽獎，可能需要多達 1 分鐘`);
 
             await page.click(".btn-base.c-accent-o").catch(catchError);
-            await page.waitForTimeout(2000);
+            await page.waitForTimeout(3000);
 
             if ((await page.$eval(".dialogify", (node) => node.innerText.includes("勇者問答考驗")).catch(() => {})) || null) {
                 log(`[抽抽樂] 需要回答問題，正在回答問題`);
@@ -49,13 +49,13 @@ exports.run = async ({ page, outputs, catchError, log }) => {
                 await page.waitForTimeout(2000);
                 await page.click("#btn-buy");
             }
-            await page.waitForTimeout(2000);
+            await page.waitForTimeout(3000);
 
             let ad_status = (await page.$eval(".dialogify .dialogify__body p", (node) => node.innerText).catch(() => {})) || "";
 
             let ad_frame;
             if (ad_status.includes("能量不足")) {
-                await catchError(`廣告能量不足？`);
+                await catchError(new Error(`廣告能量不足？`));
                 await page.reload().catch(catchError);
                 continue;
             } else if (ad_status.includes("觀看廣告")) {
