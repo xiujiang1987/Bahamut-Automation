@@ -80,3 +80,4 @@ log/
 screenshot/
 
 .data/
+.DS_Store
