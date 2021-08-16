@@ -1,7 +1,7 @@
 {
     "config": {
         "path": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
-        "headless": false
+        "headless": true
     },
     "modules": ["login", "ad_handler", "sign", "guild", "answer", "lottery", "sayloud", "builder", "logout", "telegram"],
     "secrets": {
