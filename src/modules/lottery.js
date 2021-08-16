@@ -58,7 +58,7 @@ exports.run = async ({ page, outputs, catchError, log }) => {
                 await catchError(new Error(`廣告能量不足？`));
                 await page.reload().catch(catchError);
                 continue;
-            } else if (ad_status.includes("觀看廣告")) {
+            } else if (page.url().includes("/shop_detail.php")) {
                 log(`[抽抽樂] 正在觀看廣告`);
                 await page.click("button[type=submit].btn.btn-insert.btn-primary").catch(catchError);
                 await page.waitForTimeout(1000);
