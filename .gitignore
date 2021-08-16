@@ -81,3 +81,5 @@ screenshot/
 
 .data/
 .DS_Store
+dist/bahamut-automation-win.exe
+dist/bahamut-automation-macos
