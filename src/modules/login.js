@@ -35,6 +35,7 @@ exports.run = async ({ page, params, catchError, log }) => {
                 await page.goto("https://user.gamer.com.tw/login.php").catch(catchError);
                 await page.waitForTimeout(2000);
                 log("嘗試登入中");
+                if (!params.username || !params.password) throw new Error("帳號或密碼不能為空");
                 await page.$eval("input#uidh", (node) => (node.value = "")).catch(catchError);
                 await page.$eval("input[type=password]", (node) => (node.value = "")).catch(catchError);
                 await page.type("input#uidh", params.username, { delay: 101 }).catch(catchError);
