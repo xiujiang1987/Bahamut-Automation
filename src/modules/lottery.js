@@ -49,7 +49,7 @@ exports.run = async ({ page, outputs, catchError, log }) => {
                 await page.waitForTimeout(2000);
                 await page.click("#btn-buy");
             }
-            await page.waitForTimeout(3000);
+            await page.waitForTimeout(5000);
 
             let ad_status = (await page.$eval(".dialogify .dialogify__body p", (node) => node.innerText).catch(() => {})) || "";
 
@@ -58,15 +58,21 @@ exports.run = async ({ page, outputs, catchError, log }) => {
                 await catchError(new Error(`廣告能量不足？`));
                 await page.reload().catch(catchError);
                 continue;
-            } else if (page.url().includes("/shop_detail.php")) {
+            } else if (ad_status.includes("觀看廣告")) {
                 log(`[抽抽樂] 正在觀看廣告`);
                 await page.click("button[type=submit].btn.btn-insert.btn-primary").catch(catchError);
                 await page.waitForTimeout(1000);
                 await page.waitForSelector("ins iframe").catch(catchError);
                 const ad_iframe = await page.$("ins iframe").catch(catchError);
-                ad_frame = await ad_iframe.contentFrame().catch(catchError);
-                await outputs.ad_handler({ ad_frame });
+                try {
+                    ad_frame = await ad_iframe.contentFrame();
+                    await outputs.ad_handler({ ad_frame });
+                } catch (err) {
+                    catchError(err);
+                }
                 await page.waitForTimeout(2000);
+            } else {
+                log(ad_status);
             }
 
             let url = page.url();
