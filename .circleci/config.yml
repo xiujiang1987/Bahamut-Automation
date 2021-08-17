@@ -8,7 +8,7 @@ jobs:
   automation:
     docker:
       - image: cimg/node:16.6
-    # resource_class: small
+    resource_class: small
 
     steps:
       - checkout
