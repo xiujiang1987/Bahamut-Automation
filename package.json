@@ -43,6 +43,8 @@
         "assets": [],
         "targets": [
             "node14-macos-x64",
+            "node14-linux-x64",
+            "node14-alpine-x64",
             "node14-win-x64"
         ],
         "outputPath": "dist"
