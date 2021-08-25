@@ -4,7 +4,7 @@ const { catchFatal, catchError, indentedCatchError } = require("./error");
 const { log, indentedLog } = require("./log");
 const { Browser, Page } = require("./browser");
 
-const VERSION = "v0.6.8";
+const VERSION = "v0.6.9";
 
 async function main({ config = {}, modules = [], ...params }) {
     try {
