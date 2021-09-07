@@ -36,13 +36,13 @@ exports.run = async ({ page, params, catchError, log }) => {
                 await page.waitForTimeout(2000);
                 log("嘗試登入中");
                 if (!params.username || !params.password) throw new Error("帳號或密碼不能為空");
-                await page.$eval("input#uidh", (node) => (node.value = "")).catch(catchError);
-                await page.$eval("input[type=password]", (node) => (node.value = "")).catch(catchError);
-                await page.type("input#uidh", params.username, { delay: 101 }).catch(catchError);
+                await page.$eval("input.form-control[type=text]", (node) => (node.value = "")).catch(catchError);
+                await page.$eval("input.form-control[type=password]", (node) => (node.value = "")).catch(catchError);
+                await page.type("input.form-control[type=text]", params.username, { delay: 101 }).catch(catchError);
                 await page.waitForTimeout(500);
-                await page.type("input[type=password]", params.password, { delay: 101 }).catch(catchError);
+                await page.type("input.form-control[type=password]", params.password, { delay: 101 }).catch(catchError);
                 await page.waitForTimeout(500);
-                await page.click("button[type=submit]").catch(catchError);
+                await page.click("a#btn-login").catch(catchError);
                 await page.waitForTimeout(1000);
                 await check2FA(page, params, catchError, log);
                 await page.waitForTimeout(3000);
