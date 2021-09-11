@@ -16,7 +16,8 @@ const { main } = require("./src/main.js");
 // 瀏覽器的啟動設定
 const config = {
     // 應該成你的電腦上 Google Chrome 的路徑
-    path: "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+    // path: "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+    path: "C:/Program Files (x86)/Google/Chrome/Application/chrome.exe",
     // false 可以觀察到瀏覽器每一個步驟
     headless: false,
 };
