@@ -5,12 +5,13 @@ const { main } = require("./src/main.js");
 // env.GITHUB_REPOSITORY = "JacobLinCool/BA";
 
 // 從 Command Line 拿參數
-[NODE, PROGRAM, username, password, twofa, gh_pat, tg_id] = argv;
+[NODE, PROGRAM, username, password, twofa, gh_pat, tg_id, dc_url] = argv;
 // 如果在私人環境中，你也可以直接記下機密參數
 // username = "username";
 // password = "password";
 // twofa = "twofa";
 // tg_id = "tg_id";
+// dc_url = "dc_url";
 
 // 瀏覽器的啟動設定
 const config = {
@@ -21,7 +22,7 @@ const config = {
 };
 
 // 執行的 modules（依序）
-const modules = ["login", "ad_handler", "sign", "guild", "answer", "lottery", "sayloud", "builder", "logout", "report", "telegram"];
+const modules = ["login", "ad_handler", "sign", "guild", "answer", "lottery", "sayloud", "builder", "logout", "report", "telegram", "discord"];
 
 // 非機密參數
 const parameters = {
@@ -39,6 +40,7 @@ const secrets = {
     twofa: twofa,
     gh_pat: gh_pat,
     tg_id: tg_id,
+    dc_url: dc_url,
 };
 
 main({

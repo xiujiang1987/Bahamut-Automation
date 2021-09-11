@@ -40,6 +40,13 @@
                 <input id="tg_id" placeholder="Telegram 訊息通道 ID" />
             </div>
             <div class="wrap">
+                <label for="dc_url" class="label"
+                    >Discord Webhook URL<br />
+                    (Discord 模組, v0.6.10+)</label
+                ><br />
+                <input id="dc_url" placeholder="Discord Webhook URL" />
+            </div>
+            <div class="wrap">
                 <label for="config" class="label">Secret 設定檔</label><button id="copy" data-clipboard-target="#config">複製</button>
                 <br />
                 <textarea id="config" placeholder="Secret 設定檔"></textarea>
@@ -145,6 +152,7 @@
                     twofa: document.querySelector("#twofa").value,
                     gh_pat: document.querySelector("#gh_pat").value,
                     tg_id: document.querySelector("#tg_id").value,
+                    dc_url: document.querySelector("#dc_url").value,
                 };
                 ta.value = JSON.stringify(config, null, 4);
             }
