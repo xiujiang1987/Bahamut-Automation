@@ -53,6 +53,12 @@
 - 必要參數： tg_id
 - 可選參數： tg_ignore
 
+## discord
+串接 discord 的模組，[詳細說明在 discrd 資料夾內](./discord#readme)
+- 作者： [cow03haha](https://github.com/cow03haha)
+- 必要參數： dc_url
+- 可選參數： dc_ignore
+
 ## guild
 公會簽到的模組，需先執行 login 模組
 - 作者： [JacobLinCool](https://github.com/JacobLinCool)
