@@ -56,6 +56,9 @@
 ### Telegram 通知
 - 以 Telegram 通知執行狀況
 
+### Discord 通知
+- 以 Discord 通知執行狀況
+
 ## 使用方法
 ### 使用 GitHub Action （建議）
 [**詳細的教學**](https://jacoblincool.github.io/Bahamut-Automation/tutorial)
@@ -68,10 +71,11 @@
   "password": "你的巴哈密碼",
   "twofa": "你的巴哈兩步驟驗證種子碼 (非必要)",
   "gh_pat": "GitHub Personal Access Token (非必要)",
-  "tg_id": "Telegram 訊息通道 ID (非必要)"
+  "tg_id": "Telegram 訊息通道 ID (非必要)",
+  "dc_url": "Discord Webhook 網址 (非必要)"
 }
 ```
-`gh_pat` 是 `report` 模組必要參數；`tg_id` 是 `telegram` 模組必要參數
+`gh_pat` 是 `report` 模組必要參數；`tg_id` 是 `telegram` 模組必要參數；`dc_url` 是 `discord` 模組必要參數
 
 3. 完成，詳細內容可以看看新建立的 Repo 的 README.md 及[模組說明文件](./src/modules#readme)
 
