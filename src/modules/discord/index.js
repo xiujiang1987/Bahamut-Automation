@@ -84,7 +84,7 @@ async function message(outputs, config, catchError, log) {
                     body += b + "\n";
                 }
             } else {
-                body += `${key} 模組未指定輸出報告`;
+                body += `${key} 模組未指定輸出報告\n\n`;
             }
         } catch (err) {
             catchError(err);
