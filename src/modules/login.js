@@ -41,10 +41,10 @@ exports.run = async ({ page, params, catchError, log }) => {
                 await page.type("input.form-control[type=text]", params.username, { delay: 101 }).catch(catchError);
                 await page.waitForTimeout(500);
                 await page.type("input.form-control[type=password]", params.password, { delay: 101 }).catch(catchError);
-                await page.waitForTimeout(500);
-                await page.click("a#btn-login").catch(catchError);
                 await page.waitForTimeout(1000);
                 await check2FA(page, params, catchError, log);
+                await page.waitForTimeout(500);
+                await page.click("a#btn-login").catch(catchError);
                 await page.waitForTimeout(3000);
 
                 if (attempts > 0) log("已嘗試登入，重新檢測登入狀態");
@@ -65,17 +65,12 @@ exports.run = async ({ page, params, catchError, log }) => {
 };
 
 async function check2FA(page, params, catchError, log) {
-    let twoFA = await page.$("[name=twoStepAuth]");
+    let twoFA = await page.$("[name=twoStepAuth][required]");
     if (twoFA) {
         log("有啟用 2FA");
         if (!params.twofa) throw new Error("未提供 2FA 種子碼");
         const code = authenticator.generate(params.twofa);
         await page.type("[name=twoStepAuth]", code, { delay: 10 }).catch(catchError);
-        await page
-            .evaluate(() => {
-                document.forms[0].submit();
-            })
-            .catch(catchError);
         return;
     } else {
         log("沒有啟用 2FA");
