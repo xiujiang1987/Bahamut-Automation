@@ -9,7 +9,7 @@ exports.run = async ({ page, outputs, catchError, log }) => {
 
     await page.goto("https://www.gamer.com.tw/");
     await page.waitForTimeout(2000);
-    let { days, finishedAd, prjSigninDays, signin } = await sign_status(page);
+    let { days, finishedAd, signin } = await sign_status(page);
     const initialSignin = signin;
     log(`[簽到] 已連續簽到天數: ${days}`);
 
@@ -24,8 +24,7 @@ exports.run = async ({ page, outputs, catchError, log }) => {
     }
 
     if (outputs.ad_handler) {
-        let retries = 3;
-        while (retries--) {
+        for (let retries = 3; retries--;) {
             try {
                 log(`[簽到] 正在檢測雙倍簽到獎勵狀態`);
 
@@ -54,9 +53,8 @@ exports.run = async ({ page, outputs, catchError, log }) => {
                     if (finishedAd) {
                         log("[簽到] 已觀看雙倍獎勵廣告 ✔");
                         break;
-                    } else {
-                        throw new Error("觀看雙倍獎勵廣告過程發生未知錯誤");
                     }
+                    throw new Error("觀看雙倍獎勵廣告過程發生未知錯誤");
                 } else {
                     log("[簽到] 已獲得雙倍簽到獎勵 ✔");
                     break;
@@ -85,13 +83,18 @@ exports.run = async ({ page, outputs, catchError, log }) => {
 };
 
 async function sign_status(page) {
-    let { data } = await page.evaluate(() => {
+    const { data } = await page.evaluate(() => {
+        const controller = new AbortController();
+
+        setTimeout(() => controller.abort(), 30000);
+
         return fetch("https://www.gamer.com.tw/ajax/signin.php", {
             method: "POST",
             headers: {
                 "Content-Type": "application/x-www-form-urlencoded",
             },
             body: "action=2",
+            signal: controller.signal,
         }).then((r) => r.json());
     });
 
