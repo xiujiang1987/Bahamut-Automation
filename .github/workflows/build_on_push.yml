@@ -25,15 +25,16 @@ jobs:
             ${{ runner.os }}-node-
       - name: Install Packages
         run: npm install
+      - name: Build Action
+        run: node scripts/build_action.js
       - name: Commit
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GH_TOKEN }}
-          publish_dir: "./"
+          publish_dir: "./action"
           user_name: "JacobLinCool"
           user_email: "jacoblincool@users.noreply.github.com"
           publish_branch: "action"
-          exclude_assets: ".circleci,.github,dist,docs,.gitignore,app.js,CircleCI.js,CONTRIBUTING.md,test.js"
           commit_message: "CircleCI Ignore: [ci skip]"
 
   build_binary:
@@ -54,8 +55,8 @@ jobs:
             ${{ runner.os }}-node-
       - name: Install Packages
         run: npm install
-      - name: Build
-        run: npm run build
+      - name: Build Binary
+        run: node scripts/build_binary.js
       - name: Commit
         uses: peaceiris/actions-gh-pages@v3
         with:

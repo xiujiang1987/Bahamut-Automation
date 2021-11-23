@@ -16,7 +16,10 @@ const DEFAULT_CONFIG = {
     ignore: ["login", "logout", "report", "telegram", "discord"],
 };
 
-exports.run = async ({ outputs, params, catchError, log }) => {
+exports.run = async ({ outputs, params, logger }) => {
+    const log = (...args) => logger.log("\u001b[95m[Discord]\u001b[m", ...args);
+    const error = (...args) => logger.error("\u001b[95m[Discord]\u001b[m", ...args);
+
     const { dc_url } = params;
 
     // 合併預設值
@@ -31,29 +34,31 @@ exports.run = async ({ outputs, params, catchError, log }) => {
     );
     if (typeof config.ignore === "string") config.ignore = config.ignore.split(",");
 
-    const msg = await message(outputs, config, catchError, log);
+    const msg = await message(outputs, config, error, log);
     const { ok } = await fetch(dc_url, {
         method: "POST",
         headers: {
-            "Content-Type": "application/json"
-        },  
+            "Content-Type": "application/json",
+        },
         body: JSON.stringify({
             content: null,
-            embeds: [{
-                title: `${replace(config.title)}`,
-                color: 1146518,
-                description: msg,
-            }]
+            embeds: [
+                {
+                    title: `${replace(config.title)}`,
+                    color: 1146518,
+                    description: msg,
+                },
+            ],
         }),
     });
-    if (ok) log("已發送 discord 報告！");
+    if (ok) log("已發送 Discord 報告！");
     else {
         log(msg);
-        catchError("發送 discord 報告失敗！");
+        logger.error("發送 Discord 報告失敗！");
     }
 };
 
-async function message(outputs, config, catchError, log) {
+async function message(outputs, config, error, log) {
     let body = "";
     for (let key in outputs) {
         if (config.ignore.includes(key)) continue;
@@ -87,7 +92,7 @@ async function message(outputs, config, catchError, log) {
                 body += `${key} 模組未指定輸出報告\n\n`;
             }
         } catch (err) {
-            catchError(err);
+            logger.error(err);
         }
     }
     return body;

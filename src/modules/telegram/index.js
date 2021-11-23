@@ -16,7 +16,11 @@ const DEFAULT_CONFIG = {
     ignore: ["login", "logout", "report", "telegram", "discord"],
 };
 
-exports.run = async ({ outputs, params, catchError, log }) => {
+exports.run = async ({ outputs, params, logger }) => {
+    const log = (...args) => logger.log("\u001b[95m[Telegram]\u001b[m", ...args);
+    const error = (...args) => logger.error("\u001b[95m[Telegram]\u001b[m", ...args);
+    const info = (...args) => logger.info("\u001b[95m[Telegram]\u001b[m", ...args);
+
     const { tg_id } = params;
 
     // 合併預設值
@@ -31,7 +35,7 @@ exports.run = async ({ outputs, params, catchError, log }) => {
     );
     if (typeof config.ignore === "string") config.ignore = config.ignore.split(",");
 
-    const msg = await message(outputs, config, catchError, log);
+    const msg = await message(outputs, config, error, log);
     const { ok } = await fetch("https://automia.jacob.workers.dev/", {
         method: "POST",
         body: JSON.stringify({
@@ -41,12 +45,12 @@ exports.run = async ({ outputs, params, catchError, log }) => {
     }).then((r) => r.json());
     if (ok) log("已發送 Telegram 報告！");
     else {
-        log(msg);
-        catchError("發送 Telegram 報告失敗！");
+        info(msg);
+        error("發送 Telegram 報告失敗！");
     }
 };
 
-async function message(outputs, config, catchError, log) {
+async function message(outputs, config, error, log) {
     let body = `*${replace(config.title)}* \n\n`;
     for (let key in outputs) {
         if (config.ignore.includes(key)) continue;
@@ -80,7 +84,7 @@ async function message(outputs, config, catchError, log) {
                 body += `${key} 模組未指定輸出報告\n\n`;
             }
         } catch (err) {
-            catchError(err);
+            logger.error(err);
         }
     }
     return body;

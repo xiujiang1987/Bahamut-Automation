@@ -6,7 +6,10 @@ exports.parameters = [
     },
 ];
 
-exports.run = async ({ page, outputs, params, catchError, log }) => {
+exports.run = async ({ page, outputs, params, logger }) => {
+    const log = (...args) => logger.log("\u001b[95m[回文]\u001b[m", ...args);
+    const error = (...args) => logger.error("\u001b[95m[回文]\u001b[m", ...args);
+
     if (!outputs.login || !outputs.login.success) throw new Error("使用者未登入，無法發佈勇者大聲說");
 
     const { builder } = params;
@@ -59,7 +62,7 @@ exports.run = async ({ page, outputs, params, catchError, log }) => {
                 await page.waitForTimeout(60 * 1000);
             }
         } catch (err) {
-            catchError(err);
+            error(err);
         }
     }
 

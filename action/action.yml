@@ -20,3 +20,7 @@ inputs:
     description: "機密程式參數 (建議使用 Secret)"
     required: false
     default: "{}"
+  browser:
+    description: "瀏覽器設定"
+    required: false
+    default: "{}"

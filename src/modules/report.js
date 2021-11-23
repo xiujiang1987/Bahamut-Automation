@@ -26,7 +26,10 @@ const DEFAULT_CONFIG = {
     ignore: ["login", "logout", "report"],
 };
 
-exports.run = async ({ params, outputs, catchError, log }) => {
+exports.run = async ({ params, outputs, logger }) => {
+    const log = (...args) => logger.log("\u001b[95m[報告]\u001b[m", ...args);
+    const error = (...args) => logger.error("\u001b[95m[報告]\u001b[m", ...args);
+
     // 設定 Octokit 及獲取 GitHub 資料
     const GH_PAT = params.gh_pat;
     const octokit = new Octokit({ auth: GH_PAT });
@@ -48,20 +51,20 @@ exports.run = async ({ params, outputs, catchError, log }) => {
     if (typeof config.ignore === "string") config.ignore = config.ignore.split(",");
 
     if (outputs.report && outputs.report.number) {
-        await updateIssue({ number: outputs.report.number, octokit, context, config, outputs, catchError, log }).then(() => {
+        await updateIssue({ number: outputs.report.number, octokit, context, config, outputs, error, log }).then(() => {
             log("Report Updated.");
         });
         return outputs.report;
     } else {
-        let res = await createIssue({ octokit, context, config, outputs, catchError, log });
+        let res = await createIssue({ octokit, context, config, outputs, error, log });
         if (res && res.data && res.data.number) log(`Report: https://github.com/${context.repo.owner}/${context.repo.repo}/issues/${res.data.number}`);
 
         return { number: res.data.number };
     }
 };
 
-async function createIssue({ octokit, context, config, outputs, catchError, log }) {
-    const body = await gen_body(outputs, config.ignore, catchError, log);
+async function createIssue({ octokit, context, config, outputs, error, log }) {
+    const body = await gen_body(outputs, config.ignore, error, log);
 
     let res = await octokit.request("POST /repos/{owner}/{repo}/issues", {
         owner: context.repo.owner,
@@ -74,8 +77,8 @@ async function createIssue({ octokit, context, config, outputs, catchError, log 
     return res;
 }
 
-async function updateIssue({ number, octokit, context, config, outputs, catchError, log }) {
-    const body = await gen_body(outputs, config.ignore, catchError, log);
+async function updateIssue({ number, octokit, context, config, outputs, error, log }) {
+    const body = await gen_body(outputs, config.ignore, error, log);
 
     await octokit.request("PATCH /repos/{owner}/{repo}/issues/{issue_number}", {
         owner: context.repo.owner,
@@ -85,7 +88,7 @@ async function updateIssue({ number, octokit, context, config, outputs, catchErr
     });
 }
 
-async function gen_body(outputs, ignore, catchError, log) {
+async function gen_body(outputs, ignore, error, log) {
     let body = "";
     for (let key in outputs) {
         if (ignore.includes(key)) continue;
@@ -109,7 +112,7 @@ async function gen_body(outputs, ignore, catchError, log) {
                 body += b;
             }
         } catch (err) {
-            catchError(err);
+            logger.error(err);
         }
     }
     return body;

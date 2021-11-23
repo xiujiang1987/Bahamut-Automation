@@ -1,52 +1,51 @@
 {
     "name": "bahamut-automation",
-    "version": "0.6.14-pre.1",
+    "version": "1.0.0-pre.1",
     "description": "",
-    "main": "src/main.js",
+    "main": "src/cli.js",
     "bin": {
-        "path": "./app.js"
+        "path": "./src/cli.js"
     },
     "scripts": {
         "prepare": "npm audit fix",
+        "start": "node src/cli.js",
         "build": "pkg ."
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/JacobLinCool/bahamut-automation.git"
     },
     "keywords": [],
     "author": "",
     "license": "MIT",
-    "bugs": {
-        "url": "https://github.com/JacobLinCool/bahamut-automation/issues"
-    },
-    "homepage": "https://github.com/JacobLinCool/bahamut-automation#readme",
     "dependencies": {
-        "@actions/core": "^1.4.0",
+        "@actions/core": "^1.6.0",
         "@actions/github": "^5.0.0",
         "@octokit/core": "^3.5.1",
-        "@sentry/node": "^6.10.0",
-        "@sentry/tracing": "^6.10.0",
+        "@sentry/node": "^6.15.0",
+        "@sentry/tracing": "^6.15.0",
         "countapi-js": "^1.0.2",
-        "node-fetch": "^2.6.1",
+        "node-fetch": "^2.6.6",
         "otplib": "^12.0.1",
-        "puppeteer-core": "^10.0.0"
+        "playwright": "^1.16.3"
     },
     "devDependencies": {
-        "pkg": "^5.3.1"
+        "pkg": "^5.4.1"
     },
     "pkg": {
         "scripts": [
-            "index.js",
             "src/**/*.js"
         ],
         "assets": [],
         "targets": [
-            "node14-macos-x64",
-            "node14-linux-x64",
-            "node14-alpine-x64",
-            "node14-win-x64"
+            "node16-macos-x64",
+            "node16-linux-x64",
+            "node16-win-x64"
         ],
         "outputPath": "dist"
+    },
+    "homepage": "https://github.com/JacobLinCool/bahamut-automation#readme",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/JacobLinCool/bahamut-automation.git"
+    },
+    "bugs": {
+        "url": "https://github.com/JacobLinCool/bahamut-automation/issues"
     }
 }
