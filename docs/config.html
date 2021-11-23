@@ -47,6 +47,13 @@
                 <input id="dc_url" placeholder="Discord Webhook URL" />
             </div>
             <div class="wrap">
+                <label for="line_notify_token" class="label"
+                    >Line Notify 權杖代碼<br />
+                    (Line Notify 模組, v0.6.11+) <a href="https://notify-bot.line.me/zh_TW/" target="_blank">Line Notify</a></label
+                ><br />
+                <input id="line_notify_token" placeholder="Line Notify 權杖代碼" />
+            </div>
+            <div class="wrap">
                 <label for="config" class="label">Secret 設定檔</label><button id="copy" data-clipboard-target="#config">複製</button>
                 <br />
                 <textarea id="config" placeholder="Secret 設定檔"></textarea>
@@ -153,6 +160,7 @@
                     gh_pat: document.querySelector("#gh_pat").value,
                     tg_id: document.querySelector("#tg_id").value,
                     dc_url: document.querySelector("#dc_url").value,
+                    line_notify_token: document.querySelector("#line_notify_token").value,
                 };
                 ta.value = JSON.stringify(config, null, 4);
             }
