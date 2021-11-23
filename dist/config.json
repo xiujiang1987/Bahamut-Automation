@@ -3,13 +3,14 @@
         "path": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
         "headless": true
     },
-    "modules": ["login", "ad_handler", "sign", "guild", "answer", "lottery", "sayloud", "builder", "logout", "telegram", "discord"],
+    "modules": ["login", "ad_handler", "sign", "guild", "answer", "lottery", "sayloud", "builder", "logout", "telegram", "discord", "line_notify"],
     "secrets": {
         "username": "",
         "password": "",
         "twofa": "",
         "tg_id": "",
-        "dc_url": ""
+        "dc_url": "",
+        "line_notify_token": ""
     },
     "parameters": {
         "builder": [

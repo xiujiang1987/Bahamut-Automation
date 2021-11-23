@@ -2,11 +2,11 @@ const fetch = require("node-fetch");
 
 exports.parameters = [
     {
-        name: "tg_id",
+        name: "line_notify_token",
         required: true,
     },
     {
-        name: "tg_ignore",
+        name: "line_notify_ignore",
         required: false,
     },
 ];
@@ -17,7 +17,7 @@ const DEFAULT_CONFIG = {
 };
 
 exports.run = async ({ outputs, params, catchError, log }) => {
-    const { tg_id } = params;
+    const { line_notify_token } = params;
 
     // 合併預設值
     const config = Object.assign(
@@ -25,29 +25,34 @@ exports.run = async ({ outputs, params, catchError, log }) => {
         DEFAULT_CONFIG,
         JSON.parse(
             JSON.stringify({
-                ignore: params.tg_ignore,
+                ignore: params.line_notify_ignore,
             })
         )
     );
     if (typeof config.ignore === "string") config.ignore = config.ignore.split(",");
 
     const msg = await message(outputs, config, catchError, log);
-    const { ok } = await fetch("https://automia.jacob.workers.dev/", {
+    const body = new URLSearchParams();
+    body.append('message', `${replace(config.title)}\n${msg}`);
+
+    const response = await fetch("https://notify-api.line.me/api/notify", {
         method: "POST",
-        body: JSON.stringify({
-            id: tg_id,
-            send: msg,
-        }),
-    }).then((r) => r.json());
-    if (ok) log("已發送 Telegram 報告！");
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            "Authorization": `Bearer ${line_notify_token}`,
+        },  
+        body: body,
+    }).then(res => res.json());
+    if (response.status == 200) log("已發送 Line Notify");
     else {
+        log(response);
         log(msg);
-        catchError("發送 Telegram 報告失敗！");
+        catchError("發送 Line Notify 失敗！");
     }
 };
 
 async function message(outputs, config, catchError, log) {
-    let body = `*${replace(config.title)}* \n\n`;
+    let body = "";
     for (let key in outputs) {
         if (config.ignore.includes(key)) continue;
         if (typeof outputs[key] === "function") continue;
@@ -65,7 +70,7 @@ async function message(outputs, config, catchError, log) {
                     b = b.replace(/\*\*([^]+?)\*\*/g, "<b>$1</b>");
                     b = b.replace(/\*([^]*?)\*/g, "<i>$1</i>");
                     b = b.replace(/\_([^]*?)\_/g, "<i>$1</i>");
-                    b = b.replace(/# ([^]+?)\n/g, "*$1*");
+                    b = b.replace(/# ([^]+?)\n/g, "**$1**");
                     b = b.replace(/\n\n/g, "\n");
 
                     b = b.replace("!", "\\!");
