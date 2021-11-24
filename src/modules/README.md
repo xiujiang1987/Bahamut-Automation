@@ -59,6 +59,12 @@
 - 必要參數： dc_url
 - 可選參數： dc_ignore
 
+## line_notify
+串接 Line Notify 的模組，[詳細說明在 line_notify 資料夾內](./line_notify#readme)
+- 作者： [dxball](https://github.com/dxball)
+- 必要參數： line_notify_token
+- 可選參數： line_notify_ignore
+
 ## guild
 公會簽到的模組，需先執行 login 模組
 - 作者： [JacobLinCool](https://github.com/JacobLinCool)
