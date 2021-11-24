@@ -1,52 +1,62 @@
 const countapi = require("countapi-js");
 
-exports.parameters = [];
+exports.parameters = [
+    {
+        name: "lottery_max_attempts",
+        required: false,
+    },
+];
 
-exports.run = async ({ page, outputs, catchError, log }) => {
+exports.run = async ({ page, outputs, params, logger }) => {
+    const log = (...args) => logger.log("\u001b[95m[福利社]\u001b[m", ...args);
+    const error = (...args) => logger.error("\u001b[95m[福利社]\u001b[m", ...args);
+
     if (!outputs.login || !outputs.login.success) throw new Error("使用者未登入，無法抽獎");
     if (!outputs.ad_handler) throw new Error("需使用 ad_handler 模組");
 
-    log(`[抽抽樂] 開始執行`);
+    log(`開始執行`);
     let lottery = 0;
 
-    log("[抽抽樂] 正在尋找抽抽樂");
-    let draws = await getList({ page, catchError });
+    log("正在尋找抽抽樂");
+    const draws = await getList({ page, error });
 
-    log(`[抽抽樂] 找到 ${draws.length} 個抽抽樂`);
+    log(`找到 ${draws.length} 個抽抽樂`);
     const unfinished = {};
     draws.forEach(({ name, link }, i) => {
-        log(`[抽抽樂] ${i + 1}: ${name}`);
+        log(`${i + 1}: ${name}`);
         unfinished[name] = link;
     });
 
     for (let idx = 0; idx < draws.length; idx++) {
-        log(`[抽抽樂] 正在嘗試執行第 ${idx + 1} 個抽抽樂： ${draws[idx].name}`);
+        log(`正在嘗試執行第 ${idx + 1} 個抽抽樂： ${draws[idx].name}`);
 
-        let limitation = 30;
-        for (let time = 1; time <= limitation; time++) {
-            await page.goto(draws[idx].link).catch(catchError);
-            await page.waitForTimeout(1000);
-            let name = await page.$eval("#BH-master > .BH-lbox.fuli-pbox h1", (node) => node.innerHTML);
+        const max_attempts = +params.lottery_max_attempts || 30;
+        for (let time = 1; time <= max_attempts; time++) {
+            await page.goto(draws[idx].link).catch(error);
+            await page.waitForSelector("#BH-master > .BH-lbox.fuli-pbox h1");
+            await page.waitForTimeout(100);
+            let name = await page.$eval("#BH-master > .BH-lbox.fuli-pbox h1", (elm) => elm.innerHTML);
 
             if (await page.$(".btn-base.c-accent-o.is-disable")) {
-                log(`[抽抽樂] 第 ${idx + 1} 個抽抽樂（${draws[idx].name}）的廣告免費次數已用完 ✔`);
+                log(`第 ${idx + 1} 個抽抽樂（${draws[idx].name}）的廣告免費次數已用完 ✔`);
                 unfinished[draws[idx].name] = undefined;
                 break;
             }
 
-            log(`[抽抽樂] 正在執行第 ${time} 次抽獎，可能需要多達 1 分鐘`);
+            log(`正在執行第 ${time} 次抽獎，可能需要多達 1 分鐘`);
 
-            await page.click(".btn-base.c-accent-o").catch(catchError);
+            await page.click(".btn-base.c-accent-o").catch(error);
             await page.waitForTimeout(3000);
 
             if ((await page.$eval(".dialogify", (node) => node.innerText.includes("勇者問答考驗")).catch(() => {})) || null) {
-                log(`[抽抽樂] 需要回答問題，正在回答問題`);
+                log(`需要回答問題，正在回答問題`);
                 await page.$$eval("#dialogify_1 .dialogify__body a", (options) => {
                     options.forEach((option) => {
                         if (option.dataset.option == option.dataset.answer) option.click();
                     });
                 });
-                await page.waitForTimeout(2000);
+                await page.waitForSelector("#btn-buy");
+                await page.waitForTimeout(100);
                 await page.click("#btn-buy");
             }
             await page.waitForTimeout(5000);
@@ -55,41 +65,41 @@ exports.run = async ({ page, outputs, catchError, log }) => {
 
             let ad_frame;
             if (ad_status.includes("能量不足")) {
-                await catchError(new Error(`廣告能量不足？`));
-                await page.reload().catch(catchError);
+                await error("廣告能量不足？");
+                await page.reload().catch(error);
                 continue;
             } else if (ad_status.includes("觀看廣告")) {
-                log(`[抽抽樂] 正在觀看廣告`);
-                await page.click("button[type=submit].btn.btn-insert.btn-primary").catch(catchError);
+                log(`正在觀看廣告`);
+                await page.click("button[type=submit].btn.btn-insert.btn-primary").catch(error);
+                await page.waitForSelector("ins iframe").catch(error);
                 await page.waitForTimeout(1000);
-                await page.waitForSelector("ins iframe").catch(catchError);
-                const ad_iframe = await page.$("ins iframe").catch(catchError);
+                const ad_iframe = await page.$("ins iframe").catch(error);
                 try {
                     ad_frame = await ad_iframe.contentFrame();
                     await outputs.ad_handler({ ad_frame });
                 } catch (err) {
-                    catchError(err);
+                    error(err);
                 }
-                await page.waitForTimeout(2000);
+                await page.waitForTimeout(1000);
             } else {
                 log(ad_status);
             }
 
             let url = page.url();
             if (url.includes("/buyD.php") && url.includes("ad=1")) {
-                log(`[抽抽樂] 正在確認結算頁面`);
-                await checkInfo({ page, log, catchError }).catch(catchError);
-                await confirm({ page, catchError }).catch(catchError);
+                log(`正在確認結算頁面`);
+                await checkInfo({ page, log, error }).catch(error);
+                await confirm({ page, error }).catch(error);
                 if ((await page.$(".card > .section > p")) && (await page.$eval(".card > .section > p", (node) => node.innerText.includes("成功")))) {
-                    log("[抽抽樂] 已完成一次抽抽樂：" + name + " ✔");
+                    log("已完成一次抽抽樂：" + name + " ✔");
                     lottery++;
                 } else {
-                    log("[抽抽樂] 發生錯誤，重試中 ✘");
+                    log("發生錯誤，重試中 ✘");
                 }
             } else {
                 log(url);
-                log("[抽抽樂] 未進入結算頁面，重試中 ✘");
-                catchError(new Error("抽抽樂未進入結算頁面"));
+                log("未進入結算頁面，重試中 ✘");
+                error("抽抽樂未進入結算頁面");
             }
         }
     }
@@ -97,14 +107,14 @@ exports.run = async ({ page, outputs, catchError, log }) => {
     Object.keys(unfinished).forEach((key) => unfinished[key] === undefined && delete unfinished[key]);
 
     await page.waitForTimeout(2000);
-    log(`[抽抽樂] 執行完畢 ✨`);
+    log(`執行完畢 ✨`);
 
     if (lottery) countapi.update("Bahamut-Automation", "lottery", lottery);
 
     return { lottery, unfinished, report };
 };
 
-async function getList({ page, catchError }) {
+async function getList({ page, error }) {
     let draws;
 
     let attempts = 3;
@@ -139,14 +149,14 @@ async function getList({ page, catchError }) {
 
             break;
         } catch (err) {
-            catchError(err);
+            error(err);
         }
     }
 
     return draws;
 }
 
-async function checkInfo({ page, log, catchError }) {
+async function checkInfo({ page, log, error }) {
     try {
         const name = await page.$eval("#name", (node) => node.value);
         const tel = await page.$eval("#tel", (node) => node.value);
@@ -162,22 +172,26 @@ async function checkInfo({ page, log, catchError }) {
 
         if (!name || !tel || !city || !country || !address) throw new Error("警告：收件人資料不全");
     } catch (err) {
-        catchError(err);
+        error(err);
     }
 }
 
-async function confirm({ page, catchError }) {
+async function confirm({ page, error }) {
     try {
         await page.click("#agree-confirm");
-        await page.waitForTimeout(500);
+        await page.waitForSelector("#buyD > div.pbox-btn > a");
+        await page.waitForTimeout(100);
         await page.click("#buyD > div.pbox-btn > a");
-        await page.waitForTimeout(800);
-        await page.click("#dialogify_1 > form > div > div > div.btn-box.text-right > button.btn.btn-insert.btn-primary");
-        await page.waitForNavigation();
+        await page.waitForSelector("#dialogify_1 > form > div > div > div.btn-box.text-right > button.btn.btn-insert.btn-primary");
+        await page.waitForTimeout(100);
+        await Promise.all([
+            page.waitForNavigation(),
+            page.click("#dialogify_1 > form > div > div > div.btn-box.text-right > button.btn.btn-insert.btn-primary"),
+        ]);
         await page.waitForTimeout(1000);
     } catch (err) {
         console.debug(page.url());
-        catchError(err);
+        error(err);
     }
 }
 

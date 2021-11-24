@@ -1,21 +1,29 @@
 const fetch = require("node-fetch");
 const countapi = require("countapi-js");
 
-exports.parameters = [];
+exports.parameters = [
+    {
+        name: "answer_max_attempts",
+        required: false,
+    },
+];
 
-exports.run = async ({ page, outputs, catchError, log }) => {
+exports.run = async ({ page, outputs, params, logger }) => {
+    const log = (...args) => logger.log("\u001b[95m[動畫瘋答題]\u001b[m", ...args);
+    const error = (...args) => logger.error("\u001b[95m[動畫瘋答題]\u001b[m", ...args);
+
     if (!outputs.login || !outputs.login.success) throw new Error("使用者未登入，無法答題");
 
     let reward = 0;
     let question = {};
-    log(`[動畫瘋答題] 開始執行`);
+    log(`開始執行`);
 
-    let attempts = 3;
-    while (attempts-- > 0) {
+    const max_attempts = +params.answer_max_attempts || 3;
+    for (let attempts = 0; attempts < max_attempts; attempts++) {
         try {
-            log("[動畫瘋答題] 正在檢測答題狀態");
+            log("正在檢測答題狀態");
             await page.goto("https://ani.gamer.com.tw/");
-            await page.waitForTimeout(500);
+            await page.waitForTimeout(200);
 
             question = await page.evaluate(() => {
                 return fetch("/ajax/animeGetQuestion.php?t=" + Date.now()).then((r) => r.json());
@@ -24,11 +32,11 @@ exports.run = async ({ page, outputs, catchError, log }) => {
             if (question.question) {
                 const options = [null, question.a1, question.a2, question.a3, question.a4];
 
-                log("[動畫瘋答題] 尚未回答今日題目，嘗試答題中");
-                log(`[動畫瘋答題] 今天的問題：${question.question}`);
-                log(`[動畫瘋答題] 選項：${options.filter(Boolean).join(", ")}`);
+                log("尚未回答今日題目，嘗試答題中");
+                log(`今天的問題：${question.question}`);
+                log(`選項：${options.filter(Boolean).join(", ")}`);
 
-                log(`[動畫瘋答題] 正在尋找答案`);
+                log(`正在尋找答案`);
                 let token = question.token;
                 let sn = await fetch("https://api.gamer.com.tw/mobile_app/bahamut/v1/home.php?owner=blackXblue&page=1")
                     .then((r) => r.json())
@@ -44,10 +52,10 @@ exports.run = async ({ page, outputs, catchError, log }) => {
                     )
                     .then(parseInt);
 
-                log(`[動畫瘋答題] 答案是 ${ans}. ${options[ans]} ！`);
-                log(`[動畫瘋答題] 正在嘗試回答`);
+                log(`答案是 ${ans}. ${options[ans]} ！`);
+                log(`正在嘗試回答`);
                 let result = await page.evaluate(
-                    (ans, token) => {
+                    ({ ans, token }) => {
                         return fetch("/ajax/animeAnsQuestion.php", {
                             headers: {
                                 accept: "*/*",
@@ -60,32 +68,31 @@ exports.run = async ({ page, outputs, catchError, log }) => {
                             body: encodeURI(`token=${token}&ans=${ans}&t=${Date.now()}`),
                         }).then((r) => r.json());
                     },
-                    ans,
-                    token
+                    { ans, token }
                 );
 
-                if (result.error) log("[動畫瘋答題] 回答問題時發生錯誤 " + result.msg + " ✘");
+                if (result.error) log("回答問題時發生錯誤 " + result.msg + " \u001b[91m✘\u001b[m");
                 if (result.ok) {
-                    log("[動畫瘋答題] 已回答問題 " + result.gift + " ✔");
+                    log("已回答問題 " + result.gift + " \u001b[92m✔\u001b[m");
                     reward = +result.gift.match(/\d{2,4}/)[0];
                 }
             } else if (question.error === 1 && question.msg === "今日已經答過題目了，一天僅限一次機會") {
-                log("[動畫瘋答題] 今日已經答過題目了 ✔");
+                log("今日已經答過題目了 \u001b[92m✔\u001b[m");
             } else {
-                log("[動畫瘋答題] 發生未知錯誤：" + question.msg + " ✘");
+                log("發生未知錯誤：" + question.msg + " \u001b[91m✘\u001b[m");
             }
 
             await page.waitForTimeout(1000);
             break;
         } catch (err) {
-            catchError(err);
-            log("[動畫瘋答題] 發生錯誤，重試中 ✘");
+            logger.error(err);
+            log("發生錯誤，重試中 \u001b[91m✘\u001b[m");
         }
     }
-    log(`[動畫瘋答題] 執行完畢 ✨`);
+    log(`執行完畢 ✨`);
 
     if (reward) countapi.update("Bahamut-Automation", "answer", reward);
-    
+
     return {
         answered: question.error === 1 || reward ? true : false,
         reward,

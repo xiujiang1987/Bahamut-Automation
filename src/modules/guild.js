@@ -1,9 +1,17 @@
-exports.parameters = [];
+exports.parameters = [
+    {
+        name: "guild_max_attempts",
+        required: false,
+    },
+];
 
-exports.run = async ({ page, outputs, catchError, log }) => {
+exports.run = async ({ page, outputs, params, logger }) => {
+    const log = (...args) => logger.log("\u001b[95m[公會簽到]\u001b[m", ...args);
+    const error = (...args) => logger.error("\u001b[95m[公會簽到]\u001b[m", ...args);
+
     if (!outputs.login || !outputs.login.success) throw new Error("使用者未登入，無法進行公會簽到");
 
-    let retry = 3;
+    let retry = +params.guild_max_attempts || 3;
     while (retry--) {
         try {
             await page.goto("https://home.gamer.com.tw/joinGuild.php");
@@ -24,12 +32,12 @@ exports.run = async ({ page, outputs, catchError, log }) => {
                     await page.waitForTimeout(2000);
                     log(`已簽到 ${name}`);
                 } catch (err) {
-                    catchError(err);
+                    error(err);
                 }
             }
             break;
         } catch (err) {
-            catchError(err);
+            error(err);
             await page.waitFor(500);
         }
     }

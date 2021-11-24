@@ -12,8 +12,8 @@ exports.parameters = [
     },
 ];
 
-exports.run = async ({ page, outputs, params, catchError, log }) => {
-    // the module can access this browser page
+exports.run = async ({ page, outputs, params, logger }) => {
+    // the module can access this browser page, if you need, you can use multiple pages by accessing the upstream context object
     page;
 
     // the module can access the output of the previous modules
@@ -22,11 +22,8 @@ exports.run = async ({ page, outputs, params, catchError, log }) => {
     // the module can access the parameters it asked for
     params;
 
-    // the module should use the catchError function to catch errors
-    catchError;
-
-    // the module should use the log function to log messages
-    log;
+    // the module should use this logger to log messages
+    logger;
 
     // the module can pass data to the next modules
     const something_that_can_be_access_by_other_modules = {

@@ -6,7 +6,10 @@ exports.parameters = [
     },
 ];
 
-exports.run = async ({ page, outputs, params, catchError, log }) => {
+exports.run = async ({ page, outputs, params, logger }) => {
+    const log = (...args) => logger.log("\u001b[95m[勇者大聲說]\u001b[m", ...args);
+    const warn = (...args) => logger.warn("\u001b[95m[勇者大聲說]\u001b[m", ...args);
+
     if (!outputs.login || !outputs.login.success) throw new Error("使用者未登入，無法發佈勇者大聲說");
 
     const { sayloud } = params;
@@ -21,7 +24,7 @@ exports.run = async ({ page, outputs, params, catchError, log }) => {
 
     // do some stuff
     const status = await page.evaluate(
-        async (to, text) => {
+        async ({ to, text }) => {
             const form = await fetch("https://home.gamer.com.tw/ajax/sayloud1.php?re=0", {
                 method: "POST",
                 headers: {
@@ -46,12 +49,11 @@ exports.run = async ({ page, outputs, params, catchError, log }) => {
 
             return send;
         },
-        to,
-        text
+        { to, text }
     );
 
     if (status === 2) {
-        log("目前仍有大聲說在放送");
+        warn("目前仍有大聲說在放送");
         return { success: false, reason: "目前仍有大聲說在放送", report: "勇者大聲說： 發送失敗 " + reason };
     } else {
         log("放送成功 時間：" + status);
