@@ -46,7 +46,7 @@ exports.run = async ({ page, outputs, params, logger }) => {
                 await page.waitForTimeout(100);
 
                 if (!finishedAd) {
-                    log("尚未獲得雙倍簽到獎勵 ✘");
+                    log("尚未獲得雙倍簽到獎勵 \u001b[91m✘\u001b[m");
 
                     log("嘗試觀看廣告以獲得雙倍獎勵，可能需要多達 1 分鐘");
                     await page.click("a.popoup-ctrl-btn");
@@ -74,7 +74,7 @@ exports.run = async ({ page, outputs, params, logger }) => {
                 }
             } catch (err) {
                 error(err);
-                error(`觀看雙倍獎勵廣告過程發生錯誤，將再重試 ${retries} 次 \u001b[91m✘\u001b[m`);
+                error(`觀看雙倍獎勵廣告過程發生錯誤，將再重試 ${max_attempts - attempts - 1} 次 \u001b[91m✘\u001b[m`);
             }
         }
     } else {
