@@ -93,4 +93,6 @@ temp/
 
 # github action
 action/src/
+action/node_modules/
 action/package.json
+action/action.yml

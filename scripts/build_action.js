@@ -2,10 +2,10 @@ const fs = require("fs");
 const path = require("path");
 
 // copy "../src" to "../action/src"
-const src_root = path.resolve(__dirname, "../src");
-const action_root = path.resolve(__dirname, "../action/src");
+copy_dir(path.resolve(__dirname, "../src"), path.resolve(__dirname, "../action/src"));
 
-copy_dir(src_root, action_root);
+// copy "../node_modules" to "../action/node_modules"
+// copy_dir(path.resolve(__dirname, "../node_modules"), path.resolve(__dirname, "../action/node_modules"));
 
 // copy package.json (we need version)
 fs.copyFileSync(path.resolve(__dirname, "..", "package.json"), path.resolve(__dirname, "..", "action", "package.json"));
