@@ -11,7 +11,7 @@ inputs:
   modules:
     description: "使用的模組"
     required: false
-    default: "login,ad_handler,sign,guild,answer,lottery,logout,report,telegram"
+    default: "report,ad_handler,login,sign,guild,answer,lottery,sayloud,builder,logout,report,telegram,discord,line_notify,issue"
   parameters:
     description: "一般程式參數"
     required: false
