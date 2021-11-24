@@ -8,9 +8,13 @@ async function main() {
         console.log("Installing NPM Dependencies...");
         execSync("npm install", { stdio: "inherit", cwd: __dirname });
         console.log("Dependencies NPM Installed");
+    } catch (err) {}
+    try {
         console.log("Installing Playwright Dependencies...");
         execSync("npx playwright install", { stdio: "inherit", cwd: __dirname });
         console.log("Playwright Dependencies Installed");
+    } catch (err) {}
+    try {
         console.log("Installing Browser Dependencies...");
         execSync("npx playwright install-dep", { stdio: "inherit", cwd: __dirname });
         console.log("Browser Dependencies Installed");
