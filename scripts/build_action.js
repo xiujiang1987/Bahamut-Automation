@@ -9,6 +9,8 @@ copy_dir(src_root, action_root);
 
 // copy package.json (we need version)
 fs.copyFileSync(path.resolve(__dirname, "..", "package.json"), path.resolve(__dirname, "..", "action", "package.json"));
+// copy action.yml
+fs.copyFileSync(path.resolve(__dirname, "..", "action.yml"), path.resolve(__dirname, "..", "action", "action.yml"));
 
 function copy_dir(src_dir, dest_dir) {
     if (!fs.existsSync(src_dir)) {
