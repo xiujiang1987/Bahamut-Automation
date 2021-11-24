@@ -9,6 +9,7 @@ copy_dir(path.resolve(__dirname, "../src"), path.resolve(__dirname, "../action/s
 
 // copy package.json (we need version)
 fs.copyFileSync(path.resolve(__dirname, "..", "package.json"), path.resolve(__dirname, "..", "action", "package.json"));
+fs.copyFileSync(path.resolve(__dirname, "..", "package-lock.json"), path.resolve(__dirname, "..", "action", "package-lock.json"));
 // copy action.yml
 fs.copyFileSync(path.resolve(__dirname, "..", "action.yml"), path.resolve(__dirname, "..", "action", "action.yml"));
 
