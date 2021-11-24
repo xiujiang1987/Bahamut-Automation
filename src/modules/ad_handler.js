@@ -1,16 +1,16 @@
 exports.parameters = [];
 
-let _log = () => {},
-    _catchError = () => {};
+let _log = (...args) => {},
+    _error = (...args) => {};
 
-exports.run = async function ({ log, catchError }) {
-    _log = log;
-    _catchError = catchError;
-    log("已設定 Google AD 處理程式");
+exports.run = async function ({ logger }) {
+    _log = (...args) => logger.log("\u001b[95m[AD Handler]\u001b[m", ...args);
+    _error = (...args) => logger.error("\u001b[95m[AD Handler]\u001b[m", ...args);
+    _log("已設定 Google AD 處理程式");
     return ad_handler;
 };
 
-async function ad_handler({ ad_frame, timeout = 60, log = _log, catchError = _catchError }) {
+async function ad_handler({ ad_frame, timeout = 60, log = _log, error = _error }) {
     log("Google AD 處理程式: Start");
 
     const result = await Promise.race([
@@ -38,7 +38,7 @@ async function ad_handler({ ad_frame, timeout = 60, log = _log, catchError = _ca
 
                 await ad_frame.waitForTimeout(2000);
             } catch (err) {
-                catchError(err);
+                error(err);
             }
         })(),
     ]);
@@ -50,12 +50,8 @@ async function checkVideoEnded(ad_frame) {
     const videoElement = await ad_frame.waitForSelector("video");
     if (await videoElement.evaluate((node) => node.ended)) return true;
 
-    return videoElement.evaluate((node) => {
-        return new Promise((r) => {
-            node.addEventListener("ended", () => {
-                r(true);
-            });
-        });
+    return videoElement.evaluate((elm) => {
+        return new Promise((r) => elm.addEventListener("ended", () => r(true)));
     });
 }
 
@@ -64,7 +60,7 @@ function checkTopRightClose(ad_frame) {
         try {
             const count_down = await ad_frame.$("#count_down");
             if (count_down) {
-                const seconds = +(await count_down.evaluate((node) => node.innerText)).replace(/[^0-9]/g, "");
+                const seconds = +(await count_down.evaluate((elm) => elm.innerText)).replace(/[^0-9]/g, "");
                 setTimeout(r, (seconds + 1) * 1000);
             } else {
                 setTimeout(r, 35 * 1000);
@@ -76,7 +72,5 @@ function checkTopRightClose(ad_frame) {
 }
 
 function sleep(t = 1000, msg) {
-    return new Promise((r) => {
-        setTimeout(() => r(msg), t);
-    });
+    return new Promise((r) => setTimeout(() => r(msg), t));
 }

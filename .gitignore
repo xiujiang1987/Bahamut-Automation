@@ -80,8 +80,16 @@ log/
 screenshot/
 
 .data/
+
 .DS_Store
+
 dist/bahamut-automation-win.exe
 dist/bahamut-automation-macos
 dist/bahamut-automation-linux
 dist/bahamut-automation-alpine
+dist/config.js
+
+temp/
+
+# github action
+action/src/

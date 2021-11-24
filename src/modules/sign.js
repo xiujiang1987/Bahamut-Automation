@@ -1,44 +1,57 @@
 const countapi = require("countapi-js");
 
-exports.parameters = [];
+exports.parameters = [
+    {
+        name: "sign_double_max_attempts",
+        required: false,
+    },
+];
 
-exports.run = async ({ page, outputs, catchError, log }) => {
+exports.run = async ({ page, outputs, params, logger }) => {
+    const log = (...args) => logger.log("\u001b[95m[簽到]\u001b[m", ...args);
+    const warn = (...args) => logger.warn("\u001b[95m[簽到]\u001b[m", ...args);
+    const error = (...args) => logger.error("\u001b[95m[簽到]\u001b[m", ...args);
+
     if (!outputs.login || !outputs.login.success) throw new Error("使用者未登入，無法簽到");
 
-    log(`[簽到] 開始執行`);
+    log(`開始執行`);
 
     await page.goto("https://www.gamer.com.tw/");
     await page.waitForTimeout(2000);
     let { days, finishedAd, signin } = await sign_status(page);
     const initialSignin = signin;
-    log(`[簽到] 已連續簽到天數: ${days}`);
+    log(`已連續簽到天數: ${days}`);
 
     if (!signin) {
-        log("[簽到] 今日尚未簽到 ✘");
-        log("[簽到] 正在嘗試簽到");
-        await page.click("a#signin-btn").catch(catchError);
+        log("今日尚未簽到 \u001b[91m✘\u001b[m");
+        log("正在嘗試簽到");
+        await page.click("a#signin-btn").catch(error);
         await page.waitForTimeout(5000);
-        log("[簽到] 成功簽到 ✔");
+        log("成功簽到 \u001b[92m✔\u001b[m");
     } else {
-        log("[簽到] 今日已簽到 ✔");
+        log("今日已簽到 \u001b[92m✔\u001b[m");
     }
 
     if (outputs.ad_handler) {
-        for (let retries = 3; retries--;) {
+        const max_attempts = +params.sign_double_max_attempts || 3;
+        for (let attempts = 0; attempts < max_attempts; attempts++) {
             try {
-                log(`[簽到] 正在檢測雙倍簽到獎勵狀態`);
+                log(`正在檢測雙倍簽到獎勵狀態`);
 
                 await page.goto("https://www.gamer.com.tw/");
-                await page.waitForTimeout(1000);
+                await page.waitForSelector("a#signin-btn");
+                await page.waitForTimeout(100);
                 await page.click("a#signin-btn");
-                await page.waitForTimeout(2000);
+                await page.waitForSelector("a.popoup-ctrl-btn");
+                await page.waitForTimeout(100);
 
                 if (!finishedAd) {
-                    log("[簽到] 尚未獲得雙倍簽到獎勵 ✘");
+                    log("尚未獲得雙倍簽到獎勵 ✘");
 
-                    log("[簽到] 嘗試觀看廣告以獲得雙倍獎勵，可能需要多達 1 分鐘");
+                    log("嘗試觀看廣告以獲得雙倍獎勵，可能需要多達 1 分鐘");
                     await page.click("a.popoup-ctrl-btn");
-                    await page.waitForTimeout(5000);
+                    await page.waitForSelector("button[type=submit]");
+                    await page.waitForTimeout(100);
                     await page.click("button[type=submit]");
 
                     await page.waitForTimeout(3000);
@@ -51,26 +64,26 @@ exports.run = async ({ page, outputs, catchError, log }) => {
                     finishedAd = (await sign_status(page)).finishedAd;
 
                     if (finishedAd) {
-                        log("[簽到] 已觀看雙倍獎勵廣告 ✔");
+                        log("已觀看雙倍獎勵廣告 \u001b[92m✔\u001b[m");
                         break;
                     }
                     throw new Error("觀看雙倍獎勵廣告過程發生未知錯誤");
                 } else {
-                    log("[簽到] 已獲得雙倍簽到獎勵 ✔");
+                    log("已獲得雙倍簽到獎勵 \u001b[92m✔\u001b[m");
                     break;
                 }
             } catch (err) {
-                catchError(err);
-                log(`[簽到] 觀看雙倍獎勵廣告過程發生錯誤，將再重試 ${retries} 次 ✘`);
+                error(err);
+                error(`觀看雙倍獎勵廣告過程發生錯誤，將再重試 ${retries} 次 \u001b[91m✘\u001b[m`);
             }
         }
     } else {
-        log("雙倍簽到獎勵需使用 ad_handler 模組");
+        warn("雙倍簽到獎勵需使用 ad_handler 模組");
     }
 
     const final = await sign_status(page);
 
-    log(`[簽到] 執行完畢 ✨`);
+    log(`執行完畢 ✨`);
 
     if (!initialSignin && final.signin) countapi.update("Bahamut-Automation", "sign", 1);
 
