@@ -13,7 +13,7 @@ exports.parameters = [
 
 const DEFAULT_CONFIG = {
     title: "執行報告 $time$",
-    ignore: ["login", "logout", "report", "telegram", "discord"],
+    ignore: ["login", "logout", "report", "telegram", "discord", "line_notify"],
 };
 
 exports.run = async ({ outputs, params, catchError, log }) => {
