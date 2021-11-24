@@ -38,7 +38,7 @@ exports.run = async ({ page, outputs, params, logger }) => {
             let name = await page.$eval("#BH-master > .BH-lbox.fuli-pbox h1", (elm) => elm.innerHTML);
 
             if (await page.$(".btn-base.c-accent-o.is-disable")) {
-                log(`第 ${idx + 1} 個抽抽樂（${draws[idx].name}）的廣告免費次數已用完 ✔`);
+                log(`第 ${idx + 1} 個抽抽樂（${draws[idx].name}）的廣告免費次數已用完 \u001b[92m✔\u001b[m`);
                 unfinished[draws[idx].name] = undefined;
                 break;
             }
@@ -91,7 +91,7 @@ exports.run = async ({ page, outputs, params, logger }) => {
                 await checkInfo({ page, log, error }).catch(error);
                 await confirm({ page, error }).catch(error);
                 if ((await page.$(".card > .section > p")) && (await page.$eval(".card > .section > p", (node) => node.innerText.includes("成功")))) {
-                    log("已完成一次抽抽樂：" + name + " ✔");
+                    log("已完成一次抽抽樂：" + name + " \u001b[92m✔\u001b[m");
                     lottery++;
                 } else {
                     log("發生錯誤，重試中 ✘");
