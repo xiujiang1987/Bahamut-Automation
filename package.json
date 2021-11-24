@@ -2,7 +2,7 @@
     "name": "bahamut-automation",
     "version": "1.0.0-pre.1",
     "description": "",
-    "main": "src/cli.js",
+    "main": "src/core/index.js",
     "bin": {
         "path": "./src/cli.js"
     },
@@ -21,9 +21,12 @@
         "@sentry/node": "^6.15.0",
         "@sentry/tracing": "^6.15.0",
         "countapi-js": "^1.0.2",
+        "html-to-text": "^8.1.0",
+        "markdown-it": "^12.2.0",
         "node-fetch": "^2.6.6",
         "otplib": "^12.0.1",
-        "playwright": "^1.16.3"
+        "playwright": "^1.16.3",
+        "turndown": "^7.1.1"
     },
     "devDependencies": {
         "pkg": "^5.4.1"
