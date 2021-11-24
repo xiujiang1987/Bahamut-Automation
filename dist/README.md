@@ -10,29 +10,29 @@
 
 ### Mac OS
 
-修改 config.json 中的 username 之類的東西。
+修改 config.js 中的 username 之類的設定。
 
 使用終端機或任何類似的東西：
 
-```
-./bahamut-automation-macos ./config.json
+```bash
+./bahamut-automation-macos
 ```
 
-> 可以拖曳 `bahamut-automation-macos` 及 `config.json` 到終端機裡面
+或直接打開。
 
 ### Windows
 
-修改 config.json 中的 username 之類的東西。
+修改 config.js 中的 username 之類的設定。
 
 使用命令提示字元或任何類似的東西：
 
-```
-bahamut-automation-win.exe config.json
+```bash
+bahamut-automation-win.exe
 ```
 
-> 可以拖曳 `bahamut-automation-win.exe` 及 `config.json` 到命令提示字元裡面
+或直接打開。
 
-# 免責聲明
+## 免責聲明
 
 這些已編譯的執行檔是使用 GitHub Action 從 main branch 的原始碼編譯的，相關編譯方法可以在 main branch 中查看。但搞不好 GitHub Action 出了什麼問題，沒有人知道。
 

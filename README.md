@@ -65,13 +65,12 @@
 - 支援隨機挑遠內容
 - 支援時間變數（以執行時的時間替換）
 
-### Telegram 通知
+### 多平台通知
 
 - 以 Telegram 通知執行狀況
-
-### Discord 通知
-
 - 以 Discord 通知執行狀況
+- 以 Line Notify 通知執行狀況
+- 以 GitHub Issue 通知執行狀況
 
 ## 使用方法
 
@@ -91,13 +90,18 @@
 4. 修改 `example/config.js` 的設定
 5. 執行 `npm start` 試試看
 
-## 輸入參數
+或是
+
+於 `binary` braanch 中下載相對應版本的已編譯程式和 `config.js`，然後執行該程式。
+
+## Action 輸入參數
 
 | 參數       | 預設值                                                                        | 說明      | 必要 |
 | ---------- | --------------------------------------------------------------------------- | --------- | ---- |
 | modules    | `"login,ad_handler,sign,report,answer,report,lottery,report,logout,report"` | 使用的模組 | 非必要 |
 | parameters | `"{}"`                                                                      | 帶入的參數 | 非必要 |
 | secrets    | `"{}"`                                                                      | 帶入的參數 | 非必要 |
+| browser    | `"{}"`                                                                      | 瀏覽器參數 | 非必要 |
 
 全部都是非必要參數，但你什麼都不放就什麼都不會發生，合理吧？
 
@@ -107,7 +111,7 @@
 
 ## 技術細節
 
-所有程式碼都是使用 `JavaScript` 編寫，以 `Puppeteer` 模擬人的操作，使用 `Node.js` 執行，並以 `GitHub Action` 的形式發佈。
+所有程式碼都是使用 `JavaScript` 編寫，以 `Playwright` 模擬人的操作，使用 `Node.js` 執行，並以 `GitHub Action` 的形式發佈。
 
 可以於 `src` 資料夾中查看所有核心程式碼。
 

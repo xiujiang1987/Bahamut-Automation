@@ -54,11 +54,19 @@
 
 ## report
 
-產生執行報告並發到 Issue 的模組
+產生執行報告的模組
+
+- 作者： [JacobLinCool](https://github.com/JacobLinCool)
+- 必要參數： 無
+- 可選參數： report_title, report_ignore
+
+## issue
+
+將報告發到 GitHub Issue 的模組
 
 - 作者： [JacobLinCool](https://github.com/JacobLinCool)
 - 必要參數： gh_pat
-- 可選參數： report_title, report_labels, report_ignore
+- 可選參數： report_title, report_ignore
 
 ## telegram
 
@@ -66,7 +74,7 @@
 
 - 作者： [JacobLinCool](https://github.com/JacobLinCool)
 - 必要參數： tg_id
-- 可選參數： tg_ignore
+- 可選參數： 無
 
 ## discord
 
@@ -74,7 +82,15 @@
 
 - 作者： [cow03haha](https://github.com/cow03haha)
 - 必要參數： dc_url
-- 可選參數： dc_ignore
+- 可選參數： 無
+
+## line_notify
+
+串接 Line Notify 的模組，[詳細說明在 line_notify 資料夾內](./line_notify#readme)
+
+- 作者： [dxball](https://github.com/dxball)
+- 必要參數： line_notify_token
+- 可選參數： 無
 
 ## guild
 
@@ -100,9 +116,17 @@
 - 必要參數： builder
 - 可選參數： 無
 
+## test
+
+測試用的模組
+
+- 作者： [JacobLinCool](https://github.com/JacobLinCool)
+- 必要參數： 無
+- 可選參數： 無
+
 ## module
 
-說明模組格式的的模組
+說明模組格式的模組
 
 - 作者： [JacobLinCool](https://github.com/JacobLinCool)
 - 必要參數： module_needs_this_parameter
