@@ -1,11 +1,25 @@
 const process = require("process");
-const core = require("@actions/core");
-const automation = require("./src/core");
+const { execSync } = require("child_process");
 
 main();
 
 async function main() {
     try {
+        console.log("Installing NPM Dependencies...");
+        execSync("npm install", { stdio: "inherit" });
+        console.log("Dependencies NPM Installed");
+        console.log("Installing Playwright Dependencies...");
+        execSync("npx playwright install", { stdio: "inherit" });
+        console.log("Playwright Dependencies Installed");
+        console.log("Installing Browser Dependencies...");
+        execSync("npx playwright install-dep", { stdio: "inherit" });
+        console.log("Browser Dependencies Installed");
+    } catch (err) {}
+
+    try {
+        const core = require("@actions/core");
+        const automation = require("./src/core");
+
         const modules = core.getInput("modules");
         const parameters = JSON.parse(core.getInput("parameters") || "{}");
         const secrets = JSON.parse(core.getInput("secrets") || "{}");
