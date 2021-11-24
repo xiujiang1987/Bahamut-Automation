@@ -6,13 +6,13 @@ main();
 async function main() {
     try {
         console.log("Installing NPM Dependencies...");
-        execSync("npm install", { stdio: "inherit" });
+        execSync("npm install", { stdio: "inherit", cwd: __dirname });
         console.log("Dependencies NPM Installed");
         console.log("Installing Playwright Dependencies...");
-        execSync("npx playwright install", { stdio: "inherit" });
+        execSync("npx playwright install", { stdio: "inherit", cwd: __dirname });
         console.log("Playwright Dependencies Installed");
         console.log("Installing Browser Dependencies...");
-        execSync("npx playwright install-dep", { stdio: "inherit" });
+        execSync("npx playwright install-dep", { stdio: "inherit", cwd: __dirname });
         console.log("Browser Dependencies Installed");
     } catch (err) {}
 
