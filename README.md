@@ -92,7 +92,7 @@
 
 或是
 
-於 `binary` braanch 中下載相對應版本的已編譯程式和 `config.js`，然後執行該程式。
+於 [`binary` branch](https://github.com/JacobLinCool/Bahamut-Automation/tree/binary) 中下載相對應版本的已編譯程式和 `config.js`，然後執行該程式。
 
 ## Action 輸入參數
 

@@ -12,4 +12,4 @@
 
 而關於 module 的格式，可以參考 `src/modules/module.js`。
 
-如有不清楚的地方，歡迎至 Discussion 或發 Issue 詢問，謝謝。
+如有不清楚的地方，歡迎至 [Discussions](https://github.com/JacobLinCool/Bahamut-Automation/discussions) 或發 Issue 詢問，謝謝。
