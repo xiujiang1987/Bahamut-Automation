@@ -96,12 +96,12 @@
 
 ## Action 輸入參數
 
-| 參數       | 預設值                                                                        | 說明      | 必要 |
-| ---------- | --------------------------------------------------------------------------- | --------- | ---- |
-| modules    | `"login,ad_handler,sign,report,answer,report,lottery,report,logout,report"` | 使用的模組 | 非必要 |
-| parameters | `"{}"`                                                                      | 帶入的參數 | 非必要 |
-| secrets    | `"{}"`                                                                      | 帶入的參數 | 非必要 |
-| browser    | `"{}"`                                                                      | 瀏覽器參數 | 非必要 |
+| 參數       | 預設值                                                                                                                 | 說明      | 必要 |
+| ---------- | ---------------------------------------------------------------------------------------------------------------------- | --------- | ---- |
+| modules    | `"report,ad_handler,login,sign,guild,answer,lottery,sayloud,builder,logout,report,telegram,discord,line_notify,issue"` | 使用的模組 | 非必要 |
+| parameters | `"{}"`                                                                                                                 | 帶入的參數 | 非必要 |
+| secrets    | `"{}"`                                                                                                                 | 帶入的參數 | 非必要 |
+| browser    | `"{}"`                                                                                                                 | 瀏覽器參數 | 非必要 |
 
 全部都是非必要參數，但你什麼都不放就什麼都不會發生，合理吧？
 
