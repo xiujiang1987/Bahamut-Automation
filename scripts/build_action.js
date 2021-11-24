@@ -7,6 +7,9 @@ const action_root = path.resolve(__dirname, "../action/src");
 
 copy_dir(src_root, action_root);
 
+// copy package.json (we need version)
+fs.copyFileSync(path.resolve(__dirname, "..", "package.json"), path.resolve(__dirname, "..", "action", "package.json"));
+
 function copy_dir(src_dir, dest_dir) {
     if (!fs.existsSync(src_dir)) {
         console.error(`${src_dir} does not exist`);

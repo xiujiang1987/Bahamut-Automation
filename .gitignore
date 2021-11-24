@@ -93,3 +93,4 @@ temp/
 
 # github action
 action/src/
+action/package.json
