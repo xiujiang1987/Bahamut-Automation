@@ -20,7 +20,7 @@ async function automation({ browser = {}, page = {}, modules = [], params = {} }
 
         sentry_init();
 
-        await open_browser(browser.type || "firefox", browser);
+        await open_browser(browser.type || "firefox", browser, logger);
 
         const outputs = {};
 

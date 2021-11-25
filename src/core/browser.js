@@ -15,23 +15,31 @@ let browser = null,
     context = null,
     user_agent = "";
 
-async function open_browser(type = "firefox", config = {}) {
+async function open_browser(type = "firefox", config = {}, logger) {
     if (!BRWOSER_TYPES.includes(type)) {
         type = "firefox";
     }
 
-    const target = playwright[type];
+    if (!browser) {
+        logger.info("使用瀏覽器:", type);
 
-    browser = await target.launch(config, {
-        ...DEFAULT_BROWSER_CONFIG,
-        ...config,
-    });
+        const target = playwright[type];
 
-    const temp_page = await browser.newPage();
-    user_agent = (await temp_page.evaluate(() => navigator.userAgent)).replace("Headless", "") + " BA/1";
-    await temp_page.close();
+        browser = await target.launch(config, {
+            ...DEFAULT_BROWSER_CONFIG,
+            ...config,
+        });
+    }
 
-    context = await browser.newContext({ userAgent: user_agent });
+    if (!context) {
+        const temp_page = await browser.newPage();
+        user_agent = (await temp_page.evaluate(() => navigator.userAgent)).replace("Headless", "") + " BA/1";
+        await temp_page.close();
+
+        logger.info("User-Agent:", user_agent);
+
+        context = await browser.newContext({ userAgent: user_agent });
+    }
 
     return { browser, context };
 }
