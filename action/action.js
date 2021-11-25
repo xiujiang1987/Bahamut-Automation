@@ -16,7 +16,7 @@ async function main() {
     } catch (err) {}
     try {
         console.log("Installing Browser Dependencies...");
-        execSync("npx playwright install-dep", { stdio: "inherit", cwd: __dirname });
+        execSync("npx playwright install-deps", { stdio: "inherit", cwd: __dirname });
         console.log("Browser Dependencies Installed");
     } catch (err) {}
 
@@ -25,9 +25,9 @@ async function main() {
         const automation = require("./src/core");
 
         const modules = core.getInput("modules");
-        const parameters = JSON.parse(core.getInput("parameters") || "{}");
-        const secrets = JSON.parse(core.getInput("secrets") || "{}");
-        const browser = JSON.parse(core.getInput("browser") || `{ "type": "webkit" }`); // issue #32 workaround
+        const parameters = { ...JSON.parse(core.getInput("parameters") || "{}") };
+        const secrets = { ...JSON.parse(core.getInput("secrets") || "{}") };
+        const browser = { type: "webkit", ...JSON.parse(core.getInput("browser") || "{}") }; // issue #32 workaround
 
         const result = await automation({
             modules: modules.split(",").map((x) => x.trim()),
