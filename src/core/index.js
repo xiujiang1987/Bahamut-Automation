@@ -12,6 +12,8 @@ const VERSION = require("../../package.json").version;
 
 async function automation({ browser = {}, page = {}, modules = [], params = {} }) {
     try {
+        const StartTime = Date.now();
+
         const logger = new Logger();
 
         logger.log("開始執行巴哈姆特自動化 " + VERSION);
@@ -67,11 +69,13 @@ async function automation({ browser = {}, page = {}, modules = [], params = {} }
 
         await close_all();
 
-        logger.log("巴哈姆特自動化執行完畢");
+        const time = parseInt((Date.now() - StartTime) / 1000);
+
+        logger.log("巴哈姆特自動化執行完畢", "執行時間:", time, "秒");
 
         finish_transaction();
 
-        return JSON.parse(JSON.stringify(outputs));
+        return { outputs: JSON.parse(JSON.stringify(outputs)), time };
     } catch (err) {
         catch_fatal(err);
         return null;
