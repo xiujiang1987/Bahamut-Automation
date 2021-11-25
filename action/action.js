@@ -27,7 +27,7 @@ async function main() {
         const modules = core.getInput("modules");
         const parameters = JSON.parse(core.getInput("parameters") || "{}");
         const secrets = JSON.parse(core.getInput("secrets") || "{}");
-        const browser = JSON.parse(core.getInput("browser") || "{}");
+        const browser = JSON.parse(core.getInput("browser") || `{ "type": "webkit" }`); // issue #32 workaround
 
         const result = await automation({
             modules: modules.split(",").map((x) => x.trim()),
