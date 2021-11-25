@@ -49,7 +49,7 @@ exports.run = async ({ page, outputs, params, logger }) => {
 
             return send;
         },
-        { to, text }
+        { to, text },
     );
 
     if (status === 2) {

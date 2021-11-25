@@ -48,7 +48,7 @@ exports.run = async ({ page, outputs, params, logger }) => {
                             d.content
                                 .match(/<body[\s\w"-=]*>([\s\S]*)<\/body>/)[0]
                                 .match(/A[:：](\d)/gi)[0]
-                                .match(/\d/)[0]
+                                .match(/\d/)[0],
                     )
                     .then(parseInt);
 
@@ -68,7 +68,7 @@ exports.run = async ({ page, outputs, params, logger }) => {
                             body: encodeURI(`token=${token}&ans=${ans}&t=${Date.now()}`),
                         }).then((r) => r.json());
                     },
-                    { ans, token }
+                    { ans, token },
                 );
 
                 if (result.error) log("回答問題時發生錯誤 " + result.msg + " \u001b[91m✘\u001b[m");
