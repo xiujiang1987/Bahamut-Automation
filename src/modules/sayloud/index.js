@@ -54,7 +54,7 @@ exports.run = async ({ page, outputs, params, logger }) => {
 
     if (status === 2) {
         warn("目前仍有大聲說在放送");
-        return { success: false, reason: "目前仍有大聲說在放送", report: "勇者大聲說： 發送失敗 " + reason };
+        return { success: false, reason: "目前仍有大聲說在放送", report: "勇者大聲說： 發送失敗 " };
     } else {
         log("放送成功 時間：" + status);
     }

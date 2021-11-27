@@ -64,8 +64,8 @@ exports.run = async ({ page, outputs, params, logger }) => {
             let ad_status = (await page.$eval(".dialogify .dialogify__body p", (node) => node.innerText).catch(() => {})) || "";
 
             let ad_frame;
-            if (ad_status.includes("能量不足")) {
-                await error("廣告能量不足？");
+            if (ad_status.includes("廣告能量補充中")) {
+                await error("廣告能量補充中");
                 await page.reload().catch(error);
                 continue;
             } else if (ad_status.includes("觀看廣告")) {
@@ -94,12 +94,10 @@ exports.run = async ({ page, outputs, params, logger }) => {
                     log("已完成一次抽抽樂：" + name + " \u001b[92m✔\u001b[m");
                     lottery++;
                 } else {
-                    log("發生錯誤，重試中 ✘");
+                    log("發生錯誤，重試中 \u001b[91m✘\u001b[m");
                 }
             } else {
-                log(url);
-                log("未進入結算頁面，重試中 ✘");
-                error("抽抽樂未進入結算頁面");
+                error("未進入結算頁面 (" + url + ")，重試中 \u001b[91m✘\u001b[m");
             }
         }
     }

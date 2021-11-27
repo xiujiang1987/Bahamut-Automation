@@ -8,7 +8,7 @@
 
 - 作者： [JacobLinCool](https://github.com/JacobLinCool)
 - 必要參數： username, password
-- 可選參數： 無
+- 可選參數： twofa, login_max_attempts
 
 ## logout
 
@@ -32,7 +32,7 @@
 
 - 作者： [JacobLinCool](https://github.com/JacobLinCool)
 - 必要參數： 無
-- 可選參數： 無
+- 可選參數： sign_double_max_attempts
 
 ## answer
 
@@ -40,7 +40,7 @@
 
 - 作者： [JacobLinCool](https://github.com/JacobLinCool)
 - 必要參數： 無
-- 可選參數： 無
+- 可選參數： answer_max_attempts
 
 ## lottery
 
@@ -48,9 +48,19 @@
 
 - 作者： [JacobLinCool](https://github.com/JacobLinCool)
 - 必要參數： 無
-- 可選參數： 無
+- 可選參數： lottery_max_attempts
 
 > **注意事項：使用前請先自己抽一次，填寫一次收件人資料並勾選「記住收件人資料」**
+
+## lottery_plus
+
+跟 lottery 模組類似，且支援並行抽獎
+
+> _實驗中，有 Bug 請回報_
+
+- 作者： [JacobLinCool](https://github.com/JacobLinCool)
+- 必要參數： 無
+- 可選參數： lottery_plus_max_attempts, lottery_plus_max_parallel
 
 ## report
 
@@ -66,7 +76,7 @@
 
 - 作者： [JacobLinCool](https://github.com/JacobLinCool)
 - 必要參數： gh_pat
-- 可選參數： report_title, report_ignore
+- 可選參數： gh_labels
 
 ## telegram
 
@@ -98,7 +108,7 @@
 
 - 作者： [JacobLinCool](https://github.com/JacobLinCool)
 - 必要參數： 無
-- 可選參數： 無
+- 可選參數： guild_max_attempts
 
 ## sayloud
 
@@ -122,7 +132,7 @@
 
 - 作者： [JacobLinCool](https://github.com/JacobLinCool)
 - 必要參數： 無
-- 可選參數： 無
+- 可選參數： test_parameter
 
 ## module
 
