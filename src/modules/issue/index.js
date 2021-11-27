@@ -7,7 +7,7 @@ exports.parameters = [
         required: true,
     },
     {
-        name: "gh_label",
+        name: "gh_labels",
         required: false,
     },
 ];
@@ -30,7 +30,7 @@ exports.run = async ({ params, outputs, logger }) => {
         return;
     }
 
-    const labels = outputs.report.labels || DEFAULT_LABELS;
+    const labels = params.gh_labels || DEFAULT_LABELS;
 
     // 設定 Octokit 及獲取 GitHub 資料
     octokit = new Octokit({ auth: params.gh_pat });
