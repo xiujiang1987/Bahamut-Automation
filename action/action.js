@@ -22,18 +22,20 @@ async function main() {
 
     try {
         const core = require("@actions/core");
-        const automation = require("./src/core");
+        const Automation = require("./src/core");
 
         const modules = core.getInput("modules");
         const parameters = { ...JSON.parse(core.getInput("parameters") || "{}") };
         const secrets = { ...JSON.parse(core.getInput("secrets") || "{}") };
         const browser = { type: "webkit", ...JSON.parse(core.getInput("browser") || "{}") }; // issue #32 workaround
 
-        const result = await automation({
+        const automation = new Automation({
             modules: modules.split(",").map((x) => x.trim()),
             params: { ...parameters, ...secrets },
             browser,
         });
+
+        const result = await automation.run();
 
         if (result) {
             console.log(result);
