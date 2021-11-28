@@ -24,14 +24,14 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
       - name: Install Packages
-        run: npm install
+        run: npm ci
       - name: Build Action
-        run: node scripts/build_action.js
+        run: npm run build:action
       - name: Commit
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GH_TOKEN }}
-          publish_dir: "./action"
+          publish_dir: "./dist/action"
           user_name: "JacobLinCool"
           user_email: "jacoblincool@users.noreply.github.com"
           publish_branch: "action"
@@ -54,15 +54,45 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
       - name: Install Packages
-        run: npm install
+        run: npm ci
       - name: Build Binary
-        run: node scripts/build_binary.js
+        run: npm run build:binary
       - name: Commit
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GH_TOKEN }}
-          publish_dir: "./dist"
+          publish_dir: "./dist/binary"
           user_name: "JacobLinCool"
           user_email: "jacoblincool@users.noreply.github.com"
           publish_branch: "binary"
+          commit_message: "CircleCI Ignore: [ci skip]"
+
+  build_docs:
+    name: Build Docs
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: "16"
+      - uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - name: Install Packages
+        run: npm ci
+      - name: Build Docs
+        run: npm run docs
+      - name: Commit
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GH_TOKEN }}
+          publish_dir: "./web"
+          user_name: "JacobLinCool"
+          user_email: "jacoblincool@users.noreply.github.com"
+          publish_branch: "gh-pages"
           commit_message: "CircleCI Ignore: [ci skip]"
