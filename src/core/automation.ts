@@ -14,7 +14,7 @@ const VERSION = get_version();
 function get_version(): string {
     try {
         let depth = 5;
-        let package_path = path.resolve(__dirname, "..", "..", "..", "package.json");
+        let package_path = path.resolve(__dirname, "package.json");
         while (!fs.existsSync(package_path) && depth-- > 0) {
             package_path = path.resolve(path.dirname(package_path), "..", "package.json");
         }
