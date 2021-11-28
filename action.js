@@ -72,7 +72,7 @@ function prepare() {
 }
 function main() {
     return __awaiter(this, void 0, void 0, function () {
-        var core, Automation, modules, parameters, secrets, browser, automation, result, error_1;
+        var core, BahamutAutomation, modules, parameters, secrets, browser, automation, result, error_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -80,12 +80,12 @@ function main() {
                     _a.label = 1;
                 case 1:
                     _a.trys.push([1, 3, , 4]);
-                    Automation = require("./lib/core");
+                    BahamutAutomation = require("./lib/core").BahamutAutomation;
                     modules = core.getInput("modules");
                     parameters = __assign({}, JSON.parse(core.getInput("parameters") || "{}"));
                     secrets = __assign({}, JSON.parse(core.getInput("secrets") || "{}"));
                     browser = __assign({ type: "webkit" }, JSON.parse(core.getInput("browser") || "{}"));
-                    automation = new Automation({
+                    automation = new BahamutAutomation({
                         modules: modules.split(",").map(function (x) { return x.trim(); }),
                         params: __assign(__assign({}, parameters), secrets),
                         browser: browser
