@@ -25,14 +25,14 @@ function prepare(): void {
 async function main(): Promise<void> {
     const core = require("@actions/core");
     try {
-        const Automation = require("./lib/core");
+        const { BahamutAutomation } = require("./lib/core");
 
         const modules = core.getInput("modules");
         const parameters = { ...JSON.parse(core.getInput("parameters") || "{}") };
         const secrets = { ...JSON.parse(core.getInput("secrets") || "{}") };
         const browser = { type: "webkit", ...JSON.parse(core.getInput("browser") || "{}") }; // issue #32 workaround
 
-        const automation = new Automation({
+        const automation = new BahamutAutomation({
             modules: modules.split(",").map((x: string) => x.trim()),
             params: { ...parameters, ...secrets },
             browser,
