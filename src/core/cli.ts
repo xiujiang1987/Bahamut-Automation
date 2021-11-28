@@ -1,6 +1,6 @@
-const fs = require("fs");
-const path = require("path");
-const Automation = require("./core");
+import fs from "fs";
+import path from "path";
+import Automation from "./";
 
 const readline = require("readline").createInterface({ input: process.stdin, output: process.stdout });
 
@@ -45,14 +45,14 @@ async function main() {
     process.exit(0);
 }
 
-function ask(question = "") {
+function ask(question = ""): Promise<string> {
     return new Promise((resolve) => readline.question(question, resolve));
 }
 
-function parsed_args() {
+function parsed_args(): { [key: string]: any } {
     const args = process.argv.slice(2);
 
-    const parsed = {};
+    const parsed: { [key: string]: any } = {};
 
     let now = null;
     for (let i = 0; i < args.length; i++) {

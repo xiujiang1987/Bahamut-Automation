@@ -1,9 +1,11 @@
-const EventEmitter = require("events");
-const playwright = require("playwright");
+import EventEmitter from "events";
+import playwright from "playwright";
+import Logger from "./logger";
+import type { BrowserType, BrowserConfig } from "./types";
 
 const BRWOSER_TYPES = ["chromium", "firefox", "webkit"];
 
-const DEFAULT_BROWSER_CONFIG = {
+const DEFAULT_BROWSER_CONFIG: BrowserConfig = {
     headless: true,
     args: ["--disable-web-security", "--disable-features=IsolateOrigins,site-per-process", "--disable-gpu"],
     firefoxUserPrefs: {
@@ -13,23 +15,20 @@ const DEFAULT_BROWSER_CONFIG = {
 };
 
 class Browser extends EventEmitter {
-    constructor(browser_type, browser_config, logger = null) {
+    private browser: playwright.Browser = null;
+    private context: playwright.BrowserContext = null;
+    private user_agent: string = "";
+
+    constructor(public browser_type: BrowserType, public browser_config: BrowserConfig, private logger: Logger = null) {
         super();
         if (!BRWOSER_TYPES.includes(browser_type)) {
             browser_type = "firefox";
         }
-        this.browser_type = browser_type;
-        this.browser_config = browser_config;
-        this.logger = logger;
-
-        this.browser = null;
-        this.context = null;
-        this.user_agent = "";
 
         this.setup();
     }
 
-    info(...arg) {
+    info(...arg: any[]) {
         if (this.logger) {
             this.logger.info(...arg);
         }
@@ -37,13 +36,13 @@ class Browser extends EventEmitter {
 
     async setup() {}
 
-    async launch() {
+    async launch(): Promise<this> {
         if (!this.browser) {
             this.info("使用瀏覽器", this.browser_type);
 
             const target = playwright[this.browser_type];
 
-            this.browser = await target.launch(this.browser_config, {
+            this.browser = await target.launch({
                 ...DEFAULT_BROWSER_CONFIG,
                 ...this.browser_config,
             });
@@ -66,7 +65,7 @@ class Browser extends EventEmitter {
         return this;
     }
 
-    async close() {
+    async close(): Promise<this> {
         if (this.browser) {
             await this.browser.close();
             this.browser = null;
@@ -78,10 +77,10 @@ class Browser extends EventEmitter {
         return this;
     }
 
-    async new_page(config = {}) {
+    async new_page(): Promise<playwright.Page> {
         if (!this.context) throw new Error("No Context.");
 
-        const page = await this.context.newPage(config);
+        const page = await this.context.newPage();
 
         this.emit("new_page", page);
 
@@ -89,4 +88,4 @@ class Browser extends EventEmitter {
     }
 }
 
-module.exports = Browser;
+export default Browser;

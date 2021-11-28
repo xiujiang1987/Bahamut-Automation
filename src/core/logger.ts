@@ -11,25 +11,25 @@ class Logger {
         return new Logger(this.space + 2);
     }
 
-    log(...msg) {
+    log(...msg: any[]) {
         console.log(this.prefix, "\u001b[94m" + "[LOG]" + "\u001b[m", ...msg);
     }
 
-    error(...msg) {
+    error(...msg: any[]) {
         console.log(this.prefix, "\u001b[91m" + "[ERROR]" + "\u001b[m", ...msg);
     }
 
-    warn(...msg) {
+    warn(...msg: any[]) {
         console.log(this.prefix, "\u001b[93m" + "[WARN]" + "\u001b[m", ...msg);
     }
 
-    info(...msg) {
+    info(...msg: any[]) {
         console.log(this.prefix, "\u001b[96m" + "[INFO]" + "\u001b[m", ...msg);
     }
 
-    debug(...msg) {
+    debug(...msg: any[]) {
         console.log(this.prefix, "\u001b[95m" + "[DEBUG]" + "\u001b[m", ...msg);
     }
 }
 
-module.exports = Logger;
+export default Logger;

@@ -1,61 +1,97 @@
-process.TZ = "Asia/Taipei";
+process.env.TZ = "Asia/Taipei";
 
-const path = require("path");
-const EventEmitter = require("events");
-const countapi = require("countapi-js");
-const Logger = require("./logger");
-const Browser = require("./browser");
-const { sleep } = require("./utils");
+import fs from "fs";
+import path from "path";
+import EventEmitter from "events";
+import countapi from "countapi-js";
+import Logger from "./logger";
+import Browser from "./browser";
+import { sleep } from "./utils";
+import type { BahamutAutomationConfig, BrowserConfig, Module } from "./types";
 
-const VERSION = require("../../package.json").version;
+const VERSION = get_version();
+
+function get_version(): string {
+    try {
+        let depth = 5;
+        let package_path = path.resolve(__dirname, "..", "..", "..", "package.json");
+        while (!fs.existsSync(package_path) && depth-- > 0) {
+            package_path = path.resolve(path.dirname(package_path), "..", "package.json");
+        }
+        return require(package_path).version;
+    } catch (err) {
+        return "";
+    }
+}
 
 class BahamutAutomation extends EventEmitter {
-    constructor({ modules = [], params = {}, browser = {}, page = {} }) {
+    /**
+     * 可以使用內建模組或自訂模組 (絕對路徑)
+     *
+     * @name 套用模組
+     */
+    modules: string[];
+
+    /**
+     * 依照使用模組所需的參數，設定參數
+     *
+     * @name 模組參數
+     */
+    params: { [key: string]: any };
+
+    /**
+     * 可以設定瀏覽器的種類、偏好等，基本上與 [Playwright 的 LaunchOptions](https://playwright.dev/docs/api/class-browsertype#browser-type-launch) 類似，但加上了 `type` 參數作為瀏覽器的類型
+     *
+     * @name 瀏覽器設定
+     */
+    browser_config: BrowserConfig;
+
+    private logger: Logger = new Logger();
+    private start_time: number = null;
+    private end_time: number = null;
+    private browser: Browser;
+
+    constructor({ modules = [], params = {}, browser = {} }: BahamutAutomationConfig) {
         super();
+
         this.browser_config = browser;
-        this.page_config = page;
         this.modules = modules;
         this.params = params;
-
-        this.logger = new Logger();
-
-        this.start_time = null;
-        this.end_time = null;
 
         this.setup();
     }
 
-    setup() {
+    setup(): void {
         const self = this;
         this.on("start", () => {
             self.log("開始執行巴哈姆特自動化 " + VERSION);
             countapi.update("Bahamut-Automation", "run", 1);
         });
 
-        this.on("module_start", (module_name, module_path) => {
+        this.on("module_start", (module_name: string, module_path: string) => {
             self.log(`執行 ${module_name} 模組 (${module_path})`);
         });
 
-        this.on("module_loaded", (module_name, module) => {
+        this.on("module_loaded", (module_name: string, module: Module) => {
             self.log(`參數: ${module.parameters.map(({ name, required }) => ` ${name}${required ? "*" : ""}`).join(" ") || "無"}`);
         });
 
-        this.on("module_finished", (module_name) => {
+        this.on("module_finished", (module_name: string) => {
             self.log(`模組 ${module_name} 執行完畢\n`);
         });
 
-        this.on("module_failed", (module_name, err) => {
+        this.on("module_failed", (module_name: string, err: Error) => {
             self.logger.error(`模組 ${module_name} 執行失敗\n`);
             self.logger.error(err);
         });
 
-        this.on("finished", (outputs, time) => {
+        this.on("finished", (outputs: any, time: number) => {
             self.log("巴哈姆特自動化執行完畢");
             self.log(`執行時間: ${second_to_time(time)}`);
             self.log("輸出:", outputs);
         });
 
-        this.on("fatal", (err) => {
+        this.on("fatal", (err: Error) => {
             self.logger.error("巴哈姆特自動化執行失敗");
             self.logger.error(err);
 
@@ -65,12 +101,7 @@ class BahamutAutomation extends EventEmitter {
         });
     }
 
-    log(...arg) {
-        this.logger.log(...arg);
-        this.emit("log", ...arg);
-    }
-
-    async run() {
+    async run(): Promise<any> {
         try {
             this.start_time = Date.now();
 
@@ -81,7 +112,7 @@ class BahamutAutomation extends EventEmitter {
 
             this.emit("browser_opened");
 
-            const outputs = {};
+            const outputs: any = {};
 
             for (let module_name of this.modules) {
                 try {
@@ -93,13 +124,13 @@ class BahamutAutomation extends EventEmitter {
 
                     this.emit("module_start", module_name, module_path);
 
-                    const module = require(module_path);
+                    const module: Module = require(module_path);
 
                     this.emit("module_loaded", module_name, module);
 
-                    const module_page = await this.browser.new_page(this.page_config);
+                    const module_page = await this.browser.new_page();
 
-                    const module_params = {};
+                    const module_params: any = {};
                     for (const { name, required } of module.parameters) {
                         if (this.params[name] !== undefined) {
                             module_params[name] = this.params[name];
@@ -131,7 +162,7 @@ class BahamutAutomation extends EventEmitter {
 
             this.end_time = Date.now();
 
-            const time = parseInt((this.end_time - this.start_time) / 1000);
+            const time = Math.floor((this.end_time - this.start_time) / 1000);
 
             this.emit("finished", JSON.parse(JSON.stringify(outputs)), time);
 
@@ -141,14 +172,19 @@ class BahamutAutomation extends EventEmitter {
             return null;
         }
     }
+
+    private log(...arg: any[]): void {
+        this.logger.log(...arg);
+        this.emit("log", ...arg);
+    }
 }
 
-function second_to_time(second) {
-    const hour = parseInt(second / 3600);
-    const minute = parseInt((second - hour * 3600) / 60);
+function second_to_time(second: number): string {
+    const hour = Math.floor(second / 3600);
+    const minute = Math.floor((second - hour * 3600) / 60);
     const second_left = second - hour * 3600 - minute * 60;
 
     return `${hour} 小時 ${minute} 分 ${second_left} 秒`;
 }
 
-module.exports = BahamutAutomation;
+export default BahamutAutomation;
