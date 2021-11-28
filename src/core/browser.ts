@@ -7,7 +7,6 @@ const BRWOSER_TYPES = ["chromium", "firefox", "webkit"];
 
 const DEFAULT_BROWSER_CONFIG: BrowserConfig = {
     headless: true,
-    args: ["--disable-web-security", "--disable-features=IsolateOrigins,site-per-process", "--disable-gpu"],
     firefoxUserPrefs: {
         "dom.webaudio.enabled": false,
         "media.volume_scale": 0,
