@@ -75,22 +75,14 @@ typings/
 # FuseBox cache
 .fusebox/
 
+# temp folder
+temp/
+
 # MacOS Desktop Services Store
 .DS_Store
 
-# Binary Distributions
-dist/bahamut-automation-win.exe
-dist/bahamut-automation-macos
-dist/bahamut-automation-linux
-dist/bahamut-automation-alpine
-dist/config.js
+# Distribution files
+dist/
 
-# github action
-action/src/
-action/node_modules/
-action/package.json
-action/package-lock.json
-action/action.yml
-
-# temp folder
-temp/
+# Docs
+web/docs/

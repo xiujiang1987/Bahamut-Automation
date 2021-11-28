@@ -1,4 +1,4 @@
-# Bahamut Automation Action
+# Bahamut Automation
 
 ![Bahamut Automation Preview.png](https://github.com/JacobLinCool/Bahamut-Automation/raw/main/Bahamut%20Automation%20Preview.png)
 
@@ -82,17 +82,23 @@
 
 > 如果遇到問題歡迎[發 Issue 詢問](https://github.com/JacobLinCool/Bahamut-Automation/issues/new)喔
 
-### 在自己電腦上執行
+### 在自己電腦上執行 (原始碼)
 
-1. 安裝 `Node.js` v14+
+1. 安裝 `Node.js` v16+
 2. Clone 或下載此 Repository
 3. 安裝 Packages: `npm install`
 4. 修改 `example/config.js` 的設定
 5. 執行 `npm start` 試試看
 
-或是
+### 在自己電腦上執行 (執行檔)
 
 於 [`binary` branch](https://github.com/JacobLinCool/Bahamut-Automation/tree/binary) 中下載相對應版本的已編譯程式和 `config.js`，然後執行該程式。
+
+***已編譯的執行檔有可能會被防毒軟體擋掉。***
+
+***已編譯的執行檔是使用 GitHub Action 從 main branch 的原始碼編譯的，相關編譯方法可以在 main branch 中查看。但搞不好 GitHub Action 出了什麼問題，沒有人知道。***
+
+***總而言之，如果你下載並使用這些程式，代表你同意自行承擔所有責任，包括但不限於使用程式導致的任何損失。***
 
 ## Action 輸入參數
 

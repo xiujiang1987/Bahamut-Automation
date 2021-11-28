@@ -1,17 +1,21 @@
 {
     "name": "bahamut-automation",
-    "version": "1.0.0-pre.3",
+    "version": "1.0.0-pre.4",
     "description": "免費開源的巴哈姆特自動化！",
-    "main": "src/core/index.js",
+    "main": "dist/lib/core/index.js",
     "bin": {
-        "ba": "./src/cli.js",
-        "baha": "./src/cli.js"
+        "ba": "./dist/lib/core/cli.js",
+        "baha": "./dist/lib/core/cli.js"
     },
     "scripts": {
         "prepare": "npm audit fix --silent",
-        "start": "node src/cli.js",
-        "build": "pkg .",
-        "format": "prettier --write \"src/**/*.js\""
+        "start": "node ./dist/lib/core/cli.js",
+        "format": "prettier --write \"src/**/*.{js,ts}\" \"scripts/**/*.{js,ts}\"",
+        "docs": "typedoc ./src/core/index.ts --tsconfig ./tsconfig/core.json --name 巴哈姆特自動化！ --lightHighlightTheme nord --out ./web/docs",
+        "build": "npm run build:package && npm run build:action && npm run build:binary",
+        "build:package": "ts-node scripts/build_package",
+        "build:action": "ts-node scripts/build_action",
+        "build:binary": "ts-node scripts/build_binary"
     },
     "keywords": [
         "bahamut",
@@ -35,20 +39,26 @@
         "turndown": "^7.1.1"
     },
     "devDependencies": {
+        "@types/node": "^16.11.10",
         "pkg": "^5.4.1",
-        "prettier": "^2.4.1"
+        "prettier": "^2.4.1",
+        "ts-node": "^10.4.0",
+        "typedoc": "^0.22.10",
+        "typescript": "^4.5.2"
     },
     "pkg": {
         "scripts": [
-            "src/**/*.js"
+            "dist/lib/**/*.js"
         ],
-        "assets": [],
+        "assets": [
+            "package.json"
+        ],
         "targets": [
             "node16-macos-x64",
             "node16-linux-x64",
             "node16-win-x64"
         ],
-        "outputPath": "dist"
+        "outputPath": "dist/binary"
     },
     "homepage": "https://github.com/JacobLinCool/bahamut-automation#readme",
     "repository": {
