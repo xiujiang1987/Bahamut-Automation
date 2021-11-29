@@ -1,0 +1,14 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "allowJs": true,
+        "esModuleInterop": true,
+        "noImplicitAny": true,
+        "removeComments": true,
+        "preserveConstEnums": true,
+        "outDir": "../dist/lib/modules/",
+        "sourceMap": false,
+        "moduleResolution": "node"
+    },
+    "include": ["../src/modules/**/*"]
+}
