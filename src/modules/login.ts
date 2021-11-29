@@ -1,6 +1,9 @@
-const { authenticator } = require("otplib");
+import { authenticator } from "otplib";
+import { Module, Page } from "./_module";
 
-exports.parameters = [
+const login = new Module();
+
+login.parameters = [
     {
         name: "username",
         required: true,
@@ -19,9 +22,9 @@ exports.parameters = [
     },
 ];
 
-exports.run = async ({ page, params, logger }) => {
-    const log = (...args) => logger.log("\u001b[95m[登入]\u001b[m", ...args);
-    const error = (...args) => logger.error("\u001b[95m[登入]\u001b[m", ...args);
+login.run = async ({ page, params, logger }) => {
+    const log = (...args: any[]) => logger.log("\u001b[95m[登入]\u001b[m", ...args);
+    const error = (...args: any[]) => logger.error("\u001b[95m[登入]\u001b[m", ...args);
 
     let success = false;
     log(`開始執行帳號登入程序`);
@@ -43,8 +46,8 @@ exports.run = async ({ page, params, logger }) => {
                 await page.goto("https://user.gamer.com.tw/login.php").catch(error);
                 log("嘗試登入中");
                 if (!params.username || !params.password) throw new Error("帳號或密碼不能為空");
-                await page.$eval("input.form-control[type=text]", (node) => (node.value = "")).catch(error);
-                await page.$eval("input.form-control[type=password]", (node) => (node.value = "")).catch(error);
+                await page.$eval("input.form-control[type=text]", (elm: HTMLInputElement) => (elm.value = "")).catch(error);
+                await page.$eval("input.form-control[type=password]", (elm: HTMLInputElement) => (elm.value = "")).catch(error);
                 await page.type("input.form-control[type=text]", params.username, { delay: 101 }).catch(error);
                 await page.waitForTimeout(500);
                 await page.type("input.form-control[type=password]", params.password, { delay: 101 }).catch(error);
@@ -71,7 +74,12 @@ exports.run = async ({ page, params, logger }) => {
     return { success };
 };
 
-async function check2FA(page, params, error, log) {
+async function check2FA(
+    page: Page,
+    params: { twofa: string },
+    error: (...args: any[]) => void,
+    log: { (...args: any[]): void; (arg0: string): void },
+): Promise<void> {
     let twoFA = await page.$("[name=twoStepAuth][required]");
     if (twoFA) {
         log("有啟用 2FA");
@@ -84,3 +92,5 @@ async function check2FA(page, params, error, log) {
         return;
     }
 }
+
+export default login;

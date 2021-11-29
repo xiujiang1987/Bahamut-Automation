@@ -1,6 +1,7 @@
 import fs from "fs";
 import { resolve } from "path";
 import { execSync } from "child_process";
+import UglifyJS from "uglify-js";
 
 const root = resolve(__dirname, "..");
 
@@ -15,30 +16,37 @@ async function main(): Promise<void> {
     execSync("npx tsc -p tsconfig/core.json", { stdio: "inherit" });
     console.log("Done");
 
-    process.stdout.write("Copying Modules... ");
-    copy_dir(resolve(root, "src", "modules"), resolve(root, "dist", "lib", "modules"));
+    process.stdout.write("Compiling Modules... ");
+    execSync("npx tsc -p tsconfig/modules.json", { stdio: "inherit" });
+    console.log("Done");
+
+    process.stdout.write("Minifying Lib... ");
+    const lib = resolve(root, "dist", "lib");
+    js_in_dir(lib).forEach(minify);
     console.log("Done");
 }
 
-function copy_dir(src_dir: string, dest_dir: string): void {
-    if (!fs.existsSync(src_dir)) {
-        console.error(`${src_dir} does not exist`);
-        return;
-    }
+function minify(path: string): void {
+    const code = fs.readFileSync(path, "utf8");
+    const minified = UglifyJS.minify(code, {
+        output: {
+            beautify: false,
+            preamble: "/* minified */",
+        },
+    });
+    fs.writeFileSync(path, minified.code);
+}
 
-    if (!fs.existsSync(dest_dir)) {
-        fs.mkdirSync(dest_dir, { recursive: true });
-    }
-
-    const files = fs.readdirSync(src_dir);
-    for (const file of files) {
-        const src_file = resolve(src_dir, file);
-        const dest_file = resolve(dest_dir, file);
-
-        if (fs.statSync(src_file).isDirectory()) {
-            copy_dir(src_file, dest_file);
+function js_in_dir(dir: string): string[] {
+    const files: string[] = [];
+    const dirs = fs.readdirSync(dir);
+    for (const d of dirs) {
+        const file = resolve(dir, d);
+        if (fs.statSync(file).isDirectory()) {
+            files.push(...js_in_dir(file));
         } else {
-            fs.copyFileSync(src_file, dest_file);
+            files.push(file);
         }
     }
+    return files.filter((f) => f.endsWith(".js"));
 }

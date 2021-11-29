@@ -1,16 +1,19 @@
-const countapi = require("countapi-js");
+import countapi from "countapi-js";
+import { Module, Page } from "./_module";
 
-exports.parameters = [
+const sign = new Module();
+
+sign.parameters = [
     {
         name: "sign_double_max_attempts",
         required: false,
     },
 ];
 
-exports.run = async ({ page, outputs, params, logger }) => {
-    const log = (...args) => logger.log("\u001b[95m[簽到]\u001b[m", ...args);
-    const warn = (...args) => logger.warn("\u001b[95m[簽到]\u001b[m", ...args);
-    const error = (...args) => logger.error("\u001b[95m[簽到]\u001b[m", ...args);
+sign.run = async ({ page, outputs, params, logger }) => {
+    const log = (...args: any[]) => logger.log("\u001b[95m[簽到]\u001b[m", ...args);
+    const warn = (...args: any[]) => logger.warn("\u001b[95m[簽到]\u001b[m", ...args);
+    const error = (...args: any[]) => logger.error("\u001b[95m[簽到]\u001b[m", ...args);
 
     if (!outputs.login || !outputs.login.success) throw new Error("使用者未登入，無法簽到");
 
@@ -18,7 +21,7 @@ exports.run = async ({ page, outputs, params, logger }) => {
 
     await page.goto("https://www.gamer.com.tw/");
     await page.waitForTimeout(2000);
-    let { days, finishedAd, signin } = await sign_status(page);
+    let { days, finishedAd, signin }: { days: number; finishedAd: boolean; signin: boolean } = await sign_status(page);
     const initialSignin = signin;
     log(`已連續簽到天數: ${days}`);
 
@@ -90,31 +93,32 @@ exports.run = async ({ page, outputs, params, logger }) => {
     return {
         signed: !!final.signin,
         doubled: !!final.finishedAd,
-        days: final.days,
+        days: final.days as number,
         report,
     };
 };
 
-async function sign_status(page) {
-    const { data } = await page.evaluate(() => {
+async function sign_status(page: Page) {
+    const { data } = await page.evaluate(async () => {
         const controller = new AbortController();
 
         setTimeout(() => controller.abort(), 30000);
 
-        return fetch("https://www.gamer.com.tw/ajax/signin.php", {
+        const r = await fetch("https://www.gamer.com.tw/ajax/signin.php", {
             method: "POST",
             headers: {
                 "Content-Type": "application/x-www-form-urlencoded",
             },
             body: "action=2",
             signal: controller.signal,
-        }).then((r) => r.json());
+        });
+        return await r.json();
     });
 
     return data;
 }
 
-function report({ days, signed, doubled }) {
+function report({ days, signed, doubled }: { days: number; signed: boolean; doubled: boolean }) {
     let body = `# 簽到\n\n`;
 
     body += `✨✨✨ 已連續簽到 ${days} 天 ✨✨✨\n`;
@@ -126,3 +130,5 @@ function report({ days, signed, doubled }) {
     body += "\n";
     return body;
 }
+
+export default sign;
