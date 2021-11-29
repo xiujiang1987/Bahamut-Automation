@@ -26,9 +26,9 @@ guild.run = async ({ page, outputs, params, logger }) => {
             });
             log(`已加入 ${guilds.length} 個公會`);
 
-            for (let guild of guilds) {
+            for (let _guild of guilds) {
                 try {
-                    await page.goto(guild);
+                    await page.goto(_guild);
                     await page.waitForTimeout(1000);
                     const name = await page.evaluate(() => {
                         // @ts-ignore
