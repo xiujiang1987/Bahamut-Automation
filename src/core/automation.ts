@@ -124,7 +124,7 @@ class BahamutAutomation extends EventEmitter {
 
                     this.emit("module_start", module_name, module_path);
 
-                    const module: Module = require(module_path);
+                    const module: Module = require(module_path).default || require(module_path);
 
                     this.emit("module_loaded", module_name, module);
 
