@@ -34,7 +34,7 @@ async function main(): Promise<void> {
     console.log("Done");
 }
 
-function copy_dir(src_dir: string, dest_dir: string) {
+function copy_dir(src_dir: string, dest_dir: string): void {
     if (!fs.existsSync(src_dir)) {
         console.error(`${src_dir} does not exist`);
         return;
