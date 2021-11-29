@@ -20,6 +20,8 @@ function prepare(): void {
         execSync("npx playwright install-deps", { stdio: "inherit", cwd: __dirname });
         console.log("Browser Dependencies Installed");
     } catch (err) {}
+
+    console.log("\n");
 }
 
 async function main(): Promise<void> {
