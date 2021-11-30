@@ -36,7 +36,7 @@ exports.run = async ({ outputs, params, logger }) => {
         body: body,
     }).then((res) => res.json());
 
-    if (response.status == 200) {
+    if (response.status === 200) {
         log("已發送 Line Notify");
     } else {
         info(response);
