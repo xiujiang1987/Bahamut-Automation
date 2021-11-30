@@ -1,4 +1,4 @@
-import { Module } from "./_module";
+import { Module } from "../_module";
 
 const logout = new Module();
 
