@@ -1,12 +1,13 @@
 class Pool {
     size: number;
-    available: number;
-    tasks: any[];
-    resolves: any[];
-    results: any[];
+    tasks: any[] = [];
+    results: any[] = [];
+    private available: number;
+    private resolves: any[] = [];
 
     constructor(size: number) {
         this.size = size;
+        this.available = size;
     }
 
     push(task: { (): Promise<void>; (): any }) {
