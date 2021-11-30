@@ -1,21 +1,23 @@
-const fetch = require("node-fetch");
-const countapi = require("countapi-js");
+import fetch from "node-fetch";
+import countapi from "countapi-js";
+import Module from "../_module";
 
-exports.parameters = [
+const answer = new Module();
+
+answer.parameters = [
     {
         name: "answer_max_attempts",
         required: false,
     },
 ];
 
-exports.run = async ({ page, outputs, params, logger }) => {
-    const log = (...args) => logger.log("\u001b[95m[動畫瘋答題]\u001b[m", ...args);
-    const error = (...args) => logger.error("\u001b[95m[動畫瘋答題]\u001b[m", ...args);
+answer.run = async ({ page, outputs, params, logger }) => {
+    const log = (...args: any[]) => logger.log("\u001b[95m[動畫瘋答題]\u001b[m", ...args);
 
     if (!outputs.login || !outputs.login.success) throw new Error("使用者未登入，無法答題");
 
     let reward = 0;
-    let question = {};
+    let question: { question?: string; token?: string; a1?: string; a2?: string; a3?: string; a4?: string; error?: number; msg?: string } = {};
     log(`開始執行`);
 
     const max_attempts = +params.answer_max_attempts || 3;
@@ -55,8 +57,8 @@ exports.run = async ({ page, outputs, params, logger }) => {
                 log(`答案是 ${ans}. ${options[ans]} ！`);
                 log(`正在嘗試回答`);
                 let result = await page.evaluate(
-                    ({ ans, token }) => {
-                        return fetch("/ajax/animeAnsQuestion.php", {
+                    async ({ ans, token }) => {
+                        const r = await fetch("/ajax/animeAnsQuestion.php", {
                             headers: {
                                 accept: "*/*",
                                 "content-type": "application/x-www-form-urlencoded",
@@ -66,7 +68,8 @@ exports.run = async ({ page, outputs, params, logger }) => {
                             },
                             method: "POST",
                             body: encodeURI(`token=${token}&ans=${ans}&t=${Date.now()}`),
-                        }).then((r) => r.json());
+                        });
+                        return r.json();
                     },
                     { ans, token },
                 );
@@ -100,7 +103,7 @@ exports.run = async ({ page, outputs, params, logger }) => {
     };
 };
 
-function report({ reward, answered }) {
+function report({ reward, answered }: { reward: number; answered: boolean }) {
     let body = "# 動畫瘋答題\n\n";
 
     if (reward) body += `✨✨✨ 獲得 ${reward} 巴幣 ✨✨✨\n`;
@@ -110,3 +113,5 @@ function report({ reward, answered }) {
     body += "\n";
     return body;
 }
+
+export default answer;
