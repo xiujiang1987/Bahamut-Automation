@@ -6,19 +6,19 @@ main();
 
 function prepare(): void {
     try {
-        console.log("Installing NPM Dependencies...");
-        execSync("npm install", { stdio: "inherit", cwd: __dirname });
-        console.log("Dependencies NPM Installed");
+        process.stdout.write("Installing NPM Dependencies... ");
+        execSync("npm install", { cwd: __dirname });
+        console.log("Done");
     } catch (err) {}
     try {
-        console.log("Installing Playwright Dependencies...");
-        execSync("npx playwright install", { stdio: "inherit", cwd: __dirname });
-        console.log("Playwright Dependencies Installed");
+        process.stdout.write("Installing Playwright Dependencies... ");
+        execSync("npx playwright install", { cwd: __dirname });
+        console.log("Done");
     } catch (err) {}
     try {
-        console.log("Installing Browser Dependencies...");
-        execSync("npx playwright install-deps", { stdio: "inherit", cwd: __dirname });
-        console.log("Browser Dependencies Installed");
+        process.stdout.write("Installing Browser Dependencies... ");
+        execSync("npx playwright install-deps", { cwd: __dirname });
+        console.log("Done");
     } catch (err) {}
 
     console.log("\n");
