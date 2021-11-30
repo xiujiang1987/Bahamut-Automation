@@ -1,5 +1,5 @@
 import { authenticator } from "otplib";
-import { Module, Page } from "./_module";
+import { Module, Page } from "../_module";
 
 const login = new Module();
 
