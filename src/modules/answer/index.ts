@@ -1,4 +1,4 @@
-import fetch from "node-fetch";
+import node_fetch from "node-fetch";
 import countapi from "countapi-js";
 import Module from "../_module";
 
@@ -40,10 +40,10 @@ answer.run = async ({ page, outputs, params, logger }) => {
 
                 log(`正在尋找答案`);
                 let token = question.token;
-                let sn = await fetch("https://api.gamer.com.tw/mobile_app/bahamut/v1/home.php?owner=blackXblue&page=1")
+                let sn = await node_fetch("https://api.gamer.com.tw/mobile_app/bahamut/v1/home.php?owner=blackXblue&page=1")
                     .then((r) => r.json())
                     .then((d) => d.creation[0].sn);
-                let ans = await fetch("https://api.gamer.com.tw/mobile_app/bahamut/v1/home_creation_detail.php?sn=" + sn)
+                let ans = await node_fetch("https://api.gamer.com.tw/mobile_app/bahamut/v1/home_creation_detail.php?sn=" + sn)
                     .then((r) => r.json())
                     .then(
                         (d) =>
