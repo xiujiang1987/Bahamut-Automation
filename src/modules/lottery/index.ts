@@ -1,5 +1,5 @@
 import countapi from "countapi-js";
-import { ElementHandle } from "playwright";
+import { ElementHandle, Page } from "playwright";
 import Pool from "./pool";
 import { Module } from "../_module";
 
@@ -27,11 +27,11 @@ lottery.run = async ({ page, outputs, params, logger }) => {
     let lottery = 0;
 
     log("正在尋找抽抽樂");
-    const draws = await getList({ page, error });
+    const draws = await getList(page, error);
 
     log(`找到 ${draws.length} 個抽抽樂`);
-    const unfinished = {};
-    draws.forEach(({ name, link }: any, i: number) => {
+    const unfinished: { [key: string]: string } = {};
+    draws.forEach(({ name, link }, i) => {
         log(`${i + 1}: ${name}`);
         unfinished[name] = link;
     });
@@ -106,8 +106,8 @@ lottery.run = async ({ page, outputs, params, logger }) => {
                     const final_url = task_page.url();
                     if (final_url.includes("/buyD.php") && final_url.includes("ad=1")) {
                         log(`正在確認結算頁面`);
-                        await checkInfo({ page: task_page, log, error }).catch(error);
-                        await confirm({ page: task_page, error }).catch(error);
+                        await checkInfo(task_page, log, error).catch(error);
+                        await confirm(task_page, error).catch(error);
                         if (
                             (await task_page.$(".card > .section > p")) &&
                             (await task_page.$eval(".card > .section > p", (elm: HTMLElement) => elm.innerText.includes("成功")))
@@ -137,7 +137,7 @@ lottery.run = async ({ page, outputs, params, logger }) => {
     return { lottery, unfinished, report };
 };
 
-async function getList({ page, error }) {
+async function getList(page: Page, error: (...args: any[]) => void): Promise<{ name: string; link: string }[]> {
     let draws: { name: any; link: any }[];
 
     let attempts = 3;
@@ -147,22 +147,22 @@ async function getList({ page, error }) {
             await page.goto("https://fuli.gamer.com.tw/shop.php?page=1");
             let items = await page.$$("a.items-card");
             for (let i = items.length - 1; i >= 0; i--) {
-                let is_draw = await items[i].evaluate((node: { innerHTML: string | string[] }) => node.innerHTML.includes("抽抽樂"));
+                let is_draw = await items[i].evaluate((elm: HTMLElement) => elm.innerHTML.includes("抽抽樂"));
                 if (is_draw) {
                     draws.push({
                         name: await items[i].evaluate(
                             (node: { querySelector: (arg0: string) => { (): any; new (): any; innerHTML: any } }) =>
                                 node.querySelector(".items-title").innerHTML,
                         ),
-                        link: await items[i].evaluate((node: { href: any }) => node.href),
+                        link: await items[i].evaluate((elm: HTMLAnchorElement) => elm.href),
                     });
                 }
             }
 
-            while (await page.$eval("a.pagenow", (node: { nextSibling: any }) => (node.nextSibling ? true : false))) {
+            while (await page.$eval("a.pagenow", (elm: HTMLAnchorElement) => (elm.nextSibling ? true : false))) {
                 await page.goto(
                     "https://fuli.gamer.com.tw/shop.php?page=" +
-                        (await page.$eval("a.pagenow", (node: { nextSibling: { innerText: any } }) => node.nextSibling.innerText)),
+                        (await page.$eval("a.pagenow", (elm: HTMLAnchorElement) => (elm.nextSibling as HTMLElement).innerText)),
                 );
                 let items = await page.$$("a.items-card");
                 for (let i = items.length - 1; i >= 0; i--) {
@@ -173,7 +173,7 @@ async function getList({ page, error }) {
                                 (node: { querySelector: (arg0: string) => { (): any; new (): any; innerHTML: any } }) =>
                                     node.querySelector(".items-title").innerHTML,
                             ),
-                            link: await items[i].evaluate((node: { href: any }) => node.href),
+                            link: await items[i].evaluate((elm: HTMLAnchorElement) => elm.href),
                         });
                     }
                 }
@@ -188,13 +188,13 @@ async function getList({ page, error }) {
     return draws;
 }
 
-async function checkInfo({ page, log, error }) {
+async function checkInfo(page: Page, log: (...args: any[]) => void, error: (...args: any[]) => void) {
     try {
-        const name = await page.$eval("#name", (node: { value: any }) => node.value);
-        const tel = await page.$eval("#tel", (node: { value: any }) => node.value);
-        const city = await page.$eval("[name=city]", (node: { value: any }) => node.value);
-        const country = await page.$eval("[name=country]", (node: { value: any }) => node.value);
-        const address = await page.$eval("#address", (node: { value: any }) => node.value);
+        const name = await page.$eval("#name", (elm: HTMLInputElement) => elm.value);
+        const tel = await page.$eval("#tel", (elm: HTMLInputElement) => elm.value);
+        const city = await page.$eval("[name=city]", (elm: HTMLInputElement) => elm.value);
+        const country = await page.$eval("[name=country]", (elm: HTMLInputElement) => elm.value);
+        const address = await page.$eval("#address", (elm: HTMLInputElement) => elm.value);
 
         if (!name) log("無收件人姓名");
         if (!tel) log("無收件人電話");
@@ -208,7 +208,7 @@ async function checkInfo({ page, log, error }) {
     }
 }
 
-async function confirm({ page, error }) {
+async function confirm(page: Page, error: (...args: any[]) => void) {
     try {
         await page.click("#agree-confirm");
         await page.waitForSelector("#buyD > div.pbox-btn > a");
@@ -227,7 +227,7 @@ async function confirm({ page, error }) {
     }
 }
 
-function report({ lottery, unfinished }) {
+function report({ lottery, unfinished }: { lottery: number; unfinished: { [key: string]: any } }) {
     let body = "# 福利社抽抽樂 \n\n";
 
     if (lottery) {
