@@ -5,21 +5,21 @@ prepare();
 main();
 function prepare() {
     try {
-        console.log("Installing NPM Dependencies...");
-        (0, child_process_1.execSync)("npm install", { stdio: "inherit", cwd: __dirname });
-        console.log("Dependencies NPM Installed");
+        process.stdout.write("Installing NPM Dependencies... ");
+        (0, child_process_1.execSync)("npm install", { cwd: __dirname });
+        console.log("Done");
     }
     catch (err) { }
     try {
-        console.log("Installing Playwright Dependencies...");
-        (0, child_process_1.execSync)("npx playwright install", { stdio: "inherit", cwd: __dirname });
-        console.log("Playwright Dependencies Installed");
+        process.stdout.write("Installing Playwright Dependencies... ");
+        (0, child_process_1.execSync)("npx playwright install", { cwd: __dirname });
+        console.log("Done");
     }
     catch (err) { }
     try {
-        console.log("Installing Browser Dependencies...");
-        (0, child_process_1.execSync)("npx playwright install-deps", { stdio: "inherit", cwd: __dirname });
-        console.log("Browser Dependencies Installed");
+        process.stdout.write("Installing Browser Dependencies... ");
+        (0, child_process_1.execSync)("npx playwright install-deps", { cwd: __dirname });
+        console.log("Done");
     }
     catch (err) { }
     console.log("\n");
