@@ -1,57 +1,24 @@
-const countapi = require("countapi-js");
+import countapi from "countapi-js";
+import { ElementHandle } from "playwright";
+import Pool from "./pool";
+import { Module } from "../_module";
 
-exports.parameters = [
+const lottery = new Module();
+
+lottery.parameters = [
     {
-        name: "lottery_plus_max_attempts",
+        name: "lottery_max_attempts",
         required: false,
     },
     {
-        name: "lottery_plus_max_parallel",
+        name: "lottery_max_parallel",
         required: false,
     },
 ];
 
-class Pool {
-    constructor(size) {
-        this.size = size;
-        this.available = size;
-        this.tasks = [];
-        this.resolves = [];
-        this.results = [];
-    }
-
-    push(task) {
-        this.tasks.push(async () => task());
-    }
-
-    async go() {
-        const tasks = [];
-        for (let i = 0; i < this.tasks.length; i++) {
-            await this.isAvailable();
-            tasks.push(
-                this.tasks[i]().then((res) => {
-                    this.results[i] = res;
-                    if (this.resolves.length > 0) this.resolves.shift()();
-                }),
-            );
-        }
-        await Promise.all(tasks);
-        return this.results;
-    }
-
-    isAvailable() {
-        return new Promise((resolve) => {
-            if (this.available > 0) {
-                this.available--;
-                resolve(true);
-            } else this.resolves.push(resolve);
-        });
-    }
-}
-
-exports.run = async ({ page, outputs, params, logger }) => {
-    const log = (...args) => logger.log("\u001b[95m[Lottery+]\u001b[m", ...args);
-    const error = (...args) => logger.error("\u001b[95m[Lottery+]\u001b[m", ...args);
+lottery.run = async ({ page, outputs, params, logger }) => {
+    const log = (...args: any[]) => logger.log("\u001b[95m[福利社]\u001b[m", ...args);
+    const error = (...args: any[]) => logger.error("\u001b[95m[福利社]\u001b[m", ...args);
 
     if (!outputs.login || !outputs.login.success) throw new Error("使用者未登入，無法抽獎");
     if (!outputs.ad_handler) throw new Error("需使用 ad_handler 模組");
@@ -64,13 +31,13 @@ exports.run = async ({ page, outputs, params, logger }) => {
 
     log(`找到 ${draws.length} 個抽抽樂`);
     const unfinished = {};
-    draws.forEach(({ name, link }, i) => {
+    draws.forEach(({ name, link }: any, i: number) => {
         log(`${i + 1}: ${name}`);
         unfinished[name] = link;
     });
 
-    const parrallel = +params.lottery_plus_max_parallel || 3;
-    const max_attempts = +params.lottery_plus_max_attempts || 30;
+    const parrallel = +params.lottery_max_parallel || 1;
+    const max_attempts = +params.lottery_max_attempts || 20;
 
     const context = page.context();
 
@@ -99,10 +66,10 @@ exports.run = async ({ page, outputs, params, logger }) => {
                     await task_page.click(".btn-base.c-accent-o").catch(error);
                     await task_page.waitForTimeout(3000);
 
-                    if ((await task_page.$eval(".dialogify", (node) => node.innerText.includes("勇者問答考驗")).catch(() => {})) || null) {
+                    if ((await task_page.$eval(".dialogify", (elm: HTMLElement) => elm.innerText.includes("勇者問答考驗")).catch(() => {})) || null) {
                         log(`需要回答問題，正在回答問題`);
-                        await task_page.$$eval("#dialogify_1 .dialogify__body a", (options) => {
-                            options.forEach((option) => {
+                        await task_page.$$eval("#dialogify_1 .dialogify__body a", (options: any[]) => {
+                            options.forEach((option: { dataset: { option: any; answer: any }; click: () => void }) => {
                                 if (option.dataset.option == option.dataset.answer) option.click();
                             });
                         });
@@ -112,9 +79,9 @@ exports.run = async ({ page, outputs, params, logger }) => {
                     }
                     await task_page.waitForTimeout(5000);
 
-                    let ad_status = (await task_page.$eval(".dialogify .dialogify__body p", (node) => node.innerText).catch(() => {})) || "";
+                    let ad_status = (await task_page.$eval(".dialogify .dialogify__body p", (elm: HTMLElement) => elm.innerText).catch(() => {})) || "";
 
-                    let ad_frame;
+                    let ad_frame: any;
                     if (ad_status.includes("廣告能量補充中")) {
                         await error("廣告能量補充中");
                         await task_page.reload().catch(error);
@@ -124,7 +91,7 @@ exports.run = async ({ page, outputs, params, logger }) => {
                         await task_page.click("button[type=submit].btn.btn-insert.btn-primary").catch(error);
                         await task_page.waitForSelector("ins iframe").catch(error);
                         await task_page.waitForTimeout(1000);
-                        const ad_iframe = await task_page.$("ins iframe").catch(error);
+                        const ad_iframe = (await task_page.$("ins iframe").catch(error)) as ElementHandle<HTMLIFrameElement>;
                         try {
                             ad_frame = await ad_iframe.contentFrame();
                             await outputs.ad_handler({ ad_frame });
@@ -143,16 +110,16 @@ exports.run = async ({ page, outputs, params, logger }) => {
                         await confirm({ page: task_page, error }).catch(error);
                         if (
                             (await task_page.$(".card > .section > p")) &&
-                            (await task_page.$eval(".card > .section > p", (node) => node.innerText.includes("成功")))
+                            (await task_page.$eval(".card > .section > p", (elm: HTMLElement) => elm.innerText.includes("成功")))
                         ) {
                             log("已完成一次抽抽樂：" + name + " \u001b[92m✔\u001b[m");
                             lottery++;
                         } else {
-                            log("發生錯誤，重試中 ✘");
+                            log("發生錯誤，重試中 \u001b[91m✘\u001b[m");
                         }
                     } else {
                         log(final_url);
-                        log("未進入結算頁面，重試中 ✘");
+                        log("未進入結算頁面，重試中 \u001b[91m✘\u001b[m");
                         error("抽抽樂未進入結算頁面");
                     }
                 } catch (err) {}
@@ -171,7 +138,7 @@ exports.run = async ({ page, outputs, params, logger }) => {
 };
 
 async function getList({ page, error }) {
-    let draws;
+    let draws: { name: any; link: any }[];
 
     let attempts = 3;
     while (attempts-- > 0) {
@@ -180,24 +147,33 @@ async function getList({ page, error }) {
             await page.goto("https://fuli.gamer.com.tw/shop.php?page=1");
             let items = await page.$$("a.items-card");
             for (let i = items.length - 1; i >= 0; i--) {
-                let is_draw = await items[i].evaluate((node) => node.innerHTML.includes("抽抽樂"));
+                let is_draw = await items[i].evaluate((node: { innerHTML: string | string[] }) => node.innerHTML.includes("抽抽樂"));
                 if (is_draw) {
                     draws.push({
-                        name: await items[i].evaluate((node) => node.querySelector(".items-title").innerHTML),
-                        link: await items[i].evaluate((node) => node.href),
+                        name: await items[i].evaluate(
+                            (node: { querySelector: (arg0: string) => { (): any; new (): any; innerHTML: any } }) =>
+                                node.querySelector(".items-title").innerHTML,
+                        ),
+                        link: await items[i].evaluate((node: { href: any }) => node.href),
                     });
                 }
             }
 
-            while (await page.$eval("a.pagenow", (node) => (node.nextSibling ? true : false))) {
-                await page.goto("https://fuli.gamer.com.tw/shop.php?page=" + (await page.$eval("a.pagenow", (node) => node.nextSibling.innerText)));
+            while (await page.$eval("a.pagenow", (node: { nextSibling: any }) => (node.nextSibling ? true : false))) {
+                await page.goto(
+                    "https://fuli.gamer.com.tw/shop.php?page=" +
+                        (await page.$eval("a.pagenow", (node: { nextSibling: { innerText: any } }) => node.nextSibling.innerText)),
+                );
                 let items = await page.$$("a.items-card");
                 for (let i = items.length - 1; i >= 0; i--) {
-                    let is_draw = await items[i].evaluate((node) => node.innerHTML.includes("抽抽樂"));
+                    let is_draw = await items[i].evaluate((node: { innerHTML: string | string[] }) => node.innerHTML.includes("抽抽樂"));
                     if (is_draw) {
                         draws.push({
-                            name: await items[i].evaluate((node) => node.querySelector(".items-title").innerHTML),
-                            link: await items[i].evaluate((node) => node.href),
+                            name: await items[i].evaluate(
+                                (node: { querySelector: (arg0: string) => { (): any; new (): any; innerHTML: any } }) =>
+                                    node.querySelector(".items-title").innerHTML,
+                            ),
+                            link: await items[i].evaluate((node: { href: any }) => node.href),
                         });
                     }
                 }
@@ -214,11 +190,11 @@ async function getList({ page, error }) {
 
 async function checkInfo({ page, log, error }) {
     try {
-        const name = await page.$eval("#name", (node) => node.value);
-        const tel = await page.$eval("#tel", (node) => node.value);
-        const city = await page.$eval("[name=city]", (node) => node.value);
-        const country = await page.$eval("[name=country]", (node) => node.value);
-        const address = await page.$eval("#address", (node) => node.value);
+        const name = await page.$eval("#name", (node: { value: any }) => node.value);
+        const tel = await page.$eval("#tel", (node: { value: any }) => node.value);
+        const city = await page.$eval("[name=city]", (node: { value: any }) => node.value);
+        const country = await page.$eval("[name=country]", (node: { value: any }) => node.value);
+        const address = await page.$eval("#address", (node: { value: any }) => node.value);
 
         if (!name) log("無收件人姓名");
         if (!tel) log("無收件人電話");
@@ -269,3 +245,5 @@ function report({ lottery, unfinished }) {
     body += "\n";
     return body;
 }
+
+export default lottery;
