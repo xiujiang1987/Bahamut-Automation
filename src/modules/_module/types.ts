@@ -4,8 +4,6 @@ interface ILogger {
     space: number;
     prefix: string;
 
-    constructor(space: number): ILogger;
-
     next(): ILogger;
 
     log(...msg: any[]): void;
