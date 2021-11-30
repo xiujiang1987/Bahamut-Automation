@@ -1,5 +1,5 @@
 import countapi from "countapi-js";
-import { Module, Page } from "./_module";
+import { Module, Page } from "../_module";
 
 const sign = new Module();
 
@@ -112,7 +112,7 @@ async function sign_status(page: Page) {
             body: "action=2",
             signal: controller.signal,
         });
-        return await r.json();
+        return r.json();
     });
 
     return data;
