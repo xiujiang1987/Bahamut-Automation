@@ -1,4 +1,8 @@
-exports.parameters = [
+import Module from "../_module";
+
+const builder = new Module();
+
+builder.parameters = [
     {
         name: "builder",
         required: true,
@@ -6,9 +10,9 @@ exports.parameters = [
     },
 ];
 
-exports.run = async ({ page, outputs, params, logger }) => {
-    const log = (...args) => logger.log("\u001b[95m[回文]\u001b[m", ...args);
-    const error = (...args) => logger.error("\u001b[95m[回文]\u001b[m", ...args);
+builder.run = async ({ page, outputs, params, logger }) => {
+    const log = (...args: any[]) => logger.log("\u001b[95m[回文]\u001b[m", ...args);
+    const error = (...args: any[]) => logger.error("\u001b[95m[回文]\u001b[m", ...args);
 
     if (!outputs.login || !outputs.login.success) throw new Error("使用者未登入，無法發佈勇者大聲說");
 
@@ -30,25 +34,28 @@ exports.run = async ({ page, outputs, params, logger }) => {
 
             // 提示
             await page.evaluate(() => {
+                // @ts-ignore
                 if (onTipsClick) onTipsClick();
             });
             await page.waitForTimeout(300);
 
             // 切換模式
             await page.evaluate(() => {
+                // @ts-ignore
                 if (document.querySelector("#source").style.display === "none") bahaRte.toolbar.alternateView(true);
             });
             await page.waitForTimeout(300);
 
             // 輸入內容
-            await page.$eval("#source", (node) => {
-                node.value = "";
+            await page.$eval("#source", (elm: HTMLInputElement) => {
+                elm.value = "";
             });
             await page.type("#source", replace(content), { delay: 11 });
             await page.waitForTimeout(300);
 
             // 發送
             await page.evaluate(() => {
+                // @ts-ignore
                 Forum.Post.post();
             });
             await page.waitForTimeout(300);
@@ -69,9 +76,9 @@ exports.run = async ({ page, outputs, params, logger }) => {
     return { success: true };
 };
 
-function replace(str) {
+function replace(str: string) {
     const t = time();
-    const rules = [
+    const rules: [RegExp, string][] = [
         [/\$time\$/g, `$year$/$month$/$day$ $hour$:$minute$:$second$`],
         [/\$year\$/g, t[0]],
         [/\$month\$/g, t[1]],
@@ -86,7 +93,7 @@ function replace(str) {
     return str;
 }
 
-function time() {
+function time(): string[] {
     const date = new Date().toLocaleString("en", { timeZone: "Asia/Taipei" }).split(", ");
     let [month, day, year] = date[0].split("/");
     let [hour, minute, second] = date[1].match(/\d{1,2}/g);
@@ -95,3 +102,5 @@ function time() {
     if (+hour < 12 && date[1].toLowerCase().includes("pm")) hour = String(+hour + 12);
     return [year, month, day, hour, minute, second];
 }
+
+export default builder;
