@@ -51,6 +51,10 @@ class BahamutAutomation extends EventEmitter {
     private end_time: number = null;
     private browser: Browser;
 
+    /**
+     * 建立巴哈姆特自動化實體
+     * @param automation_config
+     */
     constructor({ modules = [], params = {}, browser = {} }: BahamutAutomationConfig) {
         super();
 
