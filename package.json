@@ -40,17 +40,17 @@
         "turndown": "^7.1.1"
     },
     "devDependencies": {
-        "@types/markdown-it": "^12.2.3",
-        "@types/node": "^16.11.10",
-        "@types/node-fetch": "^2.5.12",
-        "@types/turndown": "^5.0.1",
-        "@types/uglify-js": "^3.13.1",
-        "pkg": "^5.4.1",
-        "prettier": "^2.4.1",
-        "ts-node": "^10.4.0",
-        "typedoc": "^0.22.10",
-        "typescript": "^4.5.2",
-        "uglify-js": "^3.14.3"
+        "@types/markdown-it": "12.2.3",
+        "@types/node": "16.11.10",
+        "@types/node-fetch": "2.5.12",
+        "@types/turndown": "5.0.1",
+        "@types/uglify-js": "3.13.1",
+        "pkg": "5.4.1",
+        "prettier": "2.4.1",
+        "ts-node": "10.4.0",
+        "typedoc": "0.22.10",
+        "typescript": "4.5.2",
+        "uglify-js": "3.14.3"
     },
     "pkg": {
         "scripts": [
