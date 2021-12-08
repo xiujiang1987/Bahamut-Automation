@@ -41,7 +41,7 @@
     },
     "devDependencies": {
         "@types/markdown-it": "12.2.3",
-        "@types/node": "16.11.10",
+        "@types/node": "16.11.12",
         "@types/node-fetch": "2.5.12",
         "@types/turndown": "5.0.1",
         "@types/uglify-js": "3.13.1",
