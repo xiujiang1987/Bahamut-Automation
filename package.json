@@ -46,7 +46,7 @@
         "@types/turndown": "5.0.1",
         "@types/uglify-js": "3.13.1",
         "pkg": "5.5.1",
-        "prettier": "2.4.1",
+        "prettier": "2.5.1",
         "ts-node": "10.4.0",
         "typedoc": "0.22.10",
         "typescript": "4.5.2",
