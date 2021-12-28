@@ -1,15 +1,15 @@
 import { Module } from "../_module";
 
-const guild = new Module();
+const m_guild = new Module();
 
-guild.parameters = [
+m_guild.parameters = [
     {
         name: "guild_max_attempts",
         required: false,
     },
 ];
 
-guild.run = async ({ page, outputs, params, logger }) => {
+m_guild.run = async ({ page, outputs, params, logger }) => {
     const log = (...args: any[]) => logger.log("\u001b[95m[公會簽到]\u001b[m", ...args);
     const error = (...args: any[]) => logger.error("\u001b[95m[公會簽到]\u001b[m", ...args);
 
@@ -58,4 +58,4 @@ function report() {
     return body;
 }
 
-export default guild;
+export default m_guild;
