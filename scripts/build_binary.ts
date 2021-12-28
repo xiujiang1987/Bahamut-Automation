@@ -20,6 +20,14 @@ async function main(): Promise<void> {
     }
 
     process.stdout.write("Compiling Binaries... ");
-    execSync("npx pkg .", { stdio: "inherit" });
+
+    const node_version = "16";
+    const platforms = ["win", "macos", "linux"];
+
+    if (process.arch === "x64") {
+        execSync(`npx pkg . --targets ${platforms.map((p) => `node${node_version}-${p}-x64`).join(",")}`, { stdio: "inherit" });
+    } else {
+        execSync(`npx pkg . --targets ${platforms.map((p) => `node${node_version}-${p}-arm64`).join(",")}`, { stdio: "inherit" });
+    }
     console.log("Done");
 }

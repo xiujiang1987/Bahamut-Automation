@@ -30,7 +30,14 @@ async function main(): Promise<void> {
     console.log("Done");
 
     process.stdout.write("Compiling action.ts... ");
-    execSync("npx tsc -p tsconfig/action.json", { stdio: "inherit" });
+    execSync(
+        `npx tsup --silent --target esnext --minify --loader ".md=text" ${resolve(root, "src", "action", "action.ts")} --out-dir ${resolve(
+            root,
+            "dist",
+            "action",
+        )}`,
+        { stdio: "inherit" },
+    );
     console.log("Done");
 }
 

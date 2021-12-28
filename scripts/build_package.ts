@@ -13,17 +13,29 @@ async function main(): Promise<void> {
     console.log("Done");
 
     process.stdout.write("Compiling Core... ");
-    execSync("npx tsc -p tsconfig/core.json", { stdio: "inherit" });
+    execSync(`npx tsup --silent --target esnext --minify ${resolve(root, "src", "core")} --out-dir ${resolve(root, "dist", "lib", "core")}`, {
+        stdio: "inherit",
+    });
     console.log("Done");
 
     process.stdout.write("Compiling Modules... ");
-    execSync("npx tsc -p tsconfig/modules.json", { stdio: "inherit" });
+    execSync(
+        `npx tsup --silent --target esnext --minify --loader ".md=text" ${resolve(root, "src", "modules")} --out-dir ${resolve(
+            root,
+            "dist",
+            "lib",
+            "modules",
+        )}`,
+        {
+            stdio: "inherit",
+        },
+    );
     console.log("Done");
 
-    process.stdout.write("Minifying Lib... ");
-    const lib = resolve(root, "dist", "lib");
-    js_in_dir(lib).forEach(minify);
-    console.log("Done");
+    // process.stdout.write("Minifying Lib... ");
+    // const lib = resolve(root, "dist", "lib");
+    // js_in_dir(lib).forEach(minify);
+    // console.log("Done");
 }
 
 function minify(path: string): void {
