@@ -120,13 +120,12 @@ class BahamutAutomation extends EventEmitter {
 
             for (let module_name of this.modules) {
                 try {
+                    const is_custom_module = path.isAbsolute(module_name);
                     const module_path = path.resolve(__dirname, "../modules", module_name);
 
-                    if (path.isAbsolute(module_name)) {
-                        module_name = path.basename(module_name);
-                    }
+                    module_name = path.basename(module_name);
 
-                    this.emit("module_start", module_name, module_path);
+                    this.emit("module_start", module_name, is_custom_module ? module_path : "Built-in");
 
                     const module: Module = require(module_path).default || require(module_path);
 
