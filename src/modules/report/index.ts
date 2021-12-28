@@ -4,6 +4,7 @@ import Module from "../_module";
 type Config = {
     title: string;
     ignore: string | string[];
+    only_failed: boolean;
 };
 
 const md = require("markdown-it")();
@@ -12,6 +13,7 @@ const td = new (require("turndown"))({ headingStyle: "atx" });
 const DEFAULT_CONFIG: Config = {
     title: "巴哈自動化！ 報告 $time$",
     ignore: ["login", "logout", "report"],
+    only_failed: false,
 };
 
 const report = new Module();
@@ -23,6 +25,10 @@ report.parameters = [
     },
     {
         name: "report_ignore",
+        required: false,
+    },
+    {
+        name: "only_failed",
         required: false,
     },
 ];
@@ -47,17 +53,17 @@ report.run = async ({ params, outputs, logger }) => {
 async function text(outputs: any, config: Config) {
     const { html } = await normalize(outputs, config);
     const text = html_to_text(html).replace(/\n\n\n+/g, "\n\n");
-    return text;
+    return config.only_failed && !text.includes("❌") ? "" : text;
 }
 
 async function markdown(outputs: any, config: Config) {
     const { markdown } = await normalize(outputs, config);
-    return markdown;
+    return config.only_failed && !markdown.includes("❌") ? "" : markdown;
 }
 
 async function html(outputs: any, config: Config) {
     const { html } = await normalize(outputs, config);
-    return html;
+    return config.only_failed && !html.includes("❌") ? "" : html;
 }
 
 async function normalize(outputs: any, config: Config) {

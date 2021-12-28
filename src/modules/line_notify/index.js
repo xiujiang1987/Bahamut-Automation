@@ -22,6 +22,11 @@ exports.run = async ({ outputs, params, logger }) => {
         return;
     }
 
+    if ((await outputs.report.text()).length == 0) {
+        log("沒有報告內容");
+        return;
+    }
+
     const msg = await outputs.report.markdown();
 
     const body = new URLSearchParams();

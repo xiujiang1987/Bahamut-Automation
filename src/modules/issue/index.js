@@ -30,6 +30,16 @@ exports.run = async ({ params, outputs, logger }) => {
         return;
     }
 
+    if (!params.gh_pat) {
+        error("請設定 GitHub Personal Access Token (gh_pat)");
+        return;
+    }
+
+    if ((await outputs.report.text()).length == 0) {
+        log("沒有報告內容");
+        return;
+    }
+
     const labels = params.gh_labels || DEFAULT_LABELS;
 
     // 設定 Octokit 及獲取 GitHub 資料
