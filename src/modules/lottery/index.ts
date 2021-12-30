@@ -99,7 +99,7 @@ lottery.run = async ({ page, outputs, params, logger }) => {
                             error(err);
                         }
                         await task_page.waitForTimeout(1000);
-                    } else {
+                    } else if (ad_status) {
                         log(ad_status);
                     }
 
@@ -124,6 +124,8 @@ lottery.run = async ({ page, outputs, params, logger }) => {
                     }
                 } catch (err) {}
             }
+
+            await task_page.close();
         });
     }
 
@@ -210,6 +212,7 @@ async function checkInfo(page: Page, log: (...args: any[]) => void, error: (...a
 
 async function confirm(page: Page, error: (...args: any[]) => void) {
     try {
+        await page.waitForSelector("#agree-confirm");
         await page.click("#agree-confirm");
         await page.waitForSelector("#buyD > div.pbox-btn > a");
         await page.waitForTimeout(100);
