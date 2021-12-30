@@ -63,8 +63,10 @@ lottery.run = async ({ page, outputs, params, logger }) => {
 
                     log(`[${idx + 1} / ${draws.length}] (${attempts}) ${name}`);
 
-                    await task_page.click(".btn-base.c-accent-o").catch(error);
-                    await task_page.waitForTimeout(3000);
+                    await Promise.all([
+                        task_page.waitForResponse(/ajax\/check_ad.php/, { timeout: 5000 }),
+                        task_page.click("text=看廣告免費兌換").catch(error),
+                    ]);
 
                     if ((await task_page.$eval(".dialogify", (elm: HTMLElement) => elm.innerText.includes("勇者問答考驗")).catch(() => {})) || null) {
                         log(`需要回答問題，正在回答問題`);
@@ -77,18 +79,22 @@ lottery.run = async ({ page, outputs, params, logger }) => {
                         await task_page.waitForTimeout(100);
                         await task_page.click("#btn-buy");
                     }
-                    await task_page.waitForTimeout(5000);
+
+                    await Promise.all([
+                        task_page.waitForResponse(/file\.(mp4|webm)/, { timeout: 5000 }).catch(() => {}),
+                        task_page.waitForSelector(".dialogify .dialogify__body p", { timeout: 5000 }).catch(() => {}),
+                    ]);
 
                     let ad_status = (await task_page.$eval(".dialogify .dialogify__body p", (elm: HTMLElement) => elm.innerText).catch(() => {})) || "";
 
                     let ad_frame: any;
                     if (ad_status.includes("廣告能量補充中")) {
-                        await error("廣告能量補充中");
+                        error("廣告能量補充中");
                         await task_page.reload().catch(error);
                         continue;
                     } else if (ad_status.includes("觀看廣告")) {
                         log(`正在觀看廣告`);
-                        await task_page.click("button[type=submit].btn.btn-insert.btn-primary").catch(error);
+                        await task_page.click("text=確定");
                         await task_page.waitForSelector("ins iframe").catch(error);
                         await task_page.waitForTimeout(1000);
                         const ad_iframe = (await task_page.$("ins iframe").catch(error)) as ElementHandle<HTMLIFrameElement>;
@@ -122,7 +128,9 @@ lottery.run = async ({ page, outputs, params, logger }) => {
                         log("未進入結算頁面，重試中 \u001b[91m✘\u001b[m");
                         error("抽抽樂未進入結算頁面");
                     }
-                } catch (err) {}
+                } catch (err) {
+                    error("!", err);
+                }
             }
 
             await task_page.close();
@@ -212,18 +220,18 @@ async function checkInfo(page: Page, log: (...args: any[]) => void, error: (...a
 
 async function confirm(page: Page, error: (...args: any[]) => void) {
     try {
-        await page.waitForSelector("#agree-confirm");
-        await page.click("#agree-confirm");
-        await page.waitForSelector("#buyD > div.pbox-btn > a");
+        await page.waitForSelector("input[name='agreeConfirm']");
+        if ((await (await page.$("input[name='agreeConfirm']")).getAttribute("checked")) === null) {
+            await page.check("input[name='agreeConfirm']");
+        }
         await page.waitForTimeout(100);
-        await page.click("#buyD > div.pbox-btn > a");
-        await page.waitForSelector("#dialogify_1 > form > div > div > div.btn-box.text-right > button.btn.btn-insert.btn-primary");
+        await page.waitForSelector("a:has-text('確認兌換')");
         await page.waitForTimeout(100);
-        await Promise.all([
-            page.waitForNavigation(),
-            page.click("#dialogify_1 > form > div > div > div.btn-box.text-right > button.btn.btn-insert.btn-primary"),
-        ]);
-        await page.waitForTimeout(1000);
+        await page.click("a:has-text('確認兌換')");
+        await page.waitForSelector("button:has-text('確定')");
+        await page.waitForTimeout(100);
+        await Promise.all([page.waitForNavigation(), page.click("button:has-text('確定')")]);
+        await page.waitForTimeout(300);
     } catch (err) {
         error(page.url());
         error(err);
