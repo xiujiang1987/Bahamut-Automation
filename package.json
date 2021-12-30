@@ -1,6 +1,6 @@
 {
     "name": "bahamut-automation",
-    "version": "1.0.0-pre.5",
+    "version": "1.0.0-pre.6",
     "description": "免費開源的巴哈姆特自動化！",
     "main": "dist/lib/core/index.js",
     "bin": {
