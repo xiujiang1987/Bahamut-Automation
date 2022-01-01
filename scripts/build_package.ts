@@ -26,9 +26,7 @@ async function main(): Promise<void> {
             "lib",
             "modules",
         )}`,
-        {
-            stdio: "inherit",
-        },
+        { stdio: "inherit" },
     );
     console.log("Done");
 
