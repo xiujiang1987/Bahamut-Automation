@@ -9,7 +9,7 @@ main();
 
 async function main(): Promise<void> {
     process.stdout.write("Clear old files... ");
-    execSync(`rm -rf ${resolve(root, "dist", "lib")}`);
+    fs.rmSync(resolve(root, "dist", "lib"), { recursive: true });
     console.log("Done");
 
     process.stdout.write("Compiling Core... ");
@@ -29,34 +29,4 @@ async function main(): Promise<void> {
         { stdio: "inherit" },
     );
     console.log("Done");
-
-    // process.stdout.write("Minifying Lib... ");
-    // const lib = resolve(root, "dist", "lib");
-    // js_in_dir(lib).forEach(minify);
-    // console.log("Done");
-}
-
-function minify(path: string): void {
-    const code = fs.readFileSync(path, "utf8");
-    const minified = UglifyJS.minify(code, {
-        output: {
-            beautify: false,
-            preamble: "/* minified */",
-        },
-    });
-    fs.writeFileSync(path, minified.code);
-}
-
-function js_in_dir(dir: string): string[] {
-    const files: string[] = [];
-    const dirs = fs.readdirSync(dir);
-    for (const d of dirs) {
-        const file = resolve(dir, d);
-        if (fs.statSync(file).isDirectory()) {
-            files.push(...js_in_dir(file));
-        } else {
-            files.push(file);
-        }
-    }
-    return files.filter((f) => f.endsWith(".js"));
 }
