@@ -8,7 +8,9 @@ main();
 
 async function main(): Promise<void> {
     process.stdout.write("Clear old files... ");
-    fs.rmSync(resolve(root, "dist", "binary"), { recursive: true });
+    if (fs.existsSync(resolve(root, "dist", "binary"))) {
+        fs.rmSync(resolve(root, "dist", "binary"), { recursive: true });
+    }
     console.log("Done");
 
     const lib = resolve(root, "dist", "lib");

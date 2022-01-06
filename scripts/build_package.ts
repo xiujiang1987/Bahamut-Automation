@@ -1,7 +1,6 @@
 import fs from "fs";
 import { resolve } from "path";
 import { execSync } from "child_process";
-import UglifyJS from "uglify-js";
 
 const root = resolve(__dirname, "..");
 
@@ -9,7 +8,9 @@ main();
 
 async function main(): Promise<void> {
     process.stdout.write("Clear old files... ");
-    fs.rmSync(resolve(root, "dist", "lib"), { recursive: true });
+    if (fs.existsSync(resolve(root, "dist", "lib"))) {
+        fs.rmSync(resolve(root, "dist", "lib"), { recursive: true });
+    }
     console.log("Done");
 
     process.stdout.write("Compiling Core... ");
