@@ -10,6 +10,14 @@
 - 必要參數： username, password
 - 可選參數： twofa, login_max_attempts
 
+## cookie_login
+
+用 Cookie 登入巴哈姆特的模組
+
+- 作者： [JacobLinCool](https://github.com/JacobLinCool)
+- 必要參數： username, BAHARUNE, BAHARENUR
+- 可選參數： 無
+
 ## logout
 
 登出巴哈姆特的模組，需先執行 login 模組

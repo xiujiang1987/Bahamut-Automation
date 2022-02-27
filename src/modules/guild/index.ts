@@ -13,7 +13,7 @@ m_guild.run = async ({ page, outputs, params, logger }) => {
     const log = (...args: any[]) => logger.log("\u001b[95m[公會簽到]\u001b[m", ...args);
     const error = (...args: any[]) => logger.error("\u001b[95m[公會簽到]\u001b[m", ...args);
 
-    if (!outputs.login || !outputs.login.success) throw new Error("使用者未登入，無法進行公會簽到");
+    if (!outputs.utils.logged_in()) throw new Error("使用者未登入，無法進行公會簽到");
 
     let retry = +params.guild_max_attempts || 3;
     while (retry--) {

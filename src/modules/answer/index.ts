@@ -1,5 +1,5 @@
-import node_fetch from "node-fetch";
 import countapi from "countapi-js";
+import node_fetch from "node-fetch";
 import Module from "../_module";
 
 const answer = new Module();
@@ -14,10 +14,19 @@ answer.parameters = [
 answer.run = async ({ page, outputs, params, logger }) => {
     const log = (...args: any[]) => logger.log("\u001b[95m[動畫瘋答題]\u001b[m", ...args);
 
-    if (!outputs.login || !outputs.login.success) throw new Error("使用者未登入，無法答題");
+    if (!outputs.utils.logged_in()) throw new Error("使用者未登入，無法答題");
 
     let reward = 0;
-    let question: { question?: string; token?: string; a1?: string; a2?: string; a3?: string; a4?: string; error?: number; msg?: string } = {};
+    let question: {
+        question?: string;
+        token?: string;
+        a1?: string;
+        a2?: string;
+        a3?: string;
+        a4?: string;
+        error?: number;
+        msg?: string;
+    } = {};
     log(`開始執行`);
 
     const max_attempts = +params.answer_max_attempts || 3;
@@ -40,10 +49,15 @@ answer.run = async ({ page, outputs, params, logger }) => {
 
                 log(`正在尋找答案`);
                 let token = question.token;
-                let sn = await node_fetch("https://api.gamer.com.tw/mobile_app/bahamut/v1/home.php?owner=blackXblue&page=1")
+                let sn = await node_fetch(
+                    "https://api.gamer.com.tw/mobile_app/bahamut/v1/home.php?owner=blackXblue&page=1",
+                )
                     .then((r) => r.json())
                     .then((d) => d.creation[0].sn);
-                let ans = await node_fetch("https://api.gamer.com.tw/mobile_app/bahamut/v1/home_creation_detail.php?sn=" + sn)
+                let ans = await node_fetch(
+                    "https://api.gamer.com.tw/mobile_app/bahamut/v1/home_creation_detail.php?sn=" +
+                        sn,
+                )
                     .then((r) => r.json())
                     .then(
                         (d) =>
@@ -79,7 +93,10 @@ answer.run = async ({ page, outputs, params, logger }) => {
                     log("已回答問題 " + result.gift + " \u001b[92m✔\u001b[m");
                     reward = +result.gift.match(/\d{2,4}/)[0];
                 }
-            } else if (question.error === 1 && question.msg === "今日已經答過題目了，一天僅限一次機會") {
+            } else if (
+                question.error === 1 &&
+                question.msg === "今日已經答過題目了，一天僅限一次機會"
+            ) {
                 log("今日已經答過題目了 \u001b[92m✔\u001b[m");
             } else {
                 log("發生未知錯誤：" + question.msg + " \u001b[91m✘\u001b[m");

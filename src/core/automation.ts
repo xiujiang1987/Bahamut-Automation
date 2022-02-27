@@ -1,17 +1,15 @@
+import EventEmitter from "node:events";
+import fs from "node:fs";
+import path from "node:path";
+import countapi from "countapi-js";
+import Browser from "./browser";
+import Logger from "./logger";
+import type { BahamutAutomationConfig, BrowserConfig, Module } from "./types";
+import { sleep } from "./utils";
+
 process.env.TZ = "Asia/Taipei";
 
-import fs from "fs";
-import path from "path";
-import EventEmitter from "events";
-import countapi from "countapi-js";
-import Logger from "./logger";
-import Browser from "./browser";
-import { sleep } from "./utils";
-import type { BahamutAutomationConfig, BrowserConfig, Module } from "./types";
-
-const VERSION = get_version();
-
-function get_version(): string {
+const VERSION: string = (() => {
     try {
         let depth = 5;
         let package_path = path.resolve(__dirname, "package.json");
@@ -22,9 +20,9 @@ function get_version(): string {
     } catch (err) {
         return "";
     }
-}
+})();
 
-class BahamutAutomation extends EventEmitter {
+export class BahamutAutomation extends EventEmitter {
     /**
      * 可以使用內建模組或自訂模組 (絕對路徑)
      *
@@ -60,6 +58,9 @@ class BahamutAutomation extends EventEmitter {
 
         this.browser_config = browser;
         this.modules = modules;
+        if (!this.modules.includes("utils")) {
+            this.modules.unshift("utils");
+        }
         this.params = params;
 
         this.setup();
@@ -77,7 +78,13 @@ class BahamutAutomation extends EventEmitter {
         });
 
         this.on("module_loaded", (module_name: string, module: Module) => {
-            self.log(`參數: ${module.parameters.map(({ name, required }) => ` ${name}${required ? "*" : ""}`).join(" ") || "無"}`);
+            self.log(
+                `參數: ${
+                    module.parameters
+                        .map(({ name, required }) => ` ${name}${required ? "*" : ""}`)
+                        .join(" ") || "無"
+                }`,
+            );
         });
 
         this.on("module_finished", (module_name: string) => {
@@ -111,7 +118,11 @@ class BahamutAutomation extends EventEmitter {
 
             this.emit("start");
 
-            this.browser = new Browser(this.browser_config.type || "firefox", this.browser_config, this.logger);
+            this.browser = new Browser(
+                this.browser_config.type || "firefox",
+                this.browser_config,
+                this.logger,
+            );
             await this.browser.launch();
 
             this.emit("browser_opened");
@@ -125,7 +136,11 @@ class BahamutAutomation extends EventEmitter {
 
                     module_name = path.basename(module_name);
 
-                    this.emit("module_start", module_name, is_custom_module ? module_path : "Built-in");
+                    this.emit(
+                        "module_start",
+                        module_name,
+                        is_custom_module ? module_path : "Built-in",
+                    );
 
                     const module: Module = require(module_path).default || require(module_path);
 

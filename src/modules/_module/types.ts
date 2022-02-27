@@ -18,8 +18,8 @@ interface ILogger {
 }
 
 interface IModuleParams {
-    name: string;
-    required?: boolean;
+    readonly name: string;
+    readonly required?: boolean;
 
     [key: string]: any;
 }
@@ -27,7 +27,17 @@ interface IModuleParams {
 interface IModule {
     parameters: IModuleParams[];
 
-    run({ page, outputs, params, logger }: { page: Page; outputs: any; params: any; logger: ILogger }): Promise<any>;
+    run({
+        page,
+        outputs,
+        params,
+        logger,
+    }: {
+        page: Page;
+        outputs: any;
+        params: any;
+        logger: ILogger;
+    }): Promise<any>;
 }
 
 export { IModule, IModuleParams, ILogger, Page };

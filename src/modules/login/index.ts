@@ -46,14 +46,43 @@ login.run = async ({ page, params, logger }) => {
                 await page.goto("https://user.gamer.com.tw/login.php").catch(error);
                 log("嘗試登入中");
                 if (!params.username || !params.password) throw new Error("帳號或密碼不能為空");
-                await page.$eval("input.form-control[type=text]", (elm: HTMLInputElement) => (elm.value = "")).catch(error);
-                await page.$eval("input.form-control[type=password]", (elm: HTMLInputElement) => (elm.value = "")).catch(error);
-                await page.type("input.form-control[type=text]", params.username, { delay: 101 }).catch(error);
+                await page
+                    .$eval(
+                        "input.form-control[type=text]",
+                        (elm: HTMLInputElement) => (elm.value = ""),
+                    )
+                    .catch(error);
+                await page
+                    .$eval(
+                        "input.form-control[type=password]",
+                        (elm: HTMLInputElement) => (elm.value = ""),
+                    )
+                    .catch(error);
+                await page
+                    .type("input.form-control[type=text]", params.username, { delay: 101 })
+                    .catch(error);
                 await page.waitForTimeout(500);
-                await page.type("input.form-control[type=password]", params.password, { delay: 101 }).catch(error);
+                await page
+                    .type("input.form-control[type=password]", params.password, { delay: 101 })
+                    .catch(error);
                 await page.waitForTimeout(1000);
                 await check2FA(page, params, error, log);
                 await page.waitForTimeout(500);
+                const recaptcha_iframe = await page.$("iframe[title='reCAPTCHA']");
+                if (recaptcha_iframe) {
+                    log("Recaptcha Found.");
+                    await recaptcha_iframe.waitForSelector(
+                        ".rc-anchor-center-item.rc-anchor-checkbox-holder",
+                    );
+                    const checkbox = await recaptcha_iframe.$(
+                        ".rc-anchor-center-item.rc-anchor-checkbox-holder",
+                    );
+                    if (checkbox) {
+                        log(checkbox);
+                        await checkbox.click().catch(error);
+                        await page.waitForTimeout(2000);
+                    }
+                }
                 await page.click("a#btn-login").catch(error);
                 await page.waitForTimeout(3000);
 

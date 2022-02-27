@@ -3,7 +3,9 @@ import { ILogger } from "../_module";
 
 export default async function (page: Page, logger: ILogger) {
     const supported = await page.evaluate(function () {
-        return !!document.createElement("video").canPlayType("video/mp4; codecs=avc1.42E01E,mp4a.40.2");
+        return !!document
+            .createElement("video")
+            .canPlayType("video/mp4; codecs=avc1.42E01E,mp4a.40.2");
     });
 
     if (supported) {

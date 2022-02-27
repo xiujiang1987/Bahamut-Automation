@@ -1,46 +1,44 @@
-import fs from "fs";
-import { resolve } from "path";
-import { execSync } from "child_process";
-
-const root = resolve(__dirname, "..");
+import { execSync } from "node:child_process";
+import fs from "node:fs";
+import { resolve } from "node:path";
+import ora from "ora";
 
 main();
 
 async function main(): Promise<void> {
-    process.stdout.write("Clear old files... ");
+    const root = resolve(__dirname, "..");
+    const lib = resolve(root, "dist", "lib");
+
+    let state = ora("Clear old files...").start();
     if (fs.existsSync(resolve(root, "dist", "action"))) {
         fs.rmSync(resolve(root, "dist", "action"), { recursive: true });
     }
-    console.log("Done");
-
-    const lib = resolve(root, "dist", "lib");
 
     if (!fs.existsSync(lib)) {
-        console.log("\nNo Lib Found, Running build:package");
-        execSync("npm run build:package --silent", { stdio: "inherit" });
-        console.log("Lib Built\n");
+        state.info("No lib found. Running build:package");
+        await new Promise((r) => setTimeout(r, 50));
+        execSync("pnpm build:package -s", { stdio: "inherit" });
+        state = ora().start();
     }
 
-    process.stdout.write("Copying Lib... ");
+    state.start("Copying Lib... ");
+    await new Promise((r) => setTimeout(r, 50));
     copy_dir(resolve(root, "dist", "lib"), resolve(root, "dist", "action", "lib"));
-    console.log("Done");
 
-    process.stdout.write("Copying Configs... ");
+    state.text = "Copying Configs... ";
+    await new Promise((r) => setTimeout(r, 50));
     fs.copyFileSync(resolve(root, "package.json"), resolve(root, "dist", "action", "package.json"));
-    fs.copyFileSync(resolve(root, "package-lock.json"), resolve(root, "dist", "action", "package-lock.json"));
-    fs.copyFileSync(resolve(root, "action.yml"), resolve(root, "dist", "action", "action.yml"));
-    console.log("Done");
-
-    process.stdout.write("Compiling action.ts... ");
-    execSync(
-        `npx tsup --silent --target esnext --minify --loader ".md=text" ${resolve(root, "src", "action", "action.ts")} --out-dir ${resolve(
-            root,
-            "dist",
-            "action",
-        )}`,
-        { stdio: "inherit" },
+    fs.copyFileSync(
+        resolve(root, "pnpm-lock.yaml"),
+        resolve(root, "dist", "action", "pnpm-lock.yaml"),
     );
-    console.log("Done");
+    fs.copyFileSync(resolve(root, "action.yml"), resolve(root, "dist", "action", "action.yml"));
+
+    state.text = "Compiling action.ts... ";
+    await new Promise((r) => setTimeout(r, 50));
+    build(resolve(root, "src", "action", "action.ts"), resolve(root, "dist", "action"));
+
+    state.succeed("Action Built");
 }
 
 function copy_dir(src_dir: string, dest_dir: string): void {
@@ -64,4 +62,9 @@ function copy_dir(src_dir: string, dest_dir: string): void {
             fs.copyFileSync(src_file, dest_file);
         }
     }
+}
+
+function build(src: string, output: string) {
+    const cmd = `pnpx -y tsup --silent --target esnext --minify --loader ".md=text" -d ${output} ${src}`;
+    return execSync(cmd, { stdio: "inherit" });
 }

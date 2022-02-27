@@ -14,7 +14,7 @@ builder.run = async ({ page, outputs, params, logger }) => {
     const log = (...args: any[]) => logger.log("\u001b[95m[回文]\u001b[m", ...args);
     const error = (...args: any[]) => logger.error("\u001b[95m[回文]\u001b[m", ...args);
 
-    if (!outputs.login || !outputs.login.success) throw new Error("使用者未登入，無法發佈勇者大聲說");
+    if (!outputs.utils.logged_in()) throw new Error("使用者未登入，無法發佈勇者大聲說");
 
     const { builder } = params;
     if (builder.length < 1) return { success: false };
@@ -42,7 +42,8 @@ builder.run = async ({ page, outputs, params, logger }) => {
             // 切換模式
             await page.evaluate(() => {
                 // @ts-ignore
-                if (document.querySelector("#source").style.display === "none") bahaRte.toolbar.alternateView(true);
+                if (document.querySelector("#source").style.display === "none")
+                    bahaRte.toolbar.alternateView(true);
             });
             await page.waitForTimeout(300);
 

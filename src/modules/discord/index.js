@@ -29,7 +29,10 @@ exports.run = async ({ outputs, params, logger }) => {
         return;
     }
 
-    const msg = (await outputs.report.markdown()).replace(/^#+([^#].*)/gm, (match) => `**${match.replace(/^#+/, "").trim()}**`);
+    const msg = (await outputs.report.markdown()).replace(
+        /^#+([^#].*)/gm,
+        (match) => `**${match.replace(/^#+/, "").trim()}**`,
+    );
 
     const { ok } = await fetch(dc_url, {
         method: "POST",

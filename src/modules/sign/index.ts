@@ -15,13 +15,14 @@ sign.run = async ({ page, outputs, params, logger }) => {
     const warn = (...args: any[]) => logger.warn("\u001b[95m[簽到]\u001b[m", ...args);
     const error = (...args: any[]) => logger.error("\u001b[95m[簽到]\u001b[m", ...args);
 
-    if (!outputs.login || !outputs.login.success) throw new Error("使用者未登入，無法簽到");
+    if (!outputs.utils.logged_in()) throw new Error("使用者未登入，無法簽到");
 
     log(`開始執行`);
 
     await page.goto("https://www.gamer.com.tw/");
     await page.waitForTimeout(2000);
-    let { days, finishedAd, signin }: { days: number; finishedAd: boolean; signin: boolean } = await sign_status(page);
+    let { days, finishedAd, signin }: { days: number; finishedAd: boolean; signin: boolean } =
+        await sign_status(page);
     const initialSignin = signin;
     log(`已連續簽到天數: ${days}`);
 
@@ -53,7 +54,10 @@ sign.run = async ({ page, outputs, params, logger }) => {
 
                     log("嘗試觀看廣告以獲得雙倍獎勵，可能需要多達 1 分鐘");
                     await page.click("text=觀看廣告領取雙倍巴幣");
-                    await Promise.all([page.waitForResponse(/\gampad\/ads/), page.click("text=觀看廣告領取雙倍巴幣")]);
+                    await Promise.all([
+                        page.waitForResponse(/\gampad\/ads/),
+                        page.click("text=觀看廣告領取雙倍巴幣"),
+                    ]);
                     await page.waitForTimeout(50);
                     if (await page.$("text=廣告能量補充中 請稍後再試。")) {
                         throw new Error("廣告能量補充中，請稍後再試");
@@ -82,7 +86,11 @@ sign.run = async ({ page, outputs, params, logger }) => {
                 }
             } catch (err) {
                 error(err);
-                error(`觀看雙倍獎勵廣告過程發生錯誤，將再重試 ${max_attempts - attempts - 1} 次 \u001b[91m✘\u001b[m`);
+                error(
+                    `觀看雙倍獎勵廣告過程發生錯誤，將再重試 ${
+                        max_attempts - attempts - 1
+                    } 次 \u001b[91m✘\u001b[m`,
+                );
             }
         }
     } else {

@@ -1,23 +1,22 @@
-import { execSync } from "child_process";
+import { execSync } from "node:child_process";
 
 prepare();
-
 main();
 
 function prepare(): void {
     try {
-        process.stdout.write("Installing NPM Dependencies... ");
-        execSync("npm install", { cwd: __dirname });
+        process.stdout.write("Installing Packages... ");
+        execSync("pnpm i", { cwd: __dirname });
         console.log("Done");
     } catch (err) {}
     try {
         process.stdout.write("Installing Playwright Dependencies... ");
-        execSync("npx playwright install", { cwd: __dirname });
+        execSync("pnpx -y playwright install", { cwd: __dirname });
         console.log("Done");
     } catch (err) {}
     try {
         process.stdout.write("Installing Browser Dependencies... ");
-        execSync("npx playwright install-deps", { cwd: __dirname });
+        execSync("pnpx -y playwright install-deps", { cwd: __dirname });
         console.log("Done");
     } catch (err) {}
 

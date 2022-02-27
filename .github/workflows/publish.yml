@@ -1,0 +1,109 @@
+name: Publish
+
+on:
+    push:
+        branches:
+            - main
+        paths-ignore:
+            - "**.md"
+    workflow_dispatch:
+
+jobs:
+    publish_action:
+        name: Publish Action
+        runs-on: macos-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v2
+
+            - name: Cache PNPM Modules
+              uses: actions/cache@v2
+              with:
+                  path: ~/.pnpm-store
+                  key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+                  restore-keys: |
+                      ${{ runner.os }}-pnpm-
+
+            - name: Setup PNPM
+              uses: pnpm/action-setup@v2.2.1
+              with:
+                  version: latest
+                  run_install: true
+
+            - name: Build Action
+              run: pnpm build:action
+
+            - name: Commit
+              uses: peaceiris/actions-gh-pages@v3
+              with:
+                  github_token: ${{ secrets.GH_TOKEN }}
+                  publish_dir: "./dist/action"
+                  user_name: "JacobLinCool"
+                  user_email: "jacoblincool@users.noreply.github.com"
+                  publish_branch: "action"
+
+    publish_binary:
+        name: Publish Binary
+        runs-on: macos-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v2
+
+            - name: Cache PNPM Modules
+              uses: actions/cache@v2
+              with:
+                  path: ~/.pnpm-store
+                  key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+                  restore-keys: |
+                      ${{ runner.os }}-pnpm-
+
+            - name: Setup PNPM
+              uses: pnpm/action-setup@v2.2.1
+              with:
+                  version: latest
+                  run_install: true
+
+            - name: Build Binary
+              run: pnpm build:binary
+
+            - name: Commit
+              uses: peaceiris/actions-gh-pages@v3
+              with:
+                  github_token: ${{ secrets.GH_TOKEN }}
+                  publish_dir: "./dist/binary"
+                  user_name: "JacobLinCool"
+                  user_email: "jacoblincool@users.noreply.github.com"
+                  publish_branch: "binary"
+
+    build_docs:
+        name: Build Docs
+        runs-on: macos-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v2
+
+            - name: Cache PNPM Modules
+              uses: actions/cache@v2
+              with:
+                  path: ~/.pnpm-store
+                  key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+                  restore-keys: |
+                      ${{ runner.os }}-pnpm-
+
+            - name: Setup PNPM
+              uses: pnpm/action-setup@v2.2.1
+              with:
+                  version: latest
+                  run_install: true
+
+            - name: Build Docs
+              run: pnpm docs
+
+            - name: Commit
+              uses: peaceiris/actions-gh-pages@v3
+              with:
+                  github_token: ${{ secrets.GH_TOKEN }}
+                  publish_dir: "./web"
+                  user_name: "JacobLinCool"
+                  user_email: "jacoblincool@users.noreply.github.com"
+                  publish_branch: "gh-pages"

@@ -26,7 +26,12 @@ module.exports = {
             { bsn: "60076", snA: "6515182", content: "$year$/$month$/$day$ $hour$:$minute$ OK!" },
             { bsn: "60111", snA: "120687", content: "$month$/$day$ $hour$:$minute$ Test! Test!" },
         ],
-        sayloud: [{ to: "所有人", text: "$year$/$month$/$day$ OK! https://forum.gamer.com.tw/C.php?bsn=60076&snA=6515182" }],
+        sayloud: [
+            {
+                to: "所有人",
+                text: "$year$/$month$/$day$ OK! https://forum.gamer.com.tw/C.php?bsn=60076&snA=6515182",
+            },
+        ],
     },
     browser: {
         type: "firefox", // firefox, chromium, webkit, firefox is suggested

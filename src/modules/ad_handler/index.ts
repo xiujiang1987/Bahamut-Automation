@@ -28,11 +28,20 @@ async function ad_handler({ ad_frame, timeout = 60, log = _log, error = _error }
         (async () => {
             try {
                 await ad_frame.waitForTimeout(1000);
-                if (await ad_frame.$(".rewardDialogueWrapper:not([style*=none]) .rewardResumebutton"))
-                    await ad_frame.click(".rewardDialogueWrapper:not([style*=none]) .rewardResumebutton");
+                if (
+                    await ad_frame.$(
+                        ".rewardDialogueWrapper:not([style*=none]) .rewardResumebutton",
+                    )
+                )
+                    await ad_frame.click(
+                        ".rewardDialogueWrapper:not([style*=none]) .rewardResumebutton",
+                    );
 
                 await Promise.race([
-                    ad_frame.waitForSelector(".videoAdUiSkipContainer.html5-stop-propagation > button", { timeout: 35000 }),
+                    ad_frame.waitForSelector(
+                        ".videoAdUiSkipContainer.html5-stop-propagation > button",
+                        { timeout: 35000 },
+                    ),
                     checkTopRightClose(ad_frame),
                     checkVideoEnded(ad_frame),
                     // ad_frame.waitForSelector("#google-rewarded-video > img:nth-child(4)", { visible: true, timeout: 35000 }),
@@ -41,8 +50,10 @@ async function ad_handler({ ad_frame, timeout = 60, log = _log, error = _error }
 
                 if (await ad_frame.$(".videoAdUiSkipContainer.html5-stop-propagation > button"))
                     await ad_frame.click(".videoAdUiSkipContainer.html5-stop-propagation > button");
-                else if (await ad_frame.$("div#close_button_icon")) await ad_frame.click("div#close_button_icon");
-                else if (await ad_frame.$("#google-rewarded-video > img:nth-child(4)")) await ad_frame.click("#google-rewarded-video > img:nth-child(4)");
+                else if (await ad_frame.$("div#close_button_icon"))
+                    await ad_frame.click("div#close_button_icon");
+                else if (await ad_frame.$("#google-rewarded-video > img:nth-child(4)"))
+                    await ad_frame.click("#google-rewarded-video > img:nth-child(4)");
                 else if (await checkVideoEnded(ad_frame)) {
                 } else throw new Error("發現未知類型的廣告");
 
@@ -70,7 +81,9 @@ function checkTopRightClose(ad_frame: Frame) {
         try {
             const count_down = await ad_frame.$("#count_down");
             if (count_down) {
-                const seconds = +(await count_down.evaluate((elm: HTMLElement) => elm.innerText)).replace(/[^0-9]/g, "");
+                const seconds = +(
+                    await count_down.evaluate((elm: HTMLElement) => elm.innerText)
+                ).replace(/[^0-9]/g, "");
                 setTimeout(r, (seconds + 1) * 1000);
             } else {
                 setTimeout(r, 35 * 1000);

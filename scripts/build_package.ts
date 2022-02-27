@@ -1,33 +1,30 @@
-import fs from "fs";
-import { resolve } from "path";
-import { execSync } from "child_process";
-
-const root = resolve(__dirname, "..");
+import { execSync } from "node:child_process";
+import fs from "node:fs";
+import { resolve } from "node:path";
+import ora from "ora";
 
 main();
 
 async function main(): Promise<void> {
-    process.stdout.write("Clear old files... ");
+    const root = resolve(__dirname, "..");
+
+    const state = ora("Clear old files...").start();
     if (fs.existsSync(resolve(root, "dist", "lib"))) {
         fs.rmSync(resolve(root, "dist", "lib"), { recursive: true });
     }
-    console.log("Done");
 
-    process.stdout.write("Compiling Core... ");
-    execSync(`npx tsup --silent --target esnext --minify ${resolve(root, "src", "core")} --out-dir ${resolve(root, "dist", "lib", "core")}`, {
-        stdio: "inherit",
-    });
-    console.log("Done");
+    state.text = "Compiling Core... ";
+    await new Promise((r) => setTimeout(r, 50));
+    build(resolve(root, "src", "core"), resolve(root, "dist", "lib", "core"));
 
-    process.stdout.write("Compiling Modules... ");
-    execSync(
-        `npx tsup --silent --target esnext --minify --loader ".md=text" ${resolve(root, "src", "modules")} --out-dir ${resolve(
-            root,
-            "dist",
-            "lib",
-            "modules",
-        )}`,
-        { stdio: "inherit" },
-    );
-    console.log("Done");
+    state.text = "Compiling Modules... ";
+    await new Promise((r) => setTimeout(r, 50));
+    build(resolve(root, "src", "modules"), resolve(root, "dist", "lib", "modules"));
+
+    state.succeed("Package Built");
+}
+
+function build(src: string, output: string) {
+    const cmd = `pnpx -y tsup --silent --target esnext --minify --loader ".md=text" -d ${output} ${src}`;
+    return execSync(cmd, { stdio: "inherit" });
 }

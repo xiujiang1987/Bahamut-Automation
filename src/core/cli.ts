@@ -1,8 +1,11 @@
-import fs from "fs";
-import path from "path";
+import fs from "node:fs";
+import path from "node:path";
 import Automation from "./";
 
-const readline = require("readline").createInterface({ input: process.stdin, output: process.stdout });
+const readline = require("readline").createInterface({
+    input: process.stdin,
+    output: process.stdout,
+});
 
 main();
 
@@ -17,18 +20,24 @@ async function main() {
     let mode = (args["mode"] ? +args["mode"][0] : null) || (args["m"] ? +args["m"][0] : null);
     if (mode !== 1 && mode !== 2) {
         while (true) {
-            mode = +(await ask(["選擇模式: ", "1. 設定檔執行", "2. 直接執行", ">> "].join("\n"))).trim();
+            mode = +(
+                await ask(["選擇模式: ", "1. 設定檔執行", "2. 直接執行", ">> "].join("\n"))
+            ).trim();
             if (mode === 1 || mode === 2) break;
         }
     }
 
     if (mode === 1) {
-        let config_path = (args["config"] ? args["config"][0] : null) || (args["c"] ? args["c"][0] : null);
+        let config_path =
+            (args["config"] ? args["config"][0] : null) || (args["c"] ? args["c"][0] : null);
         config_path = remove_quotes(config_path);
         if (config_path) config_path = path.resolve(process.cwd(), config_path);
         if (!fs.existsSync(config_path)) {
             while (true) {
-                config_path = path.resolve(process.cwd(), remove_quotes((await ask("請輸入設定檔位置: ")).trim()));
+                config_path = path.resolve(
+                    process.cwd(),
+                    remove_quotes((await ask("請輸入設定檔位置: ")).trim()),
+                );
                 if (fs.existsSync(config_path)) break;
                 console.log("設定檔不存在:", config_path);
             }
@@ -73,7 +82,10 @@ function parsed_args(): { [key: string]: any } {
 }
 
 function remove_quotes(str: string): string {
-    if (str && ((str.startsWith('"') && str.endsWith('"')) || (str.startsWith("'") && str.endsWith("'")))) {
+    if (
+        str &&
+        ((str.startsWith('"') && str.endsWith('"')) || (str.startsWith("'") && str.endsWith("'")))
+    ) {
         return str.substring(1, str.length - 1);
     }
     return str;

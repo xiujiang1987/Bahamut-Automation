@@ -1,7 +1,7 @@
-import EventEmitter from "events";
+import EventEmitter from "node:events";
 import playwright from "playwright";
 import Logger from "./logger";
-import type { BrowserType, BrowserConfig } from "./types";
+import type { BrowserConfig, BrowserType } from "./types";
 
 const BRWOSER_TYPES = ["chromium", "firefox", "webkit"];
 
@@ -18,7 +18,11 @@ class Browser extends EventEmitter {
     private context: playwright.BrowserContext = null;
     private user_agent: string = "";
 
-    constructor(public browser_type: BrowserType, public browser_config: BrowserConfig, private logger: Logger = null) {
+    constructor(
+        public browser_type: BrowserType,
+        public browser_config: BrowserConfig,
+        private logger: Logger = null,
+    ) {
         super();
         if (!BRWOSER_TYPES.includes(browser_type)) {
             browser_type = "firefox";
@@ -51,7 +55,9 @@ class Browser extends EventEmitter {
 
         if (!this.context) {
             const temp_page = await this.browser.newPage();
-            this.user_agent = (await temp_page.evaluate(() => navigator.userAgent)).replace("Headless", "") + " BA/1";
+            this.user_agent =
+                (await temp_page.evaluate(() => navigator.userAgent)).replace("Headless", "") +
+                " BA/1";
             await temp_page.close();
 
             this.info("User-Agent:", this.user_agent);

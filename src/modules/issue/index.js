@@ -53,7 +53,10 @@ exports.run = async ({ params, outputs, logger }) => {
         return outputs.issue;
     } else {
         let res = await createIssue(outputs.report, labels);
-        if (res && res.data && res.data.number) log(`Report: https://github.com/${context.repo.owner}/${context.repo.repo}/issues/${res.data.number}`);
+        if (res && res.data && res.data.number)
+            log(
+                `Report: https://github.com/${context.repo.owner}/${context.repo.repo}/issues/${res.data.number}`,
+            );
 
         return { number: res.data.number };
     }

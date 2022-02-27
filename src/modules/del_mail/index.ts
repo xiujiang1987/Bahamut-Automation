@@ -1,4 +1,4 @@
-import type { Page, ElementHandle } from "playwright";
+import type { ElementHandle, Page } from "playwright";
 import Module from "../_module";
 
 interface MatchRule {
@@ -30,19 +30,28 @@ m_del_mail.run = async ({ page, outputs, params, logger }) => {
     const warn = (...args: any[]) => logger.warn("\u001b[95m[站內信清除]\u001b[m", ...args);
     const error = (...args: any[]) => logger.error("\u001b[95m[站內信清除]\u001b[m", ...args);
 
-    if (!outputs.login || !outputs.login.success) throw new Error("使用者未登入");
+    if (!outputs.utils.logged_in()) throw new Error("使用者未登入");
 
     const del_mail_match = params.del_mail_match as MatchRule[];
     if (del_mail_match.length < 1) return { success: false };
 
-    await Promise.all([page.waitForResponse("https://mailbox.gamer.com.tw/ajax/inboxList.php"), page.goto("https://mailbox.gamer.com.tw/?l=1")]);
+    await Promise.all([
+        page.waitForResponse("https://mailbox.gamer.com.tw/ajax/inboxList.php"),
+        page.goto("https://mailbox.gamer.com.tw/?l=1"),
+    ]);
 
     log("正在搜集站內信... ");
     let mails = filtered_mails(await get_mails(page), del_mail_match).map((mail) => mail.id);
     while ((await page.$$(".nextPage")).length > 0 && mails.length < 10000) {
         log(`已搜集 ${mails.length} 封符合條件的站內信`);
-        await Promise.all([page.waitForResponse("https://mailbox.gamer.com.tw/ajax/inboxList.php"), page.click(".nextPage")]);
-        mails = [...mails, ...filtered_mails(await get_mails(page), del_mail_match).map((mail) => mail.id)];
+        await Promise.all([
+            page.waitForResponse("https://mailbox.gamer.com.tw/ajax/inboxList.php"),
+            page.click(".nextPage"),
+        ]);
+        mails = [
+            ...mails,
+            ...filtered_mails(await get_mails(page), del_mail_match).map((mail) => mail.id),
+        ];
     }
     log(`已搜集 ${mails.length} 封符合條件的站內信`);
 
@@ -55,7 +64,9 @@ m_del_mail.run = async ({ page, outputs, params, logger }) => {
         if (res.code === 0) {
             log(`已成功刪除第 ${i + 1} 到 ${Math.min(i + 100, mails.length)} 封站內信`);
         } else {
-            error(`刪除第 ${i + 1} 到 ${Math.min(i + 100, mails.length)} 封站內信失敗 (${res.code})`);
+            error(
+                `刪除第 ${i + 1} 到 ${Math.min(i + 100, mails.length)} 封站內信失敗 (${res.code})`,
+            );
         }
     }
 
@@ -70,7 +81,9 @@ async function get_mails(page: Page): Promise<Mail[]> {
         const sender = (await (await mail.$(".ML-tb1B")).textContent()).trim();
         const title = (await (await mail.$(".mailTitle")).textContent()).trim();
         const time = new Date((await (await mail.$("[nowrap='nowrap']")).textContent()).trim());
-        const checkbox = (await mail.$("input[type='checkbox']")) as ElementHandle<HTMLInputElement>;
+        const checkbox = (await mail.$(
+            "input[type='checkbox']",
+        )) as ElementHandle<HTMLInputElement>;
         const id = await checkbox.getAttribute("value");
 
         Mails.push({ id, sender, title, time, checkbox });
@@ -87,7 +100,12 @@ function filtered_mails(mails: Mail[], matches: MatchRule[]): Mail[] {
 
         for (const match of matches) {
             let passed = true;
-            const { title: title_match, sender: sender_match, before: before_match, after: after_match } = match;
+            const {
+                title: title_match,
+                sender: sender_match,
+                before: before_match,
+                after: after_match,
+            } = match;
 
             if (title_match && !title.includes(title_match)) passed = false;
             if (sender_match && !sender.includes(sender_match)) passed = false;

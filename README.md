@@ -1,6 +1,6 @@
 # Bahamut Automation
 
-![Bahamut Automation Preview.png](https://github.com/JacobLinCool/Bahamut-Automation/raw/main/Bahamut%20Automation%20Preview.png)
+![Bahamut Automation Preview.png](./web/Bahamut-Automation.png)
 
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FJacobLinCool%2FBahamut-Automation.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FJacobLinCool%2FBahamut-Automation?ref=badge_shield)
 
@@ -102,8 +102,8 @@
 
 ## Action 輸入參數
 
-| 參數       | 預設值                                                                                                                 | 說明      | 必要 |
-| ---------- | ---------------------------------------------------------------------------------------------------------------------- | --------- | ---- |
+| 參數       | 預設值                                                                                                                 | 說明       | 必要   |
+| ---------- | ---------------------------------------------------------------------------------------------------------------------- | ---------- | ------ |
 | modules    | `"report,ad_handler,login,sign,guild,answer,lottery,sayloud,builder,logout,report,telegram,discord,line_notify,issue"` | 使用的模組 | 非必要 |
 | parameters | `"{}"`                                                                                                                 | 帶入的參數 | 非必要 |
 | secrets    | `"{}"`                                                                                                                 | 帶入的參數 | 非必要 |

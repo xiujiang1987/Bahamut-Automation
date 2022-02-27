@@ -1,7 +1,7 @@
 import countapi from "countapi-js";
 import { ElementHandle, Page } from "playwright";
-import Pool from "./pool";
 import { Module } from "../_module";
+import Pool from "./pool";
 
 const lottery = new Module();
 
@@ -20,7 +20,7 @@ lottery.run = async ({ page, outputs, params, logger }) => {
     const log = (...args: any[]) => logger.log("\u001b[95m[福利社]\u001b[m", ...args);
     const error = (...args: any[]) => logger.error("\u001b[95m[福利社]\u001b[m", ...args);
 
-    if (!outputs.login || !outputs.login.success) throw new Error("使用者未登入，無法抽獎");
+    if (!outputs.utils.logged_in()) throw new Error("使用者未登入，無法抽獎");
     if (!outputs.ad_handler) throw new Error("需使用 ad_handler 模組");
 
     log(`開始執行`);
@@ -68,24 +68,50 @@ lottery.run = async ({ page, outputs, params, logger }) => {
                         task_page.click("text=看廣告免費兌換").catch(error),
                     ]);
 
-                    if ((await task_page.$eval(".dialogify", (elm: HTMLElement) => elm.innerText.includes("勇者問答考驗")).catch(() => {})) || null) {
+                    if (
+                        (await task_page
+                            .$eval(".dialogify", (elm: HTMLElement) =>
+                                elm.innerText.includes("勇者問答考驗"),
+                            )
+                            .catch(() => {})) ||
+                        null
+                    ) {
                         log(`需要回答問題，正在回答問題`);
-                        await task_page.$$eval("#dialogify_1 .dialogify__body a", (options: any[]) => {
-                            options.forEach((option: { dataset: { option: any; answer: any }; click: () => void }) => {
-                                if (option.dataset.option == option.dataset.answer) option.click();
-                            });
-                        });
+                        await task_page.$$eval(
+                            "#dialogify_1 .dialogify__body a",
+                            (options: any[]) => {
+                                options.forEach(
+                                    (option: {
+                                        dataset: { option: any; answer: any };
+                                        click: () => void;
+                                    }) => {
+                                        if (option.dataset.option == option.dataset.answer)
+                                            option.click();
+                                    },
+                                );
+                            },
+                        );
                         await task_page.waitForSelector("#btn-buy");
                         await task_page.waitForTimeout(100);
                         await task_page.click("#btn-buy");
                     }
 
                     await Promise.all([
-                        task_page.waitForResponse(/file\.(mp4|webm)/, { timeout: 5000 }).catch(() => {}),
-                        task_page.waitForSelector(".dialogify .dialogify__body p", { timeout: 5000 }).catch(() => {}),
+                        task_page
+                            .waitForResponse(/file\.(mp4|webm)/, { timeout: 5000 })
+                            .catch(() => {}),
+                        task_page
+                            .waitForSelector(".dialogify .dialogify__body p", { timeout: 5000 })
+                            .catch(() => {}),
                     ]);
 
-                    let ad_status = (await task_page.$eval(".dialogify .dialogify__body p", (elm: HTMLElement) => elm.innerText).catch(() => {})) || "";
+                    let ad_status =
+                        (await task_page
+                            .$eval(
+                                ".dialogify .dialogify__body p",
+                                (elm: HTMLElement) => elm.innerText,
+                            )
+                            .catch(() => {})) || "";
 
                     let ad_frame: any;
                     if (ad_status.includes("廣告能量補充中")) {
@@ -97,7 +123,9 @@ lottery.run = async ({ page, outputs, params, logger }) => {
                         await task_page.click("text=確定");
                         await task_page.waitForSelector("ins iframe").catch(error);
                         await task_page.waitForTimeout(1000);
-                        const ad_iframe = (await task_page.$("ins iframe").catch(error)) as ElementHandle<HTMLIFrameElement>;
+                        const ad_iframe = (await task_page
+                            .$("ins iframe")
+                            .catch(error)) as ElementHandle<HTMLIFrameElement>;
                         try {
                             ad_frame = await ad_iframe.contentFrame();
                             await outputs.ad_handler({ ad_frame });
@@ -116,7 +144,9 @@ lottery.run = async ({ page, outputs, params, logger }) => {
                         await confirm(task_page, error).catch(error);
                         if (
                             (await task_page.$(".card > .section > p")) &&
-                            (await task_page.$eval(".card > .section > p", (elm: HTMLElement) => elm.innerText.includes("成功")))
+                            (await task_page.$eval(".card > .section > p", (elm: HTMLElement) =>
+                                elm.innerText.includes("成功"),
+                            ))
                         ) {
                             log("已完成一次抽抽樂：" + name + " \u001b[92m✔\u001b[m");
                             lottery++;
@@ -147,7 +177,10 @@ lottery.run = async ({ page, outputs, params, logger }) => {
     return { lottery, unfinished, report };
 };
 
-async function getList(page: Page, error: (...args: any[]) => void): Promise<{ name: string; link: string }[]> {
+async function getList(
+    page: Page,
+    error: (...args: any[]) => void,
+): Promise<{ name: string; link: string }[]> {
     let draws: { name: any; link: any }[];
 
     let attempts = 3;
@@ -157,31 +190,53 @@ async function getList(page: Page, error: (...args: any[]) => void): Promise<{ n
             await page.goto("https://fuli.gamer.com.tw/shop.php?page=1");
             let items = await page.$$("a.items-card");
             for (let i = items.length - 1; i >= 0; i--) {
-                let is_draw = await items[i].evaluate((elm: HTMLElement) => elm.innerHTML.includes("抽抽樂"));
+                let is_draw = await items[i].evaluate((elm: HTMLElement) =>
+                    elm.innerHTML.includes("抽抽樂"),
+                );
                 if (is_draw) {
                     draws.push({
                         name: await items[i].evaluate(
-                            (node: { querySelector: (arg0: string) => { (): any; new (): any; innerHTML: any } }) =>
-                                node.querySelector(".items-title").innerHTML,
+                            (node: {
+                                querySelector: (arg0: string) => {
+                                    (): any;
+                                    new (): any;
+                                    innerHTML: any;
+                                };
+                            }) => node.querySelector(".items-title").innerHTML,
                         ),
                         link: await items[i].evaluate((elm: HTMLAnchorElement) => elm.href),
                     });
                 }
             }
 
-            while (await page.$eval("a.pagenow", (elm: HTMLAnchorElement) => (elm.nextSibling ? true : false))) {
+            while (
+                await page.$eval("a.pagenow", (elm: HTMLAnchorElement) =>
+                    elm.nextSibling ? true : false,
+                )
+            ) {
                 await page.goto(
                     "https://fuli.gamer.com.tw/shop.php?page=" +
-                        (await page.$eval("a.pagenow", (elm: HTMLAnchorElement) => (elm.nextSibling as HTMLElement).innerText)),
+                        (await page.$eval(
+                            "a.pagenow",
+                            (elm: HTMLAnchorElement) => (elm.nextSibling as HTMLElement).innerText,
+                        )),
                 );
                 let items = await page.$$("a.items-card");
                 for (let i = items.length - 1; i >= 0; i--) {
-                    let is_draw = await items[i].evaluate((node: { innerHTML: string | string[] }) => node.innerHTML.includes("抽抽樂"));
+                    let is_draw = await items[i].evaluate(
+                        (node: { innerHTML: string | string[] }) =>
+                            node.innerHTML.includes("抽抽樂"),
+                    );
                     if (is_draw) {
                         draws.push({
                             name: await items[i].evaluate(
-                                (node: { querySelector: (arg0: string) => { (): any; new (): any; innerHTML: any } }) =>
-                                    node.querySelector(".items-title").innerHTML,
+                                (node: {
+                                    querySelector: (arg0: string) => {
+                                        (): any;
+                                        new (): any;
+                                        innerHTML: any;
+                                    };
+                                }) => node.querySelector(".items-title").innerHTML,
                             ),
                             link: await items[i].evaluate((elm: HTMLAnchorElement) => elm.href),
                         });
@@ -198,7 +253,11 @@ async function getList(page: Page, error: (...args: any[]) => void): Promise<{ n
     return draws;
 }
 
-async function checkInfo(page: Page, log: (...args: any[]) => void, error: (...args: any[]) => void) {
+async function checkInfo(
+    page: Page,
+    log: (...args: any[]) => void,
+    error: (...args: any[]) => void,
+) {
     try {
         const name = await page.$eval("#name", (elm: HTMLInputElement) => elm.value);
         const tel = await page.$eval("#tel", (elm: HTMLInputElement) => elm.value);
@@ -242,7 +301,9 @@ function report({ lottery, unfinished }: { lottery: number; unfinished: { [key: 
     let body = "# 福利社抽抽樂 \n\n";
 
     if (lottery) {
-        body += `✨✨✨ 獲得 **${lottery}** 個抽獎機會，價值 **${(lottery * 500).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}** 巴幣 ✨✨✨\n`;
+        body += `✨✨✨ 獲得 **${lottery}** 個抽獎機會，價值 **${(lottery * 500)
+            .toString()
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}** 巴幣 ✨✨✨\n`;
     }
 
     if (Object.keys(unfinished).length === 0) {

@@ -7,11 +7,16 @@
     </head>
     <body>
         <div id="background">
-            <img src="https://raw.githubusercontent.com/JacobLinCool/Bahamut-Automation/main/Bahamut%20Automation%20Preview.png" />
+            <img src="Bahamut-Automation.png" />
         </div>
         <div id="container">
             <div class="wrap">
-                <h1 id="title"><a href="https://github.com/JacobLinCool/Bahamut-Automation" target="_blank">巴哈姆特自動化</a> Action 設定檔產生器</h1>
+                <h1 id="title">
+                    <a href="https://github.com/JacobLinCool/Bahamut-Automation" target="_blank"
+                        >巴哈姆特自動化</a
+                    >
+                    Action 設定檔產生器
+                </h1>
             </div>
             <div class="wrap">
                 <label for="username" class="label">巴哈姆特用戶名稱</label><br />
@@ -28,14 +33,16 @@
             <div class="wrap">
                 <label for="gh_pat" class="label"
                     >GitHub Personal Access Token<br />
-                    (Issue 模組) <a href="https://github.com/settings/tokens" target="_blank">產生</a></label
+                    (Issue 模組)
+                    <a href="https://github.com/settings/tokens" target="_blank">產生</a></label
                 ><br />
                 <input id="gh_pat" placeholder="GitHub Personal Access Token" />
             </div>
             <div class="wrap">
                 <label for="tg_id" class="label"
                     >Telegram 訊息通道 ID<br />
-                    (Telegram 模組, v0.6.3+) <a href="https://t.me/automia_bot" target="_blank">機器人</a></label
+                    (Telegram 模組, v0.6.3+)
+                    <a href="https://t.me/automia_bot" target="_blank">機器人</a></label
                 ><br />
                 <input id="tg_id" placeholder="Telegram 訊息通道 ID" />
             </div>
@@ -49,12 +56,16 @@
             <div class="wrap">
                 <label for="line_notify_token" class="label"
                     >Line Notify 權杖代碼<br />
-                    (Line Notify 模組, 1.0.0+) <a href="https://notify-bot.line.me/zh_TW/" target="_blank">Line Notify</a></label
+                    (Line Notify 模組, 1.0.0+)
+                    <a href="https://notify-bot.line.me/zh_TW/" target="_blank"
+                        >Line Notify</a
+                    ></label
                 ><br />
                 <input id="line_notify_token" placeholder="Line Notify 權杖代碼" />
             </div>
             <div class="wrap">
-                <label for="config" class="label">Secret 設定檔</label><button id="copy" data-clipboard-target="#config">複製</button>
+                <label for="config" class="label">Secret 設定檔</label
+                ><button id="copy" data-clipboard-target="#config">複製</button>
                 <br />
                 <textarea id="config" placeholder="Secret 設定檔"></textarea>
             </div>

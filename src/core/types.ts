@@ -1,5 +1,5 @@
+import type { LaunchOptions, Page } from "playwright";
 import Logger from "./logger";
-import type { Page, LaunchOptions } from "playwright";
 
 export type BrowserType = "firefox" | "chromium" | "webkit";
 
@@ -37,5 +37,15 @@ export interface ModuleParams {
 export interface Module {
     parameters: ModuleParams[];
 
-    run({ page, outputs, params, logger }: { page: Page; outputs: any; params: any; logger: Logger }): Promise<any>;
+    run({
+        page,
+        outputs,
+        params,
+        logger,
+    }: {
+        page: Page;
+        outputs: any;
+        params: any;
+        logger: Logger;
+    }): Promise<any>;
 }

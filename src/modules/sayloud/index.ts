@@ -14,7 +14,7 @@ sayloud.run = async ({ page, outputs, params, logger }) => {
     const log = (...args: any[]) => logger.log("\u001b[95m[勇者大聲說]\u001b[m", ...args);
     const warn = (...args: any[]) => logger.warn("\u001b[95m[勇者大聲說]\u001b[m", ...args);
 
-    if (!outputs.login || !outputs.login.success) throw new Error("使用者未登入，無法發佈勇者大聲說");
+    if (!outputs.utils.logged_in()) throw new Error("使用者未登入，無法發佈勇者大聲說");
 
     const { sayloud } = params;
     if (sayloud.length < 1) return { success: false };
