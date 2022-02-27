@@ -5,6 +5,11 @@ main();
 
 function prepare(): void {
     try {
+        process.stdout.write("Installing PNPM... ");
+        execSync("npm i -g pnpm", { cwd: __dirname });
+        console.log("Done");
+    } catch (err) {}
+    try {
         process.stdout.write("Installing Packages... ");
         execSync("pnpm i", { cwd: __dirname });
         console.log("Done");
