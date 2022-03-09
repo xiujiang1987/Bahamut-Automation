@@ -18,6 +18,14 @@
 - 必要參數： username, BAHARUNE, BAHARENUR
 - 可選參數： 無
 
+## login_v2
+
+略過 recaptcha 登入巴哈姆特的模組
+
+- 作者： [dxball](https://github.com/dxball)
+- 必要參數： username, password
+- 可選參數： twofa, login_max_attempts
+
 ## logout
 
 登出巴哈姆特的模組，需先執行 login 模組
