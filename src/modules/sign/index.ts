@@ -46,17 +46,17 @@ sign.run = async ({ page, outputs, params, logger }) => {
                 await page.waitForSelector("a#signin-btn");
                 await page.waitForTimeout(50);
                 await page.click("a#signin-btn");
-                await page.waitForSelector("text=觀看廣告領取雙倍巴幣");
+                await page.waitForSelector("text=領取雙倍巴幣");
                 await page.waitForTimeout(50);
 
                 if (!finishedAd) {
                     log("尚未獲得雙倍簽到獎勵 \u001b[91m✘\u001b[m");
 
                     log("嘗試觀看廣告以獲得雙倍獎勵，可能需要多達 1 分鐘");
-                    await page.click("text=觀看廣告領取雙倍巴幣");
+                    await page.click("text=領取雙倍巴幣");
                     await Promise.all([
                         page.waitForResponse(/\gampad\/ads/),
-                        page.click("text=觀看廣告領取雙倍巴幣"),
+                        page.click("text=領取雙倍巴幣"),
                     ]);
                     await page.waitForTimeout(50);
                     if (await page.$("text=廣告能量補充中 請稍後再試。")) {
