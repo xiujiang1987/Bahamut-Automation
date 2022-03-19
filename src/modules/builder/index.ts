@@ -10,11 +10,11 @@ builder.parameters = [
     },
 ];
 
-builder.run = async ({ page, outputs, params, logger }) => {
+builder.run = async ({ page, shared, params, logger }) => {
     const log = (...args: any[]) => logger.log("\u001b[95m[回文]\u001b[m", ...args);
     const error = (...args: any[]) => logger.error("\u001b[95m[回文]\u001b[m", ...args);
 
-    if (!outputs.utils.logged_in()) throw new Error("使用者未登入，無法發佈勇者大聲說");
+    if (!shared.flags.logged) throw new Error("使用者未登入，無法發佈勇者大聲說");
 
     const { builder } = params;
     if (builder.length < 1) return { success: false };

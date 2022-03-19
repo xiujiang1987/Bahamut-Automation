@@ -1,16 +1,9 @@
 import { Module } from "../_module";
 
-const test = new Module();
-
-test.parameters = [
-    {
-        name: "test_parameter",
-        required: false,
+export default {
+    name: "測試用模組",
+    description: "測試用模組，測試瀏覽器支不支援 MP4",
+    async run({ page, logger }) {
+        await import("./video").then((m) => m.default(page, logger));
     },
-];
-
-test.run = async ({ page, params, outputs, logger }) => {
-    await import("./video").then((m) => m.default(page, logger));
-};
-
-export default test;
+} as Module;

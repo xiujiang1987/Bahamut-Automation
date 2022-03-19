@@ -1,7 +1,7 @@
-import { Page } from "playwright-core";
-import { ILogger } from "../_module";
+import { Page } from "playwright";
+import { Logger } from "../../core";
 
-export default async function (page: Page, logger: ILogger) {
+export default async function (page: Page, logger: Logger) {
     const supported = await page.evaluate(function () {
         return !!document
             .createElement("video")

@@ -1,187 +1,147 @@
 import EventEmitter from "node:events";
 import fs from "node:fs";
 import path from "node:path";
+import url from "node:url";
+import { pathToFileURL } from "node:url";
 import countapi from "countapi-js";
-import Browser from "./browser";
-import Logger from "./logger";
-import type { BahamutAutomationConfig, BrowserConfig, Module } from "./types";
-import { sleep } from "./utils";
+import yaml from "js-yaml";
+import { Browser } from "./browser";
+import { Logger } from "./logger";
+import type { BahamutAutomationConfig, Module } from "./types";
+import { get_version, second_to_time } from "./utils";
 
 process.env.TZ = "Asia/Taipei";
+const dirname = url.fileURLToPath(import.meta.url);
+const VERSION = get_version(dirname);
 
-const VERSION: string = (() => {
-    try {
-        let depth = 5;
-        let package_path = path.resolve(__dirname, "package.json");
-        while (!fs.existsSync(package_path) && depth-- > 0) {
-            package_path = path.resolve(path.dirname(package_path), "..", "package.json");
-        }
-        return require(package_path).version;
-    } catch (err) {
-        return "";
+function resolve_module(id: string): { location: string; builtin: boolean } {
+    const module_path = path.resolve(id);
+    if (fs.existsSync(module_path)) {
+        return { location: module_path, builtin: false };
     }
-})();
+    return {
+        location: path.resolve(dirname, "..", "..", "modules", id, "index.js"),
+        builtin: true,
+    };
+}
 
 export class BahamutAutomation extends EventEmitter {
-    /**
-     * 可以使用內建模組或自訂模組 (絕對路徑)
-     *
-     * @name 套用模組
-     */
-    modules: string[];
+    /** @name 模組設定 */
+    public config: Required<BahamutAutomationConfig>;
+    public logger: Logger;
 
-    /**
-     * 依照使用模組所需的參數，設定參數
-     *
-     * @name 模組參數
-     */
-    params: { [key: string]: any };
-
-    /**
-     * 可以設定瀏覽器的種類、偏好等，基本上與 [Playwright 的 LaunchOptions](https://playwright.dev/docs/api/class-browsertype#browser-type-launch) 類似，但加上了 `type` 參數作為瀏覽器的類型
-     *
-     * @name 瀏覽器設定
-     */
-    browser_config: BrowserConfig;
-
-    private logger: Logger = new Logger();
     private start_time: number = null;
     private end_time: number = null;
     private browser: Browser;
 
-    /**
-     * 建立巴哈姆特自動化實體
-     * @param automation_config
-     */
-    constructor({ modules = [], params = {}, browser = {} }: BahamutAutomationConfig) {
+    /** 建立巴哈姆特自動化實體 */
+    constructor(config: BahamutAutomationConfig, logger = new Logger("Automation")) {
         super();
 
-        this.browser_config = browser;
-        this.modules = modules;
-        if (!this.modules.includes("utils")) {
-            this.modules.unshift("utils");
-        }
-        this.params = params;
+        this.config = {
+            shared: { flags: {}, ...config?.shared },
+            modules: { utils: {}, ...config?.modules },
+            browser: { type: "firefox", headless: true, ...config?.browser },
+        };
+        this.logger = logger;
 
-        this.setup();
+        this.on("error", (...arg: unknown[]) => this?.logger?.error(...arg));
+        this.on("warn", (...arg: unknown[]) => this?.logger?.warn(...arg));
+        this.on("info", (...arg: unknown[]) => this?.logger?.info(...arg));
+        this.on("log", (...arg: unknown[]) => this?.logger?.log(...arg));
     }
 
-    setup(): void {
+    setup_listeners(): void {
         const self = this;
         this.on("start", () => {
-            self.log("開始執行巴哈姆特自動化 " + VERSION);
+            self.emit("log", `開始執行巴哈姆特自動化 ${VERSION}`);
             countapi.update("Bahamut-Automation", "run", 1);
         });
 
         this.on("module_start", (module_name: string, module_path: string) => {
-            self.log(`執行 ${module_name} 模組 (${module_path})`);
-        });
-
-        this.on("module_loaded", (module_name: string, module: Module) => {
-            self.log(
-                `參數: ${
-                    module.parameters
-                        .map(({ name, required }) => ` ${name}${required ? "*" : ""}`)
-                        .join(" ") || "無"
-                }`,
-            );
+            self.emit("log", `執行 ${module_name} 模組 (${module_path})`);
+            console.group();
         });
 
         this.on("module_finished", (module_name: string) => {
-            self.log(`模組 ${module_name} 執行完畢\n`);
+            console.groupEnd();
+            self.emit("log", `模組 ${module_name} 執行完畢`);
         });
 
         this.on("module_failed", (module_name: string, err: Error) => {
-            self.logger.error(`模組 ${module_name} 執行失敗\n`);
-            self.logger.error(err);
+            console.groupEnd();
+            self.emit("error", `模組 ${module_name} 執行失敗`, err);
         });
 
         this.on("finished", (outputs: any, time: number) => {
-            self.log("巴哈姆特自動化執行完畢");
-            self.log(`執行時間: ${second_to_time(time)}`);
-            self.log("輸出:", outputs);
+            self.emit(
+                "log",
+                `執行完畢 時間: ${second_to_time(time)}\n輸出: ${outputs}`,
+                outputs,
+                time,
+            );
         });
 
         this.on("fatal", (err: Error) => {
-            self.logger.error("巴哈姆特自動化執行失敗");
-            self.logger.error(err);
-
             if (self.browser) {
                 self.browser.close();
             }
+
+            self.emit("error", "巴哈姆特自動化執行失敗", err);
         });
     }
 
     async run(): Promise<any> {
         try {
             this.start_time = Date.now();
-
             this.emit("start");
 
-            this.browser = new Browser(
-                this.browser_config.type || "firefox",
-                this.browser_config,
-                this.logger,
-            );
+            this.browser = new Browser(this.config.browser.type || "firefox", this.config.browser);
+            this.browser.on("log", (...arg: unknown[]) => this.emit("log", ...arg));
             await this.browser.launch();
-
             this.emit("browser_opened");
 
-            const outputs: any = {};
+            const shared = this.config.shared;
+            const outputs: Record<string, any> = {};
 
-            for (let module_name of this.modules) {
+            for (const [module_id, module_params] of Object.entries(this.config.modules)) {
+                const page = await this.browser.new_page();
+
                 try {
-                    const is_custom_module = path.isAbsolute(module_name);
-                    const module_path = path.resolve(__dirname, "../modules", module_name);
-
-                    module_name = path.basename(module_name);
+                    const { location, builtin } = resolve_module(module_id);
+                    if (!fs.existsSync(location)) {
+                        throw new Error(`模組 ${module_id} (${location}) 不存在`);
+                    }
+                    const _module = await import(pathToFileURL(location).toString());
+                    const module: Module = _module.default || _module;
 
                     this.emit(
                         "module_start",
-                        module_name,
-                        is_custom_module ? module_path : "Built-in",
+                        module.name || module_id,
+                        builtin ? "Built-in" : location,
                     );
 
-                    const module: Module = require(module_path).default || require(module_path);
-
-                    this.emit("module_loaded", module_name, module);
-
-                    const module_page = await this.browser.new_page();
-
-                    const module_params: any = {};
-                    for (const { name, required } of module.parameters) {
-                        if (this.params[name] !== undefined) {
-                            module_params[name] = this.params[name];
-                        } else if (required) {
-                            await module_page.close();
-                            this.emit("module_parameter_error", module_name, name);
-                            throw new Error(`模組 ${module_name} 所必須之 ${name} 參數不存在`);
-                        }
-                    }
-
-                    outputs[module_name] = await module.run({
-                        page: module_page,
-                        outputs: outputs,
-                        params: module_params,
-                        logger: this.logger.next(),
+                    outputs[module_id] = await module.run({
+                        page,
+                        shared: { ...shared, ...outputs },
+                        params: module_params || {},
+                        logger: new Logger(module.name || module_id),
                     });
 
-                    await module_page.close();
-
-                    this.emit("module_finished", module_name);
+                    this.emit("module_finished", module_id);
                 } catch (err) {
-                    this.emit("module_failed", module_name, err);
+                    this.emit("module_failed", module_id, err);
                 }
 
-                await sleep(1000);
+                if (page && page.close) {
+                    await page.close();
+                }
             }
 
             await this.browser.close();
 
             this.end_time = Date.now();
-
             const time = Math.floor((this.end_time - this.start_time) / 1000);
-
             this.emit("finished", JSON.parse(JSON.stringify(outputs)), time);
 
             return { outputs: JSON.parse(JSON.stringify(outputs)), time };
@@ -191,18 +151,44 @@ export class BahamutAutomation extends EventEmitter {
         }
     }
 
-    private log(...arg: any[]): void {
-        this.logger.log(...arg);
-        this.emit("log", ...arg);
+    /**
+     * 從設定檔建立實體
+     * @param config_path 設定檔路徑
+     * @returns 巴哈姆特自動化實體
+     */
+    static from(config_path: string): BahamutAutomation {
+        switch (path.extname(config_path)) {
+            case ".yml":
+            case ".yaml":
+                return new BahamutAutomation(
+                    yaml.load(fs.readFileSync(config_path, "utf8")) as BahamutAutomationConfig,
+                );
+            case ".json":
+                return new BahamutAutomation(
+                    JSON.parse(fs.readFileSync(config_path, "utf8")) as BahamutAutomationConfig,
+                );
+            case ".js":
+            case ".cjs":
+                return new BahamutAutomation(require(config_path) as BahamutAutomationConfig);
+            default:
+                throw new Error("不支援的設定檔格式");
+        }
     }
 }
 
-function second_to_time(second: number): string {
-    const hour = Math.floor(second / 3600);
-    const minute = Math.floor((second - hour * 3600) / 60);
-    const second_left = second - hour * 3600 - minute * 60;
-
-    return `${hour} 小時 ${minute} 分 ${second_left} 秒`;
+export declare interface BahamutAutomation {
+    on(event: "error", listener: (...args: unknown[]) => void): this;
+    on(event: "warn", listener: (...args: unknown[]) => void): this;
+    on(event: "info", listener: (...args: unknown[]) => void): this;
+    on(event: "log", listener: (...args: unknown[]) => void): this;
+    on(event: "browser_opened", listener: () => void): this;
+    on(event: "module_start", listener: (module_name: string, module_path: string) => void): this;
+    on(event: "module_finished", listener: (module_name: string) => void): this;
+    on(event: "module_failed", listener: (module_name: string, err: Error) => void): this;
+    on(event: "finished", listener: (outputs: any, time: number) => void): this;
+    on(event: "fatal", listener: (err: Error) => void): this;
+    on(event: "start", listener: () => void): this;
+    on(event: string, listener: Function): this;
 }
 
 export default BahamutAutomation;

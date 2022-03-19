@@ -1,34 +1,30 @@
-class Logger {
-    space = 0;
-    prefix = "";
+export class Logger {
+    constructor(public name = "", public verbose = 3) {}
 
-    constructor(space = 0) {
-        this.space = space;
-        this.prefix = " ".repeat(space);
+    public debug = this.log;
+    public log(...msg: unknown[]) {
+        this.verbose >= 3 &&
+            console.log("\x1b[94m[LOG]\x1b[m", `\x1b[95m[${this.name}]\x1b[m`, ...msg);
     }
 
-    next() {
-        return new Logger(this.space + 2);
+    public error(...msg: unknown[]) {
+        this.verbose >= 1 &&
+            console.log("\x1b[91m[ERROR]\x1b[m", `\x1b[95m[${this.name}]\x1b[m`, ...msg);
     }
 
-    log(...msg: any[]) {
-        console.log(this.prefix, "\u001b[94m" + "[LOG]" + "\u001b[m", ...msg);
+    public warn(...msg: unknown[]) {
+        this.verbose >= 2 &&
+            console.log("\x1b[93m[WARN]\x1b[m", `\x1b[95m[${this.name}]\x1b[m`, ...msg);
     }
 
-    error(...msg: any[]) {
-        console.log(this.prefix, "\u001b[91m" + "[ERROR]" + "\u001b[m", ...msg);
+    public info(...msg: unknown[]) {
+        this.verbose >= 3 &&
+            console.log("\x1b[96m[INFO]\x1b[m", `\x1b[95m[${this.name}]\x1b[m`, ...msg);
     }
 
-    warn(...msg: any[]) {
-        console.log(this.prefix, "\u001b[93m" + "[WARN]" + "\u001b[m", ...msg);
-    }
-
-    info(...msg: any[]) {
-        console.log(this.prefix, "\u001b[96m" + "[INFO]" + "\u001b[m", ...msg);
-    }
-
-    debug(...msg: any[]) {
-        console.log(this.prefix, "\u001b[95m" + "[DEBUG]" + "\u001b[m", ...msg);
+    public success(...msg: unknown[]) {
+        this.verbose >= 2 &&
+            console.log("\x1b[92m[SUCCESS]\x1b[m", `\x1b[95m[${this.name}]\x1b[m`, ...msg);
     }
 }
 

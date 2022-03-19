@@ -1,55 +1,32 @@
 import EventEmitter from "node:events";
 import playwright from "playwright";
-import Logger from "./logger";
-import type { BrowserConfig, BrowserType } from "./types";
 
-const BRWOSER_TYPES = ["chromium", "firefox", "webkit"];
+const BRWOSER_TYPES = ["chromium", "firefox", "webkit"] as const;
 
-const DEFAULT_BROWSER_CONFIG: BrowserConfig = {
-    headless: true,
-    firefoxUserPrefs: {
-        "dom.webaudio.enabled": false,
-        "media.volume_scale": 0,
-    },
-};
-
-class Browser extends EventEmitter {
+export class Browser extends EventEmitter {
     private browser: playwright.Browser = null;
     private context: playwright.BrowserContext = null;
     private user_agent: string = "";
 
     constructor(
-        public browser_type: BrowserType,
-        public browser_config: BrowserConfig,
-        private logger: Logger = null,
+        public browser_type: typeof BRWOSER_TYPES[number] = "firefox",
+        public browser_config: playwright.LaunchOptions,
     ) {
         super();
         if (!BRWOSER_TYPES.includes(browser_type)) {
             browser_type = "firefox";
         }
-
-        this.setup();
     }
 
-    info(...arg: any[]) {
-        if (this.logger) {
-            this.logger.info(...arg);
-        }
+    log(...arg: unknown[]): void {
+        this.emit("log", ...arg);
     }
-
-    async setup() {}
 
     async launch(): Promise<this> {
         if (!this.browser) {
-            this.info("使用瀏覽器", this.browser_type);
-
+            this.log(`使用 ${this.browser_type} 瀏覽器`);
             const target = playwright[this.browser_type];
-
-            this.browser = await target.launch({
-                ...DEFAULT_BROWSER_CONFIG,
-                ...this.browser_config,
-            });
-
+            this.browser = await target.launch(this.browser_config);
             this.emit("launched", this.browser);
         }
 
@@ -59,11 +36,9 @@ class Browser extends EventEmitter {
                 (await temp_page.evaluate(() => navigator.userAgent)).replace("Headless", "") +
                 " BA/1";
             await temp_page.close();
-
-            this.info("User-Agent:", this.user_agent);
+            this.log("User-Agent:", this.user_agent);
 
             this.context = await this.browser.newContext({ userAgent: this.user_agent });
-
             this.emit("context_created", this.context);
         }
 
@@ -83,10 +58,11 @@ class Browser extends EventEmitter {
     }
 
     async new_page(): Promise<playwright.Page> {
-        if (!this.context) throw new Error("No Context.");
+        if (!this.context) {
+            throw new Error("No Context.");
+        }
 
         const page = await this.context.newPage();
-
         this.emit("new_page", page);
 
         return page;

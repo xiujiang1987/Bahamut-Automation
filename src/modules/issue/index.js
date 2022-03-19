@@ -16,7 +16,7 @@ const DEFAULT_LABELS = ["自動化報告"];
 
 let octokit, context;
 
-exports.run = async ({ params, outputs, logger }) => {
+exports.run = async ({ params, shared, logger }) => {
     const log = (...args) => logger.log("\u001b[95m[GitHub Issue]\u001b[m", ...args);
     const error = (...args) => logger.error("\u001b[95m[GitHub Issue]\u001b[m", ...args);
 

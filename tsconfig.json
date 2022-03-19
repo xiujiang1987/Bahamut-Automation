@@ -5,9 +5,8 @@
         "esModuleInterop": true,
         "noImplicitAny": true,
         "preserveConstEnums": true,
-        "outDir": "../dist/lib/core/",
         "sourceMap": false,
         "moduleResolution": "node"
     },
-    "include": ["../src/core/**/*"]
+    "include": ["src/**/*"]
 }

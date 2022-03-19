@@ -6,7 +6,7 @@ import ora from "ora";
 main();
 
 async function main(): Promise<void> {
-    const root = resolve(__dirname, "..");
+    const root = process.cwd();
     const lib = resolve(root, "dist", "lib");
     const node_version = "16";
     const platforms = ["win", "macos", "linux"];

@@ -1,51 +1,33 @@
 import type { LaunchOptions, Page } from "playwright";
 import Logger from "./logger";
 
-export type BrowserType = "firefox" | "chromium" | "webkit";
-
-export interface BrowserConfig extends LaunchOptions {
-    /**
-     * 瀏覽器種類
-     */
-    type?: BrowserType;
-}
-
 export interface BahamutAutomationConfig {
-    /**
-     * 依序執行的內建模組名稱，或為外部模組的絕對路徑
-     */
-    modules: string[];
+    /** 所有模組皆可存取的共用參數 */
+    shared?: Record<string, any>;
 
-    /**
-     * 各模組參數聯合參數池
-     */
-    params: { [key: string]: any };
+    /** 使用的模組及其參數，可以是內建模組的名稱或是自製模組的路徑 */
+    modules?: Record<string, Record<string, any>>;
 
-    /**
-     * 自動化實體使用之瀏覽器的啟動設定
-     */
-    browser: BrowserConfig;
-}
-
-export interface ModuleParams {
-    name: string;
-    required?: boolean;
-
-    [key: string]: any;
+    /** 瀏覽器的設定，擴展自 playwright.LaunchOptions @see LaunchOptions */
+    browser?: LaunchOptions & { type?: "firefox" | "chromium" | "webkit" };
 }
 
 export interface Module {
-    parameters: ModuleParams[];
+    /** 模組名稱 */
+    name?: string;
 
-    run({
-        page,
-        outputs,
-        params,
-        logger,
-    }: {
+    /** 模組敘述 */
+    description?: string;
+
+    /** 模組執行函式 */
+    run: (payload: {
+        /** 自動化框架分配的網頁 */
         page: Page;
-        outputs: any;
-        params: any;
+        /** 共用參數池，包含各模組輸出 */
+        shared: Record<string, any>;
+        /** 模組參數 */
+        params: Record<string, any>;
+        /** 印 Log 的東西 */
         logger: Logger;
-    }): Promise<any>;
+    }) => Promise<any>;
 }

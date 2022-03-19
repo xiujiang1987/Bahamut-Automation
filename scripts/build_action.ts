@@ -6,7 +6,7 @@ import ora from "ora";
 main();
 
 async function main(): Promise<void> {
-    const root = resolve(__dirname, "..");
+    const root = process.cwd();
     const lib = resolve(root, "dist", "lib");
 
     let state = ora("Clear old files...").start();
@@ -65,6 +65,6 @@ function copy_dir(src_dir: string, dest_dir: string): void {
 }
 
 function build(src: string, output: string) {
-    const cmd = `pnpx -y tsup --silent --target esnext --minify --loader ".md=text" -d ${output} ${src}`;
+    const cmd = `pnpx -y tsup --silent esnext --format esm --no-splitting --loader ".md=text" -d ${output} ${src}`;
     return execSync(cmd, { stdio: "inherit" });
 }

@@ -1,5 +1,5 @@
 import { Frame } from "playwright";
-import Module from "../_module";
+import { Logger, Module } from "../_module";
 
 type ad_handler_args = {
     ad_frame: Frame;
@@ -8,20 +8,21 @@ type ad_handler_args = {
     error?: (...args: any[]) => void;
 };
 
-const ad_handler_module = new Module();
+let _logger: Logger;
 
-let _log = (...args: any[]) => {},
-    _error = (...args: any[]) => {};
+export default {
+    name: "Google AD 處理程式",
+    description: "註冊處理 Google AD 的程式",
+    async run({ page, logger }) {
+        _logger = logger;
+        await page.exposeFunction("ad_handler", ad_handler);
+        logger.info("已註冊 Google AD 處理程式");
+        return ad_handler;
+    },
+} as Module;
 
-ad_handler_module.run = async function ({ logger }) {
-    _log = (...args) => logger.log("\u001b[95m[AD Handler]\u001b[m", ...args);
-    _error = (...args) => logger.error("\u001b[95m[AD Handler]\u001b[m", ...args);
-    _log("已設定 Google AD 處理程式");
-    return ad_handler;
-};
-
-async function ad_handler({ ad_frame, timeout = 60, log = _log, error = _error }: ad_handler_args) {
-    log("Google AD 處理程式: Start");
+async function ad_handler({ ad_frame, timeout = 60 }: ad_handler_args) {
+    _logger.log("Google AD 處理程式: Start");
 
     const result = await Promise.race([
         sleep(timeout * 1000, "timed out"),
@@ -59,12 +60,15 @@ async function ad_handler({ ad_frame, timeout = 60, log = _log, error = _error }
 
                 await ad_frame.waitForTimeout(2000);
             } catch (err) {
-                error(err);
+                _logger.error(err);
             }
         })(),
     ]);
-    if (result === "timed out") log("Google AD 處理程式: Timed Out");
-    else log("Google AD 處理程式: Finished");
+    if (result === "timed out") {
+        _logger.log("Google AD 處理程式: Timed Out");
+    } else {
+        _logger.log("Google AD 處理程式: Finished");
+    }
 }
 
 async function checkVideoEnded(ad_frame: Frame) {
@@ -97,5 +101,3 @@ function checkTopRightClose(ad_frame: Frame) {
 function sleep(t = 1000, msg: any) {
     return new Promise((r) => setTimeout(() => r(msg), t));
 }
-
-export default ad_handler_module;

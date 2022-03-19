@@ -1,21 +1,22 @@
 import { Module } from "../_module";
 
-const logout = new Module();
+export default {
+    name: "登出",
+    description: "登出巴哈姆特",
+    run: async ({ page, shared, logger }) => {
+        if (!shared.flags.logged) throw new Error("使用者未登入，無需登出");
 
-logout.parameters = [];
+        logger.log(`開始執行`);
+        await page.goto("https://user.gamer.com.tw/logout.php");
+        await page.waitForSelector(
+            "div.wrapper.wrapper-prompt > div > div > div.form__buttonbar > button",
+        );
+        await page.click("div.wrapper.wrapper-prompt > div > div > div.form__buttonbar > button");
+        await page
+            .waitForSelector("div.TOP-my.TOP-nologin")
+            .catch((...args: unknown[]) => logger.error(...args));
 
-logout.run = async ({ page, outputs, logger }) => {
-    const log = (...args: any[]) => logger.log("\u001b[95m[登出]\u001b[m", ...args);
-
-    if (!outputs.utils.logged_in()) throw new Error("使用者未登入，無需登出");
-
-    log(`開始執行帳號登出程序`);
-    await page.goto("https://user.gamer.com.tw/logout.php");
-    await page.waitForSelector("button.btn");
-    await page.click("button.btn");
-    await page.waitForSelector("div.TOP-my.TOP-nologin").catch(logger.error);
-
-    log(`帳號登出程序已完成`);
-};
-
-export default logout;
+        logger.log(`帳號已登出`);
+        shared.flags.logged = false;
+    },
+} as Module;
