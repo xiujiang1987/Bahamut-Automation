@@ -1,0 +1,57 @@
+{
+  "projectName": "Bahamut-Automation",
+  "projectOwner": "JacobLinCool",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 96,
+  "commit": true,
+  "commitConvention": "angular",
+  "contributors": [
+    {
+      "login": "JacobLinCool",
+      "name": "JacobLinCool",
+      "avatar_url": "https://avatars.githubusercontent.com/u/28478594?v=4",
+      "profile": "https://jacoblin.cool/",
+      "contributions": []
+    },
+    {
+      "login": "dxball",
+      "name": "Dxball ☕",
+      "avatar_url": "https://avatars.githubusercontent.com/u/194673?v=4",
+      "profile": "https://dxball.github.io/",
+      "contributions": []
+    },
+    {
+      "login": "cow03haha",
+      "name": "cow03haha",
+      "avatar_url": "https://avatars.githubusercontent.com/u/44705326?v=4",
+      "profile": "https://cow03haha.github.io/",
+      "contributions": []
+    },
+    {
+      "login": "Tony-Liou",
+      "name": "Zironic",
+      "avatar_url": "https://avatars.githubusercontent.com/u/13446378?v=4",
+      "profile": "https://github.com/Tony-Liou",
+      "contributions": []
+    },
+    {
+      "login": "yslinear",
+      "name": "Ying-Shan Lin",
+      "avatar_url": "https://avatars.githubusercontent.com/u/31029063?v=4",
+      "profile": "https://github.com/yslinear",
+      "contributions": []
+    },
+    {
+      "login": "IamSkyBlue",
+      "name": "IamSkyBlue",
+      "avatar_url": "https://avatars.githubusercontent.com/u/34653812?v=4",
+      "profile": "https://github.com/IamSkyBlue",
+      "contributions": []
+    }
+  ],
+  "contributorsPerLine": 4
+}

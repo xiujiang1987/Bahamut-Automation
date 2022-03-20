@@ -1,4 +1,7 @@
 # Bahamut Automation
+<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+[![All Contributors](https://img.shields.io/badge/all_contributors-6-orange.svg?style=flat-square)](#contributors-)
+<!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 ![Bahamut Automation Preview.png](./web/Bahamut-Automation.png)
 
@@ -136,3 +139,28 @@
 ## License Check
 
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FJacobLinCool%2FBahamut-Automation.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2FJacobLinCool%2FBahamut-Automation?ref=badge_large)
+
+## Contributors ✨
+
+Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+  <tr>
+    <td align="center"><a href="https://jacoblin.cool/"><img src="https://avatars.githubusercontent.com/u/28478594?v=4?s=96" width="96px;" alt=""/><br /><sub><b>JacobLinCool</b></sub></a><br /></td>
+    <td align="center"><a href="https://dxball.github.io/"><img src="https://avatars.githubusercontent.com/u/194673?v=4?s=96" width="96px;" alt=""/><br /><sub><b>Dxball ☕</b></sub></a><br /></td>
+    <td align="center"><a href="https://cow03haha.github.io/"><img src="https://avatars.githubusercontent.com/u/44705326?v=4?s=96" width="96px;" alt=""/><br /><sub><b>cow03haha</b></sub></a><br /><a href="#a11y-cow03haha" title="Accessibility">️️️️♿️</a></td>
+    <td align="center"><a href="https://github.com/Tony-Liou"><img src="https://avatars.githubusercontent.com/u/13446378?v=4?s=96" width="96px;" alt=""/><br /><sub><b>Zironic</b></sub></a><br /><a href="#a11y-Tony-Liou" title="Accessibility">️️️️♿️</a></td>
+    <td align="center"><a href="https://github.com/yslinear"><img src="https://avatars.githubusercontent.com/u/31029063?v=4?s=96" width="96px;" alt=""/><br /><sub><b>Ying-Shan Lin</b></sub></a><br /><a href="#a11y-yslinear" title="Accessibility">️️️️♿️</a></td>
+    <td align="center"><a href="https://github.com/IamSkyBlue"><img src="https://avatars.githubusercontent.com/u/34653812?v=4?s=96" width="96px;" alt=""/><br /><sub><b>IamSkyBlue</b></sub></a><br /><a href="#a11y-IamSkyBlue" title="Accessibility">️️️️♿️</a></td>
+  </tr>
+</table>
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
