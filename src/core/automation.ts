@@ -7,7 +7,7 @@ import countapi from "countapi-js";
 import yaml from "js-yaml";
 import { Browser } from "./browser";
 import { Logger } from "./logger";
-import type { BahamutAutomationConfig, Module } from "./types";
+import type { BahamutAutomationConfig, CustomOutput, Module } from "./types";
 import { get_version, second_to_time } from "./utils";
 
 process.env.TZ = "Asia/Taipei";
@@ -73,7 +73,7 @@ export class BahamutAutomation extends EventEmitter {
             self.emit("error", `模組 ${module_name} 執行失敗`, err);
         });
 
-        this.on("finished", (outputs: any, time: number) => {
+        this.on("finished", (outputs: unknown, time: number) => {
             self.emit(
                 "log",
                 `執行完畢 時間: ${second_to_time(time)}\n輸出: ${outputs}`,
@@ -91,7 +91,7 @@ export class BahamutAutomation extends EventEmitter {
         });
     }
 
-    async run(): Promise<any> {
+    async run(): Promise<{ outputs: CustomOutput; time: number }> | null {
         try {
             this.start_time = Date.now();
             this.emit("start");
@@ -102,7 +102,7 @@ export class BahamutAutomation extends EventEmitter {
             this.emit("browser_opened");
 
             const shared = this.config.shared;
-            const outputs: Record<string, any> = {};
+            const outputs: Record<string, CustomOutput> = {};
 
             for (const [module_id, module_params] of Object.entries(this.config.modules)) {
                 const page = await this.browser.new_page();
@@ -177,17 +177,16 @@ export class BahamutAutomation extends EventEmitter {
 }
 
 export declare interface BahamutAutomation {
-    on(event: "error", listener: (...args: unknown[]) => void): this;
-    on(event: "warn", listener: (...args: unknown[]) => void): this;
-    on(event: "info", listener: (...args: unknown[]) => void): this;
-    on(event: "log", listener: (...args: unknown[]) => void): this;
-    on(event: "browser_opened", listener: () => void): this;
+    on(
+        event: "error" | "success" | "warn" | "info" | "log",
+        listener: (...args: unknown[]) => void,
+    ): this;
+    on(event: "start" | "browser_opened", listener: () => void): this;
     on(event: "module_start", listener: (module_name: string, module_path: string) => void): this;
     on(event: "module_finished", listener: (module_name: string) => void): this;
     on(event: "module_failed", listener: (module_name: string, err: Error) => void): this;
-    on(event: "finished", listener: (outputs: any, time: number) => void): this;
+    on(event: "finished", listener: (outputs: unknown, time: number) => void): this;
     on(event: "fatal", listener: (err: Error) => void): this;
-    on(event: "start", listener: () => void): this;
     on(event: string, listener: Function): this;
 }
 
