@@ -12,7 +12,7 @@ export default {
         let bahaRune = "";
         let bahaEnur = "";
 
-        const max_attempts = +params.max_attempts || +shared.login_max_attempts || 3;
+        const max_attempts = +params.max_attempts || +shared.max_attempts || 3;
         for (let i = 0; i < max_attempts; i++) {
             const query = new URLSearchParams();
             query.append("uid", params.username);

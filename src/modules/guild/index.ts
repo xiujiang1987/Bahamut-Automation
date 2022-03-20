@@ -6,7 +6,7 @@ export default {
     async run({ page, shared, params, logger }) {
         if (!shared.flags.logged) throw new Error("使用者未登入，無法進行公會簽到");
 
-        let retry = +params.max_attempts || 3;
+        let retry = +params.max_attempts || +shared.max_attempts || 3;
         while (retry--) {
             try {
                 await page.goto("https://home.gamer.com.tw/joinGuild.php");

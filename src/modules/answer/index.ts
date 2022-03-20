@@ -21,7 +21,7 @@ export default {
         } = {};
         logger.log(`開始執行`);
 
-        const max_attempts = +params.max_attempts || 3;
+        const max_attempts = +params.max_attempts || +shared.max_attempts || 3;
         for (let attempts = 0; attempts < max_attempts; attempts++) {
             try {
                 logger.log("正在檢測答題狀態");
@@ -38,8 +38,8 @@ export default {
                     const options = [null, question.a1, question.a2, question.a3, question.a4];
 
                     logger.log("尚未回答今日題目，嘗試答題中");
-                    logger.log(`今天的問題：${question.question}`);
-                    logger.log(`選項：${options.filter(Boolean).join(", ")}`);
+                    logger.info(`今天的問題：${question.question}`);
+                    logger.info(`選項：${options.filter(Boolean).join(", ")}`);
 
                     logger.log(`正在尋找答案`);
                     const token = question.token;
@@ -69,13 +69,16 @@ export default {
                             const r = await fetch("/ajax/animeAnsQuestion.php", {
                                 headers: {
                                     accept: "*/*",
-                                    "content-type": "application/x-www-form-urlencoded",
                                     "sec-fetch-dest": "empty",
                                     "sec-fetch-mode": "cors",
                                     "sec-fetch-site": "same-origin",
                                 },
                                 method: "POST",
-                                body: encodeURI(`token=${token}&ans=${ans}&t=${Date.now()}`),
+                                body: new URLSearchParams({
+                                    token,
+                                    ans: ans.toString(),
+                                    t: Date.now().toString(),
+                                }),
                             });
                             return r.json();
                         },
@@ -83,25 +86,25 @@ export default {
                     );
 
                     if (result.error)
-                        logger.log("回答問題時發生錯誤 " + result.msg + " \u001b[91m✘\u001b[m");
+                        logger.error("回答問題時發生錯誤 " + result.msg + " \u001b[91m✘\u001b[m");
                     if (result.ok) {
-                        logger.log("已回答問題 " + result.gift + " \u001b[92m✔\u001b[m");
+                        logger.success("已回答問題 " + result.gift + " \u001b[92m✔\u001b[m");
                         reward = +result.gift.match(/\d{2,4}/)[0];
                     }
                 } else if (
                     question.error === 1 &&
                     question.msg === "今日已經答過題目了，一天僅限一次機會"
                 ) {
-                    logger.log("今日已經答過題目了 \u001b[92m✔\u001b[m");
+                    logger.info("今日已經答過題目了 \u001b[92m✔\u001b[m");
                 } else {
-                    logger.log("發生未知錯誤：" + question.msg + " \u001b[91m✘\u001b[m");
+                    logger.error("發生未知錯誤：" + question.msg + " \u001b[91m✘\u001b[m");
                 }
 
                 await page.waitForTimeout(1000);
                 break;
             } catch (err) {
                 logger.error(err);
-                logger.log("發生錯誤，重試中 \u001b[91m✘\u001b[m");
+                logger.error("發生錯誤，重試中 \u001b[91m✘\u001b[m");
             }
         }
         logger.log(`執行完畢 ✨`);

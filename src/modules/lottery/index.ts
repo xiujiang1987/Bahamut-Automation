@@ -24,7 +24,7 @@ export default {
         });
 
         const parrallel = +params.max_parallel || 1;
-        const max_attempts = +params.max_attempts || 20;
+        const max_attempts = +params.max_attempts || +shared.max_attempts || 20;
 
         const context = page.context();
 

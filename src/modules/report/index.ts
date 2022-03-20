@@ -2,6 +2,7 @@ import { convert as html_to_text } from "html-to-text";
 import markdownIt from "markdown-it";
 import TurndownService from "turndown";
 import Module from "../_module";
+import { template } from "../utils";
 
 const md = markdownIt();
 const td = new TurndownService({ headingStyle: "atx" });
@@ -34,7 +35,7 @@ export default {
         const reports = {};
 
         return {
-            title: replace(config.title),
+            title: template(config.title),
             reports,
             text: () => text(reports, config),
             markdown: () => markdown(reports, config),
@@ -81,7 +82,7 @@ async function normalize(reports: any, config: Config) {
         }
     }
 
-    const raw_md = replace(report);
+    const raw_md = template(report);
 
     const html = md.render(raw_md, {
         html: true,
@@ -92,33 +93,4 @@ async function normalize(reports: any, config: Config) {
     const markdown = td.turndown(html);
 
     return { html, markdown };
-}
-
-function replace(str: string) {
-    const t = time();
-    const rules: [RegExp, string][] = [
-        [/\$time\$/g, `$year$/$month$/$day$ $hour$:$minute$:$second$`],
-        [/\$year\$/g, t[0]],
-        [/\$month\$/g, t[1]],
-        [/\$day\$/g, t[2]],
-        [/\$hour\$/g, t[3]],
-        [/\$minute\$/g, t[4]],
-        [/\$second\$/g, t[5]],
-    ];
-
-    for (let i = 0; i < rules.length; i++) {
-        str = str.replace(rules[i][0], rules[i][1]);
-    }
-
-    return str;
-}
-
-function time(): string[] {
-    const date = new Date().toLocaleString("en", { timeZone: "Asia/Taipei" }).split(", ");
-    let [month, day, year] = date[0].split("/");
-    let [hour, minute, second] = date[1].match(/\d{1,2}/g);
-
-    if (+hour === 12 && date[1].toLowerCase().includes("am")) hour = String(+hour - 12);
-    if (+hour < 12 && date[1].toLowerCase().includes("pm")) hour = String(+hour + 12);
-    return [year, month, day, hour, minute, second];
 }
