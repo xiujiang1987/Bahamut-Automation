@@ -4,18 +4,23 @@
 
 ## 參數
 
-必要參數： `del_mail_match`
+必要參數： `match`
 
 ### 範例
 
-```json
-{
-    "del_mail_match": [
-        { "title": "【勇者福利社】成功獲得抽獎資格通知信" },
-        { "sender": "someone" },
-        { "sender": "the other", "title": "hello", "before": "2021-12-28 12:34:56" }
-    ]
-}
+```yaml
+modules:
+    ...
+
+    del_mail:
+        match:
+            - title: "【勇者福利社】成功獲得抽獎資格通知信"
+            - sender: "someone"
+            - sender: "the other"
+              title: "hello"
+              before: "2021-12-28 12:34:56"
+
+    ...
 ```
 
 這樣他會刪除所有：
