@@ -1,15 +1,55 @@
-# Bahamut Automation
-<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-6-orange.svg?style=flat-square)](#contributors-)
-<!-- ALL-CONTRIBUTORS-BADGE:END -->
 
-![Bahamut Automation Preview.png](./web/Bahamut-Automation.png)
+<br />
+<div align="center">
+  
+[![Banner][banner-img]][github-url]
 
-[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FJacobLinCool%2FBahamut-Automation.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FJacobLinCool%2FBahamut-Automation?ref=badge_shield)
-
-巴哈姆特自動化！
+### 巴哈姆特自動化！
 
 自動簽到、自動動畫瘋答題、自動抽抽樂，以及其他更多！
+
+[![Contributors][contributors-shield]][contributors-url]
+[![Stargazers][stars-shield]][stars-url]
+[![Forks][forks-shield]][forks-url]
+[![Issues][issues-shield]][issues-url]
+[![MIT License][license-shield]][license-url]
+
+[**>> 開始使用 <<**]()
+
+[遇到問題][discussion-qa] ·
+[想要新功能][discussion-idea] ·
+[自製模組](./src/modules/module.js)
+
+</div>
+
+<!-- TABLE OF CONTENTS -->
+<details>
+  <summary>目錄</summary>
+
+  1. [特色](#特色)
+     - [不需要任何硬體](#不需要任何硬體)
+     - [快速設定立刻開始](#快速設定立刻開始)
+     - [完整公開及免費使用](#完整公開及免費使用)
+     - [不影響巴哈姆特收益](#不影響巴哈姆特收益)
+  2. [功能](#功能)
+     - [簽到](#簽到)
+     - [回答動畫瘋問題](#回答動畫瘋問題)
+     - [福利社抽抽樂](#福利社抽抽樂)
+     - [蓋樓（回文）](#蓋樓（回文）)
+     - [勇者大聲說](#勇者大聲說)
+     - [整理站內信](#整理站內信)
+     - [多平台通知](#多平台通知)
+  3. [使用方法](#使用方法)
+     - [使用 GitHub Action （☁️）](#use-github-action)
+     - [命令列工具 （💻）](#use-cli)
+     - [已編譯的執行檔 （💻）](#use-binary)
+     - [Docker （🐳）](#use-docker)
+     - [其他雲端平台 （☁️）](#use-other-platforms)
+  3. [為此專案貢獻](#為此專案貢獻)
+     - [如何開始？](#如何開始)
+     - [貢獻者們](#貢獻者們)
+
+</details>
 
 ## 特色
 
@@ -27,7 +67,7 @@
 
 ### 完整公開及免費使用
 
-所有程式碼皆完整公開於 GitHub 上，所有會執行到的程式就是那些。
+所有程式碼皆依 MIT 授權開源於 GitHub 上，所有會執行到的程式就是那些。
 
 這個工具本來是我自己要用的，既然都寫了，就拿出來給大家一起用！不過如果你要捐款我也是 OK 的喔，等等，好像沒有捐款按鈕？那就給個 star 或幫忙一起優化吧！
 
@@ -38,35 +78,41 @@
 
 ## 功能
 
-### 自動簽到
+所有的功能皆由「模組」實現，內建的模組大致有以下功能：
 
-- 自動執行每日簽到
-- 自動觀看廣告以獲得雙倍獎勵
-- 自動公會簽到
+### 簽到
 
-### 自動回答動畫瘋問題
+- 執行每日簽到
+- 觀看廣告以獲得雙倍獎勵
+- 公會簽到
 
-- 自動抓取解答以回答當日問題
-  - 解答自 blackXblue 小屋抓取
+### 回答動畫瘋問題
 
-### 自動福利社抽抽樂
+- 抓取解答回答當日問題
 
-- 自動檢測抽抽樂數量
-- 自動觀看廣告獲得免費抽抽樂機會
-- 自動檢測是否需要答題，如需要，自動答題
+> 解答自 [blackXblue 小屋](https://home.gamer.com.tw/homeindex.php?owner=blackxblue)抓取
 
-### 自動蓋樓（回文）
+### 福利社抽抽樂
 
-- 自動於指定文章回覆
+- 觀看廣告獲得免費抽抽樂機會
+- 檢測是否需要答題，如需要，自動答題
+
+### 蓋樓（回文）
+
+- 於指定文章回覆
 - 支援複數文章
 - 支援巴哈 BBCode（支援圖片連結等）
-- 支援時間變數（以執行時的時間替換）
+- 支援時間變數模板（以執行時的時間動態替換）
 
-### 自動勇者大聲說
+### 勇者大聲說
 
-- 自動發佈勇者大聲說
-- 支援隨機挑遠內容
-- 支援時間變數（以執行時的時間替換）
+- 發佈勇者大聲說
+- 支援隨機挑選內容
+- 支援時間變數模板（以執行時的時間動態替換）
+
+### 整理站內信
+
+- 依給定規則刪除站內信
 
 ### 多平台通知
 
@@ -77,25 +123,33 @@
 
 ## 使用方法
 
-### 使用 GitHub Action （建議）
+有各種使用方法，如果遇到問題歡迎[詢問][discussion-qa]喔！
+
+<a id="use-github-action"></a>
+
+### 使用 GitHub Action （☁️）
 
 [**詳細的教學**](https://jacoblincool.github.io/Bahamut-Automation/tutorial)
 
-> _注意：新辦帳號只執行巴哈自動化的情況，可能被 GitHub 視為濫用資源（lottery 模組執行時間可能要近 1 小時）_
+> _注意：新辦帳號只執行巴哈自動化的情況，可能被 GitHub 視為濫用資源_
 
-> 如果遇到問題歡迎[發 Issue 詢問](https://github.com/JacobLinCool/Bahamut-Automation/issues/new)喔
+<a id="use-cli"></a>
 
-### 在自己電腦上執行 (原始碼)
+### 命令列工具 （💻）
 
 1. 安裝 `Node.js` v16+
-2. Clone 或下載此 Repository
-3. 安裝 Packages: `npm install`
-4. 修改 `example/config.js` 的設定
-5. 執行 `npm start` 試試看
+2. 下載 `example/config.yml` 並修改設定
+3. 執行 `npx bahamut-automation` 試試看
 
-### 在自己電腦上執行 (執行檔)
+<a id="use-binary"></a>
 
-於 [`binary` branch](https://github.com/JacobLinCool/Bahamut-Automation/tree/binary) 中下載相對應版本的已編譯程式和 `config.js`，然後執行該程式。
+### 已編譯的執行檔 （💻）
+
+> 不建議，其實就是把 `Node.js` 跟命令列工具包在一起而已
+
+1. 下載 `example/config.yml` 並修改設定
+2. 於 [`binary` branch](https://github.com/JacobLinCool/Bahamut-Automation/tree/binary) 中下載已編譯的程式
+3. 然後執行該程式
 
 ***已編譯的執行檔有可能會被防毒軟體擋掉。***
 
@@ -103,46 +157,43 @@
 
 ***總而言之，如果你下載並使用這些程式，代表你同意自行承擔所有責任，包括但不限於使用程式導致的任何損失。***
 
-## Action 輸入參數
+<a id="use-docker"></a>
 
-| 參數       | 預設值                                                                                                                 | 說明       | 必要   |
-| ---------- | ---------------------------------------------------------------------------------------------------------------------- | ---------- | ------ |
-| modules    | `"report,ad_handler,login,sign,guild,answer,lottery,sayloud,builder,logout,report,telegram,discord,line_notify,issue"` | 使用的模組 | 非必要 |
-| parameters | `"{}"`                                                                                                                 | 帶入的參數 | 非必要 |
-| secrets    | `"{}"`                                                                                                                 | 帶入的參數 | 非必要 |
-| browser    | `"{}"`                                                                                                                 | 瀏覽器參數 | 非必要 |
+### Docker （🐳）
 
-全部都是非必要參數，但你什麼都不放就什麼都不會發生，合理吧？
+Coming soon...
 
-## 模組
+<a id="use-other-platforms"></a>
 
-[模組說明文件](./src/modules#readme)
+### 其他雲端平台 （☁️）
 
-## 技術細節
+有想法嗎？發個 PR 吧！
 
-所有程式碼都是使用 `JavaScript` 編寫，以 `Playwright` 模擬人的操作，使用 `Node.js` 執行，並以 `GitHub Action` 的形式發佈。
+## 為此專案貢獻
 
-可以於 `src` 資料夾中查看所有核心程式碼。
+任何形式的貢獻都非常感謝！
 
-## 聲明
+你可以：
 
-我不能保證程式一定會如期執行，也不能保證程式會成功執行，有時 GitHub 會自己吃掉。
+- 優化核心架構
+- 新增或建議新模組
+- 協助撰寫使用教學及文件
+- 幫忙回答其他人遇到的問題
+- 或做任何有益於此專案及開源社群的事！
 
-自 v0.6.7 版本開始，使用 [countapi.xyz](https://countapi.xyz/) 計數器匿名累積使用次數，方便估算成效，如有疑慮請不要使用本程式。
+### 如何開始？
 
-本程式仰賴部分 NPM 外部程式庫，如果發生安全問題，由使用者自行承擔，如有疑慮請不要使用本程式。
+1. Fork the project
+2. Create your feature branch (`git checkout -b feat/amazing-feature`)
+3. Commit your changes (`git commit -m 'feat: add some cool things'`)
+4. Push to the origin (`git push origin feat/amazing-feature`)
+5. Open a pull request
 
-如果你執行這個程式，代表你必須自負所有風險，如有疑慮請不要使用本程式。
+### 貢獻者們
 
-如果你發現什麼 Bug 之類的東西（尤其是安全問題），或是有新的想法，歡迎[到 Action 的 Repo 發 Issue](https://github.com/JacobLinCool/Bahamut-Automation/issues)。
+感謝所有貢獻者們的貢獻！
 
-## License Check
-
-[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FJacobLinCool%2FBahamut-Automation.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2FJacobLinCool%2FBahamut-Automation?ref=badge_large)
-
-## Contributors ✨
-
-Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+這邊列出來的是在 Commit History 中找到的貢獻者們，除此之外，也有許多人幫忙回答問題、提報錯誤，以及跟大家一起討論。
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
@@ -151,10 +202,12 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
   <tr>
     <td align="center"><a href="https://jacoblin.cool/"><img src="https://avatars.githubusercontent.com/u/28478594?v=4?s=96" width="96px;" alt=""/><br /><sub><b>JacobLinCool</b></sub></a><br /></td>
     <td align="center"><a href="https://dxball.github.io/"><img src="https://avatars.githubusercontent.com/u/194673?v=4?s=96" width="96px;" alt=""/><br /><sub><b>Dxball ☕</b></sub></a><br /></td>
-    <td align="center"><a href="https://cow03haha.github.io/"><img src="https://avatars.githubusercontent.com/u/44705326?v=4?s=96" width="96px;" alt=""/><br /><sub><b>cow03haha</b></sub></a><br /><a href="#a11y-cow03haha" title="Accessibility">️️️️♿️</a></td>
-    <td align="center"><a href="https://github.com/Tony-Liou"><img src="https://avatars.githubusercontent.com/u/13446378?v=4?s=96" width="96px;" alt=""/><br /><sub><b>Zironic</b></sub></a><br /><a href="#a11y-Tony-Liou" title="Accessibility">️️️️♿️</a></td>
-    <td align="center"><a href="https://github.com/yslinear"><img src="https://avatars.githubusercontent.com/u/31029063?v=4?s=96" width="96px;" alt=""/><br /><sub><b>Ying-Shan Lin</b></sub></a><br /><a href="#a11y-yslinear" title="Accessibility">️️️️♿️</a></td>
-    <td align="center"><a href="https://github.com/IamSkyBlue"><img src="https://avatars.githubusercontent.com/u/34653812?v=4?s=96" width="96px;" alt=""/><br /><sub><b>IamSkyBlue</b></sub></a><br /><a href="#a11y-IamSkyBlue" title="Accessibility">️️️️♿️</a></td>
+    <td align="center"><a href="https://cow03haha.github.io/"><img src="https://avatars.githubusercontent.com/u/44705326?v=4?s=96" width="96px;" alt=""/><br /><sub><b>cow03haha</b></sub></a><br /></td>
+    <td align="center"><a href="https://github.com/Tony-Liou"><img src="https://avatars.githubusercontent.com/u/13446378?v=4?s=96" width="96px;" alt=""/><br /><sub><b>Zironic</b></sub></a><br /></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/yslinear"><img src="https://avatars.githubusercontent.com/u/31029063?v=4?s=96" width="96px;" alt=""/><br /><sub><b>Ying-Shan Lin</b></sub></a><br /></td>
+    <td align="center"><a href="https://github.com/IamSkyBlue"><img src="https://avatars.githubusercontent.com/u/34653812?v=4?s=96" width="96px;" alt=""/><br /><sub><b>IamSkyBlue</b></sub></a><br /></td>
   </tr>
 </table>
 
@@ -163,4 +216,24 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
-This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
+## 授權條款
+
+以 MIT License 授權，詳見 [`LICENSE`](./LICENSE)。
+
+<!-- Links! -->
+[banner-img]: web/Bahamut-Automation.png
+[github-url]: https://github.com/JacobLinCool/Bahamut-Automation
+[discussion]: https://github.com/JacobLinCool/Bahamut-Automation/discussions
+[discussion-qa]: https://github.com/JacobLinCool/Bahamut-Automation/discussions/new?category=-q-a-%E6%88%91%E8%A6%81%E5%95%8F%E5%95%8F%E9%A1%8C
+[discussion-idea]: https://github.com/JacobLinCool/Bahamut-Automation/discussions/new?category=ideas
+[contributors-shield]: https://img.shields.io/github/contributors/JacobLinCool/Bahamut-Automation.svg?style=flat-square&color=6f61ff
+[contributors-url]: https://github.com/JacobLinCool/Bahamut-Automation/graphs/contributors
+[stars-shield]: https://img.shields.io/github/stars/JacobLinCool/Bahamut-Automation.svg?style=flat-square&color=6f61ff
+[stars-url]: https://github.com/JacobLinCool/Bahamut-Automation/stargazers
+[forks-shield]: https://img.shields.io/github/forks/JacobLinCool/Bahamut-Automation.svg?style=flat-square&color=6f61ff
+[forks-url]: https://github.com/JacobLinCool/Bahamut-Automation/network/members
+[issues-shield]: https://img.shields.io/github/issues/JacobLinCool/Bahamut-Automation.svg?style=flat-square&color=6f61ff
+[issues-url]: https://github.com/JacobLinCool/Bahamut-Automation/issues
+[license-shield]: https://img.shields.io/github/license/JacobLinCool/Bahamut-Automation.svg?style=flat-square&color=6f61ff
+[license-url]: https://github.com/JacobLinCool/Bahamut-Automation/blob/main/LICENSE
+[product-screenshot]: images/screenshot.png
