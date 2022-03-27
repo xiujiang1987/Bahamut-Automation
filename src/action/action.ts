@@ -1,4 +1,5 @@
 import { execSync } from "node:child_process";
+import fs from "node:fs";
 
 prepare();
 main();
@@ -29,21 +30,22 @@ function prepare(): void {
 }
 
 async function main(): Promise<void> {
-    const core = require("@actions/core");
+    const core = (await import("@actions/core")).default;
     try {
-        const { BahamutAutomation } = require("./lib/core");
+        // @ts-ignore
+        const { BahamutAutomation } = await import("./lib/core");
 
-        const modules = core.getInput("modules");
-        const parameters = { ...JSON.parse(core.getInput("parameters") || "{}") };
+        const config_path = core.getInput("config");
         const secrets = { ...JSON.parse(core.getInput("secrets") || "{}") };
-        const browser = { type: "webkit", ...JSON.parse(core.getInput("browser") || "{}") }; // issue #32 workaround
 
-        const automation = new BahamutAutomation({
-            modules: modules.split(",").map((x: string) => x.trim()),
-            params: { ...parameters, ...secrets },
-            browser,
-        });
+        let raw = fs.readFileSync(config_path, "utf8");
+        for (const key in secrets) {
+            raw = raw.replace(new RegExp(`$${key}`, "ig"), secrets[key]);
+        }
+        fs.writeFileSync(config_path, raw);
 
+        const automation = BahamutAutomation.from(config_path);
+        automation.setup_listeners();
         const result = await automation.run();
 
         if (result) {

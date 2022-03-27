@@ -43,7 +43,6 @@ async function main() {
             console.log("設定檔不存在", config_path);
         }
 
-        const logger = new Logger("Automation", 3);
         const automation = BahamutAutomation.from(config_path);
         automation.setup_listeners();
         await automation.run();
