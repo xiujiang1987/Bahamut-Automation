@@ -1,5 +1,6 @@
 import { execSync } from "node:child_process";
 import fs from "node:fs";
+import path from "node:path";
 
 prepare();
 main();
@@ -32,17 +33,19 @@ function prepare(): void {
 async function main(): Promise<void> {
     const core = (await import("@actions/core")).default;
     try {
-        // @ts-ignore
-        const { BahamutAutomation } = await import("./lib/core");
-
-        const config_path = core.getInput("config");
-        const secrets = { ...JSON.parse(core.getInput("secrets") || "{}") };
+        const config_path = path.resolve(core.getInput("config"));
+        const secrets: Record<string, string> = { ...JSON.parse(core.getInput("secrets") || "{}") };
 
         let raw = fs.readFileSync(config_path, "utf8");
         for (const key in secrets) {
-            raw = raw.replace(new RegExp(`$${key}`, "ig"), secrets[key]);
+            const regex = new RegExp("\\$" + key, "g");
+            console.log(`Replacing ${raw.match(regex)?.length ?? 0} ${regex} in ${config_path}`);
+            raw = raw.replace(regex, secrets[key]);
         }
         fs.writeFileSync(config_path, raw);
+
+        // @ts-ignore
+        const { BahamutAutomation } = await import("./lib/core/index.js");
 
         const automation = BahamutAutomation.from(config_path);
         automation.setup_listeners();
