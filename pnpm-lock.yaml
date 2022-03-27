@@ -3,16 +3,20 @@ lockfileVersion: 5.3
 specifiers:
     "@actions/core": ^1.6.0
     "@actions/github": ^5.0.0
+    "@jacoblincool/puddle": ^0.1.1
     "@octokit/core": ^3.5.1
     "@trivago/prettier-plugin-sort-imports": ^3.2.0
     "@types/html-to-text": ^8.0.1
+    "@types/js-yaml": ^4.0.5
     "@types/markdown-it": 12.2.3
     "@types/node": 16.11.12
     "@types/node-fetch": 2.5.12
     "@types/turndown": 5.0.1
+    commander: ^9.1.0
     countapi-js: ^1.0.2
     esno: ^0.14.1
     html-to-text: ^8.1.0
+    js-yaml: ^4.1.0
     markdown-it: ^12.2.0
     node-fetch: ^2.6.6
     ora: 5.4.1
@@ -28,10 +32,13 @@ specifiers:
 dependencies:
     "@actions/core": 1.6.0
     "@actions/github": 5.0.0
+    "@jacoblincool/puddle": 0.1.1
     "@octokit/core": 3.5.1
     "@types/html-to-text": 8.0.1
+    commander: 9.1.0
     countapi-js: 1.0.2
     html-to-text: 8.1.0
+    js-yaml: 4.1.0
     markdown-it: 12.3.2
     node-fetch: 2.6.7
     otplib: 12.0.1
@@ -40,6 +47,7 @@ dependencies:
 
 devDependencies:
     "@trivago/prettier-plugin-sort-imports": 3.2.0_prettier@2.5.1
+    "@types/js-yaml": 4.0.5
     "@types/markdown-it": 12.2.3
     "@types/node": 16.11.12
     "@types/node-fetch": 2.5.12
@@ -414,6 +422,13 @@ packages:
             to-fast-properties: 2.0.0
         dev: true
 
+    /@jacoblincool/puddle/0.1.1:
+        resolution:
+            {
+                integrity: sha512-hDKfSwdXcS8zQmC8wP9hQ6s6iO4jZp4LebCnavYFg4fTKbBqH0lunMZ55NuaxY3EX+hsQJdmYxIBqYv/MusDXw==,
+            }
+        dev: false
+
     /@nodelib/fs.scandir/2.1.5:
         resolution:
             {
@@ -646,6 +661,13 @@ packages:
                 integrity: sha512-0B/OifmJYmk5r9z9+KJtGWOF0LEjbTN4D2QeCh+mAw81JkJwC83NvNWUZFEqRT5PpnjX7vX0ab1SMGcwCs3Lag==,
             }
         dev: false
+
+    /@types/js-yaml/4.0.5:
+        resolution:
+            {
+                integrity: sha512-FhpRzf927MNQdRZP0J5DLIdTXhjLYzeUTmLAu69mnVksLH9CJY3IuSeEgbKUki7GQZm0WqDkGzyxju2EZGD2wA==,
+            }
+        dev: true
 
     /@types/linkify-it/3.0.2:
         resolution:
@@ -1080,6 +1102,14 @@ packages:
                 integrity: sha512-OkTL9umf+He2DZkUq8f8J9of7yL6RJKI24dVITBmNfZBmri9zYZQrKkuXiKhyfPSu8tUhnVBB1iKXevvnlR4Ww==,
             }
         engines: { node: ">= 12" }
+        dev: false
+
+    /commander/9.1.0:
+        resolution:
+            {
+                integrity: sha512-i0/MaqBtdbnJ4XQs4Pmyb+oFQl+q0lsAmokVUH92SlSw4fkeAcG3bVon+Qt7hmtF+u3Het6o4VgrcY3qAoEB6w==,
+            }
+        engines: { node: ^12.20.0 || >=14 }
         dev: false
 
     /concat-map/0.0.1:
@@ -2190,6 +2220,16 @@ packages:
                 integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==,
             }
         dev: true
+
+    /js-yaml/4.1.0:
+        resolution:
+            {
+                integrity: sha512-wpxZs9NoxZaJESJGIZTyDEaYpl0FKSA+FB9aJiyemKhMwkxQg63h4T1KJgUGHpTqPDNRcmmYLugrRjJlBtWvRA==,
+            }
+        hasBin: true
+        dependencies:
+            argparse: 2.0.1
+        dev: false
 
     /jsesc/2.5.2:
         resolution:
