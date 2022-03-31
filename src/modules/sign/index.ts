@@ -13,7 +13,7 @@ export default {
 
         await goto(page, "home");
         await page.waitForTimeout(2000);
-        let { days, finished_ad, signin }: { days: number; finished_ad: boolean; signin: boolean } =
+        let { days, finishedAd, signin }: { days: number; finishedAd: boolean; signin: boolean } =
             await sign_status(page);
         const initial_signin = signin;
         logger.info(`已連續簽到天數: ${days}`);
@@ -41,7 +41,7 @@ export default {
                     await page.waitForSelector("text=領取雙倍巴幣");
                     await page.waitForTimeout(50);
 
-                    if (!finished_ad) {
+                    if (!finishedAd) {
                         logger.log("尚未獲得雙倍簽到獎勵 \u001b[91m✘\u001b[m");
 
                         if (await page.$("div.popup-dailybox__bottom > button[disabled]")) {
@@ -69,9 +69,9 @@ export default {
 
                         await shared.ad_handler({ ad_frame });
 
-                        finished_ad = (await sign_status(page)).finishedAd;
+                        finishedAd = (await sign_status(page)).finishedAd;
 
-                        if (finished_ad) {
+                        if (finishedAd) {
                             logger.success("已觀看雙倍獎勵廣告 \u001b[92m✔\u001b[m");
                             break;
                         }
@@ -101,7 +101,7 @@ export default {
 
         const result = {
             signed: !!final.signin,
-            doubled: !!final.finished_ad,
+            doubled: !!final.finishedAd,
             days: final.days as number,
         };
 
