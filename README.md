@@ -57,7 +57,7 @@
 
 好吧，其實也不完全是這樣啦。應該說是不需要任何「你的」硬體，程式使用 GitHub Action 在雲端自動執行。
 
-> 不過如果你要在自己電腦上執行也是可以喔，觀察一下 `test.js`！
+> 不過如果你要在自己電腦上執行也是可以喔，查看[使用命令列工具](#use-cli)！
 
 ### 快速設定立刻開始
 
@@ -127,7 +127,7 @@
 
 <a id="use-github-action"></a>
 
-### 使用 GitHub Action （☁️）
+### GitHub Actions （☁️）
 
 [**詳細的教學**](https://jacoblincool.github.io/Bahamut-Automation/tutorial)
 
@@ -190,6 +190,8 @@ _Replit?_ _Heroku?_ _Koyeb?_
 3. Commit your changes (`git commit -m 'feat: add some cool things'`)
 4. Push to the origin (`git push origin feat/amazing-feature`)
 5. Open a pull request
+
+[詳細開發說明可以看這邊](./CONTRIBUTING.md)
 
 ### 貢獻者們
 
