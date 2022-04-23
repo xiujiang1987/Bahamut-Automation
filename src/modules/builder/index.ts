@@ -6,11 +6,16 @@ export default {
     description: "自動回文模組，蓋樓？",
     async run({ page, shared, params, logger }) {
         if (!shared.flags.logged) {
-            throw new Error("使用者未登入，無法發佈勇者大聲說");
+            throw new Error("使用者未登入，無法自動回文蓋樓");
         }
 
         const builder = params.posts;
-        if (builder.length < 1) return { success: false };
+        if (builder == null) {
+            if (shared.report) {
+                shared.report.reports["自動回文蓋樓"] = `# 自動回文蓋樓 \n\n❌ 未執行自動回文 沒有指定的文章`;
+            }
+            return { success: false };
+        }
 
         for (let i = 0; i < builder.length; i++) {
             try {
@@ -71,7 +76,9 @@ export default {
                 logger.error(err);
             }
         }
-
+        if (shared.report) {
+            shared.report.reports["自動回文蓋樓"] = `# 自動回文蓋樓 \n\n🟢 已完成`;
+        }
         return { success: true };
     },
 } as Module;
