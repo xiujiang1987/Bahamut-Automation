@@ -204,14 +204,15 @@ _Replit?_ _Heroku?_ _Koyeb?_
 <!-- markdownlint-disable -->
 <table>
   <tr>
-    <td align="center"><a href="https://jacoblin.cool/"><img src="https://avatars.githubusercontent.com/u/28478594?v=4?s=96" width="96px;" alt=""/><br /><sub><b>JacobLinCool</b></sub></a><br /></td>
-    <td align="center"><a href="https://dxball.github.io/"><img src="https://avatars.githubusercontent.com/u/194673?v=4?s=96" width="96px;" alt=""/><br /><sub><b>Dxball ☕</b></sub></a><br /></td>
-    <td align="center"><a href="https://cow03haha.github.io/"><img src="https://avatars.githubusercontent.com/u/44705326?v=4?s=96" width="96px;" alt=""/><br /><sub><b>cow03haha</b></sub></a><br /></td>
-    <td align="center"><a href="https://github.com/Tony-Liou"><img src="https://avatars.githubusercontent.com/u/13446378?v=4?s=96" width="96px;" alt=""/><br /><sub><b>Zironic</b></sub></a><br /></td>
+    <td align="center"><a href="https://jacoblin.cool/"><img src="https://avatars.githubusercontent.com/u/28478594?v=4?s=96" width="96px;" alt=""/><br /><sub><b>JacobLinCool</b></sub></a><br /><a href="https://github.com/JacobLinCool/Bahamut-Automation/commits?author=JacobLinCool" title="Code">💻</a></td>
+    <td align="center"><a href="https://dxball.github.io/"><img src="https://avatars.githubusercontent.com/u/194673?v=4?s=96" width="96px;" alt=""/><br /><sub><b>Dxball ☕</b></sub></a><br /><a href="https://github.com/JacobLinCool/Bahamut-Automation/commits?author=dxball" title="Code">💻</a></td>
+    <td align="center"><a href="https://cow03haha.github.io/"><img src="https://avatars.githubusercontent.com/u/44705326?v=4?s=96" width="96px;" alt=""/><br /><sub><b>cow03haha</b></sub></a><br /><a href="https://github.com/JacobLinCool/Bahamut-Automation/commits?author=cow03haha" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/Tony-Liou"><img src="https://avatars.githubusercontent.com/u/13446378?v=4?s=96" width="96px;" alt=""/><br /><sub><b>Zironic</b></sub></a><br /><a href="https://github.com/JacobLinCool/Bahamut-Automation/commits?author=Tony-Liou" title="Code">💻</a></td>
   </tr>
   <tr>
-    <td align="center"><a href="https://github.com/yslinear"><img src="https://avatars.githubusercontent.com/u/31029063?v=4?s=96" width="96px;" alt=""/><br /><sub><b>Ying-Shan Lin</b></sub></a><br /></td>
-    <td align="center"><a href="https://github.com/IamSkyBlue"><img src="https://avatars.githubusercontent.com/u/34653812?v=4?s=96" width="96px;" alt=""/><br /><sub><b>IamSkyBlue</b></sub></a><br /></td>
+    <td align="center"><a href="https://github.com/yslinear"><img src="https://avatars.githubusercontent.com/u/31029063?v=4?s=96" width="96px;" alt=""/><br /><sub><b>Ying-Shan Lin</b></sub></a><br /><a href="https://github.com/JacobLinCool/Bahamut-Automation/commits?author=yslinear" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/IamSkyBlue"><img src="https://avatars.githubusercontent.com/u/34653812?v=4?s=96" width="96px;" alt=""/><br /><sub><b>IamSkyBlue</b></sub></a><br /><a href="https://github.com/JacobLinCool/Bahamut-Automation/commits?author=IamSkyBlue" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/nico12313"><img src="https://avatars.githubusercontent.com/u/27029472?v=4?s=96" width="96px;" alt=""/><br /><sub><b>NicholasWu</b></sub></a><br /><a href="https://github.com/JacobLinCool/Bahamut-Automation/commits?author=nico12313" title="Code">💻</a></td>
   </tr>
 </table>
 
