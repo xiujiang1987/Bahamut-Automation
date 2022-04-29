@@ -110,7 +110,7 @@ export default {
                             continue;
                         } else if (ad_status.includes("觀看廣告")) {
                             logger.log(`正在觀看廣告`);
-                            await task_page.click("text=確定");
+                            await task_page.click('button:has-text("確定")');
                             await task_page
                                 .waitForSelector("ins iframe")
                                 .catch((...args: unknown[]) => logger.error(...args));
