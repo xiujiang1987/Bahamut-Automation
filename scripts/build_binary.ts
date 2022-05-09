@@ -27,14 +27,14 @@ async function main(): Promise<void> {
     await new Promise((r) => setTimeout(r, 100));
     if (process.arch === "x64") {
         execSync(
-            `pnpx -y pkg . --targets ${platforms
+            `pnpm pkg . --targets ${platforms
                 .map((p) => `node${node_version}-${p}-x64`)
                 .join(",")}`,
             { stdio: "ignore" },
         );
     } else {
         execSync(
-            `pnpx -y pkg . --targets ${platforms
+            `pnpm pkg . --targets ${platforms
                 .map((p) => `node${node_version}-${p}-arm64`)
                 .join(",")}`,
             { stdio: "ignore" },

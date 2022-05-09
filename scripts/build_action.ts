@@ -65,6 +65,6 @@ function copy_dir(src_dir: string, dest_dir: string): void {
 }
 
 function build(src: string, output: string) {
-    const cmd = `pnpx -y tsup --silent --target esnext --format esm --no-splitting --loader ".md=text" -d ${output} ${src}`;
+    const cmd = `pnpm tsup --silent --target esnext --format esm --no-splitting --loader ".md=text" -d ${output} ${src}`;
     return execSync(cmd, { stdio: "inherit" });
 }
