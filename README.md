@@ -161,7 +161,15 @@
 
 ### Docker （🐳）
 
-Coming soon...
+1. 下載 `example/config.yml` 並修改設定
+2. 執行以下命令
+
+```sh
+docker run --rm -v $PWD/example:/usr/src/app/config jacoblincool/bahamut-automation
+# --rm: 容器執行完就自動刪除
+# -v: 將目前目錄的 `example` 資料夾指定給容器的 `/usr/src/app/config`
+#     你可以改成任何包含 config.yml 的來源資料夾，但要掛在 /usr/src/app/config 上
+```
 
 <a id="use-other-platforms"></a>
 
