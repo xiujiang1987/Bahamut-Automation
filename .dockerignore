@@ -79,10 +79,7 @@ typings/
 temp/
 
 # MacOS Desktop Services Store
-.DS_Store
-
-# Distribution files
-dist/
+**/.DS_Store
 
 # Docs
 web/docs/
