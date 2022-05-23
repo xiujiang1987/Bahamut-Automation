@@ -38,6 +38,10 @@ async function ad_handler({ ad_frame, timeout = 60 }: ad_handler_args) {
                         ".rewardDialogueWrapper:not([style*=none]) .rewardResumebutton",
                     );
 
+                if (await ad_frame.$(".rewardResumebutton:visible")) {
+                    await ad_frame.click(".rewardResumebutton:visible");
+                }
+
                 await Promise.race([
                     ad_frame.waitForSelector(
                         ".videoAdUiSkipContainer.html5-stop-propagation > button",
