@@ -165,10 +165,10 @@
 2. 執行以下命令
 
 ```sh
-docker run --rm -v $PWD/example:/usr/src/app/config jacoblincool/bahamut-automation
+docker run --rm -v "$(pwd)/config.yml:/config.yml" jacoblincool/bahamut-automation
 # --rm: 容器執行完就自動刪除
-# -v: 將目前目錄的 `example` 資料夾指定給容器的 `/usr/src/app/config`
-#     你可以改成任何包含 config.yml 的來源資料夾，但要掛在 /usr/src/app/config 上
+# -v: 將目前目錄下的 `config.yml` 資料夾掛載至容器的 `/config.yml`
+#     你可以改成任何主機上指向設定檔的位置，但要掛在 `/config.yml` 上
 ```
 
 <a id="use-other-platforms"></a>
