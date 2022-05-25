@@ -167,7 +167,7 @@
 ```sh
 docker run --rm -v "$(pwd)/config.yml:/config.yml" jacoblincool/bahamut-automation
 # --rm: 容器執行完就自動刪除
-# -v: 將目前目錄下的 `config.yml` 資料夾掛載至容器的 `/config.yml`
+# -v: 將主機目前目錄下的 `config.yml` 掛載至容器的 `/config.yml`
 #     你可以改成任何主機上指向設定檔的位置，但要掛在 `/config.yml` 上
 ```
 
