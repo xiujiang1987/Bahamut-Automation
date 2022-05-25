@@ -9,7 +9,7 @@ specifiers:
   '@types/html-to-text': ^8.0.1
   '@types/js-yaml': ^4.0.5
   '@types/markdown-it': 12.2.3
-  '@types/node': 16.11.12
+  '@types/node': 16.11.36
   '@types/node-fetch': 2.5.12
   '@types/turndown': 5.0.1
   commander: ^9.1.0
@@ -49,7 +49,7 @@ devDependencies:
   '@trivago/prettier-plugin-sort-imports': 3.2.0_prettier@2.5.1
   '@types/js-yaml': 4.0.5
   '@types/markdown-it': 12.2.3
-  '@types/node': 16.11.12
+  '@types/node': 16.11.36
   '@types/node-fetch': 2.5.12
   '@types/turndown': 5.0.1
   esno: 0.14.1
@@ -252,18 +252,24 @@ packages:
     resolution: {integrity: sha512-oG0ej7efjEXxb4UgE+klVx+3j4MVo+A2vCzm7OUN4CLo6WhQ+vSOD2yJ8m7B+DghObxtLxt3EfgMWpq+AsWehQ==}
     engines: {node: '>=6.0.0'}
     hasBin: true
+    dependencies:
+      '@babel/types': 7.17.0
     dev: true
 
   /@babel/parser/7.16.2:
     resolution: {integrity: sha512-RUVpT0G2h6rOZwqLDTrKk7ksNv7YpAilTnYe1/Q+eDjxEceRMKVWbCsX7t8h6C1qCFi/1Y8WZjcEPBAFG27GPw==}
     engines: {node: '>=6.0.0'}
     hasBin: true
+    dependencies:
+      '@babel/types': 7.17.0
     dev: true
 
   /@babel/parser/7.17.3:
     resolution: {integrity: sha512-7yJPvPV+ESz2IUTPbOL+YkIGyCqOyNIzdguKQuJGnH7bg1WTIifuM21YqokFt/THWh1AkCRn9IgoykTRCBVpzA==}
     engines: {node: '>=6.0.0'}
     hasBin: true
+    dependencies:
+      '@babel/types': 7.17.0
     dev: true
 
   /@babel/template/7.16.7:
@@ -529,12 +535,12 @@ packages:
   /@types/node-fetch/2.5.12:
     resolution: {integrity: sha512-MKgC4dlq4kKNa/mYrwpKfzQMB5X3ee5U6fSprkKpToBqBmX4nFZL9cW5jl6sWn+xpRJ7ypWh2yyqqr8UUCstSw==}
     dependencies:
-      '@types/node': 16.11.12
+      '@types/node': 16.11.36
       form-data: 3.0.1
     dev: true
 
-  /@types/node/16.11.12:
-    resolution: {integrity: sha512-+2Iggwg7PxoO5Kyhvsq9VarmPbIelXP070HMImEpbtGCoyWNINQj4wzjbQCXzdHTRXnqufutJb5KAURZANNBAw==}
+  /@types/node/16.11.36:
+    resolution: {integrity: sha512-FR5QJe+TaoZ2GsMHkjuwoNabr+UrJNRr2HNOo+r/7vhcuntM6Ee/pRPOnRhhL2XE9OOvX9VLEq+BcXl3VjNoWA==}
 
   /@types/turndown/5.0.1:
     resolution: {integrity: sha512-N8Ad4e3oJxh9n9BiZx9cbe/0M3kqDpOTm2wzj13wdDUxDPjfjloWIJaquZzWE1cYTAHpjOH3rcTnXQdpEfS/SQ==}
@@ -544,7 +550,7 @@ packages:
     resolution: {integrity: sha512-8uALY5LTvSuHgloDVUvWP3pIauILm+8/0pDMokuDYIoNsOkSwd5AiHBTSEJjKTDcZr5z8UpgOWZkxBF4iJftoA==}
     requiresBuild: true
     dependencies:
-      '@types/node': 16.11.12
+      '@types/node': 16.11.36
     dev: false
     optional: true
 

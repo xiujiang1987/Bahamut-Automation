@@ -53,7 +53,7 @@
         "@trivago/prettier-plugin-sort-imports": "^3.2.0",
         "@types/js-yaml": "^4.0.5",
         "@types/markdown-it": "12.2.3",
-        "@types/node": "16.11.12",
+        "@types/node": "16.11.36",
         "@types/node-fetch": "2.5.12",
         "@types/turndown": "5.0.1",
         "esno": "^0.14.1",
