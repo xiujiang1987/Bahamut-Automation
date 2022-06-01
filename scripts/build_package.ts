@@ -25,6 +25,6 @@ async function main(): Promise<void> {
 }
 
 function build(src: string, output: string) {
-    const cmd = `pnpm tsup --silent --target esnext --format esm --no-splitting --loader ".md=text" -d ${output} ${src}`;
+    const cmd = `pnpm tsup --silent --target esnext --format esm --no-splitting --loader ".md=text" --shims -d ${output} ${src}`;
     return execSync(cmd, { stdio: "inherit" });
 }
