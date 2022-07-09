@@ -186,6 +186,10 @@ export default {
 async function getList(page: Page, logger: Logger): Promise<{ name: string; link: string }[]> {
     let draws: { name: any; link: any }[];
 
+    await page
+        .context()
+        .addCookies([{ name: "ckFuli_18UP", value: "1", domain: "fuli.gamer.com.tw", path: "/" }]);
+
     let attempts = 3;
     while (attempts-- > 0) {
         draws = [];
