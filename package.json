@@ -22,7 +22,8 @@
         "build:package": "esmo --no-warnings scripts/build_package.ts",
         "build:action": "esmo --no-warnings scripts/build_action.ts",
         "build:binary": "esmo --no-warnings scripts/build_binary.ts",
-        "build:docker": "./scripts/docker_build.sh"
+        "docker:dev": "./scripts/docker_dev.sh",
+        "docker:release": "./scripts/docker_release.sh"
     },
     "keywords": [
         "bahamut",
