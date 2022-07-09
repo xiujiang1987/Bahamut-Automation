@@ -2,16 +2,15 @@
 <br />
 <div align="center">
   
-[![Banner][banner-img]][github-url]
+[![Banner][banner-img]][gitlab-url]
 
 ### 巴哈姆特自動化！
 
 自動簽到、自動動畫瘋答題、自動抽抽樂，以及其他更多！
 
 [![Contributors][contributors-shield]][contributors-url]
-[![Stargazers][stars-shield]][stars-url]
-[![Forks][forks-shield]][forks-url]
-[![Issues][issues-shield]][issues-url]
+[![Pulls][pull-shield]][pull-url]
+[![Version][version-shield]][version-url]
 [![MIT License][license-shield]][license-url]
 
 [**>> 開始使用 <<**](#使用方法)
@@ -40,7 +39,6 @@
      - [整理站內信](#整理站內信)
      - [多平台通知](#多平台通知)
   3. [使用方法](#使用方法)
-     - [使用 GitHub Action （☁️）](#use-github-action)
      - [命令列工具 （💻）](#use-cli)
      - [已編譯的執行檔 （💻）](#use-binary)
      - [Docker （🐳）](#use-docker)
@@ -55,9 +53,9 @@
 
 ### 不需要任何硬體
 
-好吧，其實也不完全是這樣啦。應該說是不需要任何「你的」硬體，程式使用 GitHub Action 在雲端自動執行。
+好吧，其實也不完全是這樣啦。應該說是不需要任何「你的」硬體，程式提供 Docker Image，你可以使用其在許多雲端環境自動執行。
 
-> 不過如果你要在自己電腦上執行也是可以喔，查看[使用命令列工具](#use-cli)！
+> 不過如果你要在自己電腦上執行也是可以喔，查看[使用方法](#使用方法)！
 
 ### 快速設定立刻開始
 
@@ -67,7 +65,7 @@
 
 ### 完整公開及免費使用
 
-所有程式碼皆依 MIT 授權開源於 GitHub 上，所有會執行到的程式就是那些。
+所有程式碼皆依 MIT 授權開源於 GitLab 上，所有會執行到的程式就是那些。
 
 這個工具本來是我自己要用的，既然都寫了，就拿出來給大家一起用！不過如果你要捐款我也是 OK 的喔，等等，好像沒有捐款按鈕？那就給個 star 或幫忙一起優化吧！
 
@@ -119,19 +117,10 @@
 - 以 Telegram 通知執行狀況
 - 以 Discord 通知執行狀況
 - 以 Line Notify 通知執行狀況
-- 以 GitHub Issue 通知執行狀況
 
 ## 使用方法
 
 有各種使用方法，如果遇到問題歡迎[詢問][discussion-qa]喔！
-
-<a id="use-github-action"></a>
-
-### GitHub Actions （☁️）
-
-[**詳細的教學**](https://jacoblincool.github.io/Bahamut-Automation/tutorial)
-
-> _注意：新辦帳號只執行巴哈自動化的情況，可能被 GitHub 視為濫用資源_
 
 <a id="use-cli"></a>
 
@@ -148,12 +137,12 @@
 > 不建議，其實就是把 `Node.js` 跟命令列工具包在一起而已
 
 1. 下載 `example/config.yml` 並修改設定
-2. 於 [`binary` branch](https://github.com/JacobLinCool/Bahamut-Automation/tree/binary) 中下載已編譯的程式
+2. 於 [`binary` branch](https://gitlab.com/jacoblincool/bahamut-automation/tree/binary) 中下載已編譯的程式
 3. 然後執行該程式
 
 ***已編譯的執行檔有可能會被防毒軟體擋掉。***
 
-***已編譯的執行檔是使用 GitHub Action 從 main branch 的原始碼編譯的，相關編譯方法可以在 main branch 中查看。但搞不好 GitHub Action 出了什麼問題，沒有人知道。***
+***已編譯的執行檔是使用 gitlab Action 從 main branch 的原始碼編譯的，相關編譯方法可以在 main branch 中查看。但搞不好 gitlab Action 出了什麼問題，沒有人知道。***
 
 ***總而言之，如果你下載並使用這些程式，代表你同意自行承擔所有責任，包括但不限於使用程式導致的任何損失。***
 
@@ -174,6 +163,11 @@ docker run --rm -v "$(pwd)/config.yml:/config.yml" jacoblincool/bahamut-automati
 <a id="use-other-platforms"></a>
 
 ### 其他雲端平台 （☁️）
+
+嘗試過可以免費成功定時執行 Docker Image 的雲端平台：
+
+- gitlab Actions
+- Oracle Cloud Always Free (Ampere 1 CPU / 6G RAM)
 
 有想法嗎？發個 PR 吧！
 
@@ -212,15 +206,15 @@ _Replit?_ _Heroku?_ _Koyeb?_
 <!-- markdownlint-disable -->
 <table>
   <tr>
-    <td align="center"><a href="https://jacoblin.cool/"><img src="https://avatars.githubusercontent.com/u/28478594?v=4?s=96" width="96px;" alt=""/><br /><sub><b>JacobLinCool</b></sub></a><br /><a href="https://github.com/JacobLinCool/Bahamut-Automation/commits?author=JacobLinCool" title="Code">💻</a></td>
-    <td align="center"><a href="https://dxball.github.io/"><img src="https://avatars.githubusercontent.com/u/194673?v=4?s=96" width="96px;" alt=""/><br /><sub><b>Dxball ☕</b></sub></a><br /><a href="https://github.com/JacobLinCool/Bahamut-Automation/commits?author=dxball" title="Code">💻</a></td>
-    <td align="center"><a href="https://cow03haha.github.io/"><img src="https://avatars.githubusercontent.com/u/44705326?v=4?s=96" width="96px;" alt=""/><br /><sub><b>cow03haha</b></sub></a><br /><a href="https://github.com/JacobLinCool/Bahamut-Automation/commits?author=cow03haha" title="Code">💻</a></td>
-    <td align="center"><a href="https://github.com/Tony-Liou"><img src="https://avatars.githubusercontent.com/u/13446378?v=4?s=96" width="96px;" alt=""/><br /><sub><b>Zironic</b></sub></a><br /><a href="https://github.com/JacobLinCool/Bahamut-Automation/commits?author=Tony-Liou" title="Code">💻</a></td>
+    <td align="center"><a href="https://jacoblin.cool/"><img src="https://avatars.gitlabusercontent.com/u/28478594?v=4?s=96" width="96px;" alt=""/><br /><sub><b>JacobLinCool</b></sub></a><br /><a href="https://gitlab.com/jacoblincool/bahamut-automation/commits?author=JacobLinCool" title="Code">💻</a></td>
+    <td align="center"><a href="https://dxball.gitlab.io/"><img src="https://avatars.gitlabusercontent.com/u/194673?v=4?s=96" width="96px;" alt=""/><br /><sub><b>Dxball ☕</b></sub></a><br /><a href="https://gitlab.com/jacoblincool/bahamut-automation/commits?author=dxball" title="Code">💻</a></td>
+    <td align="center"><a href="https://cow03haha.gitlab.io/"><img src="https://avatars.gitlabusercontent.com/u/44705326?v=4?s=96" width="96px;" alt=""/><br /><sub><b>cow03haha</b></sub></a><br /><a href="https://gitlab.com/jacoblincool/bahamut-automation/commits?author=cow03haha" title="Code">💻</a></td>
+    <td align="center"><a href="https://gitlab.com/Tony-Liou"><img src="https://avatars.gitlabusercontent.com/u/13446378?v=4?s=96" width="96px;" alt=""/><br /><sub><b>Zironic</b></sub></a><br /><a href="https://gitlab.com/jacoblincool/bahamut-automation/commits?author=Tony-Liou" title="Code">💻</a></td>
   </tr>
   <tr>
-    <td align="center"><a href="https://github.com/yslinear"><img src="https://avatars.githubusercontent.com/u/31029063?v=4?s=96" width="96px;" alt=""/><br /><sub><b>Ying-Shan Lin</b></sub></a><br /><a href="https://github.com/JacobLinCool/Bahamut-Automation/commits?author=yslinear" title="Code">💻</a></td>
-    <td align="center"><a href="https://github.com/IamSkyBlue"><img src="https://avatars.githubusercontent.com/u/34653812?v=4?s=96" width="96px;" alt=""/><br /><sub><b>IamSkyBlue</b></sub></a><br /><a href="https://github.com/JacobLinCool/Bahamut-Automation/commits?author=IamSkyBlue" title="Code">💻</a></td>
-    <td align="center"><a href="https://github.com/nico12313"><img src="https://avatars.githubusercontent.com/u/27029472?v=4?s=96" width="96px;" alt=""/><br /><sub><b>NicholasWu</b></sub></a><br /><a href="https://github.com/JacobLinCool/Bahamut-Automation/commits?author=nico12313" title="Code">💻</a></td>
+    <td align="center"><a href="https://gitlab.com/yslinear"><img src="https://avatars.gitlabusercontent.com/u/31029063?v=4?s=96" width="96px;" alt=""/><br /><sub><b>Ying-Shan Lin</b></sub></a><br /><a href="https://gitlab.com/jacoblincool/bahamut-automation/commits?author=yslinear" title="Code">💻</a></td>
+    <td align="center"><a href="https://gitlab.com/IamSkyBlue"><img src="https://avatars.gitlabusercontent.com/u/34653812?v=4?s=96" width="96px;" alt=""/><br /><sub><b>IamSkyBlue</b></sub></a><br /><a href="https://gitlab.com/jacoblincool/bahamut-automation/commits?author=IamSkyBlue" title="Code">💻</a></td>
+    <td align="center"><a href="https://gitlab.com/nico12313"><img src="https://avatars.gitlabusercontent.com/u/27029472?v=4?s=96" width="96px;" alt=""/><br /><sub><b>NicholasWu</b></sub></a><br /><a href="https://gitlab.com/jacoblincool/bahamut-automation/commits?author=nico12313" title="Code">💻</a></td>
   </tr>
 </table>
 
@@ -235,18 +229,16 @@ _Replit?_ _Heroku?_ _Koyeb?_
 
 <!-- Links! -->
 [banner-img]: web/Bahamut-Automation.png
-[github-url]: https://github.com/JacobLinCool/Bahamut-Automation
-[discussion]: https://github.com/JacobLinCool/Bahamut-Automation/discussions
-[discussion-qa]: https://github.com/JacobLinCool/Bahamut-Automation/discussions/new?category=-q-a-%E6%88%91%E8%A6%81%E5%95%8F%E5%95%8F%E9%A1%8C
-[discussion-idea]: https://github.com/JacobLinCool/Bahamut-Automation/discussions/new?category=ideas
-[contributors-shield]: https://img.shields.io/github/contributors/JacobLinCool/Bahamut-Automation.svg?style=flat-square&color=6f61ff
-[contributors-url]: https://github.com/JacobLinCool/Bahamut-Automation/graphs/contributors
-[stars-shield]: https://img.shields.io/github/stars/JacobLinCool/Bahamut-Automation.svg?style=flat-square&color=6f61ff
-[stars-url]: https://github.com/JacobLinCool/Bahamut-Automation/stargazers
-[forks-shield]: https://img.shields.io/github/forks/JacobLinCool/Bahamut-Automation.svg?style=flat-square&color=6f61ff
-[forks-url]: https://github.com/JacobLinCool/Bahamut-Automation/network/members
-[issues-shield]: https://img.shields.io/github/issues/JacobLinCool/Bahamut-Automation.svg?style=flat-square&color=6f61ff
-[issues-url]: https://github.com/JacobLinCool/Bahamut-Automation/issues
-[license-shield]: https://img.shields.io/github/license/JacobLinCool/Bahamut-Automation.svg?style=flat-square&color=6f61ff
-[license-url]: https://github.com/JacobLinCool/Bahamut-Automation/blob/main/LICENSE
+[gitlab-url]: https://gitlab.com/jacoblincool/bahamut-automation
+[discussion]: https://gitlab.com/JacobLinCool/bahamut-automation/-/issues
+[discussion-qa]: https://gitlab.com/JacobLinCool/bahamut-automation/-/issues
+[discussion-idea]: https://gitlab.com/JacobLinCool/bahamut-automation/-/issues
+[contributors-shield]: https://img.shields.io/gitlab/contributors/jacoblincool/bahamut-automation.svg?style=flat-square&color=6f61ff
+[contributors-url]: https://gitlab.com/JacobLinCool/bahamut-automation/-/graphs/main
+[pull-shield]: https://img.shields.io/docker/pulls/jacoblincool/bahamut-automation.svg?style=flat-square&color=6f61ff
+[pull-url]: https://hub.docker.com/r/jacoblincool/bahamut-automation
+[version-shield]: https://img.shields.io/gitlab/v/tag/jacoblincool/bahamut-automation.svg?style=flat-square&color=6f61ff
+[version-url]: https://gitlab.com/JacobLinCool/bahamut-automation/-/tags
+[license-shield]: https://img.shields.io/gitlab/license/JacobLinCool/Bahamut-Automation.svg?style=flat-square&color=6f61ff
+[license-url]: https://gitlab.com/JacobLinCool/bahamut-automation/-/blob/main/LICENSE
 [product-screenshot]: images/screenshot.png
