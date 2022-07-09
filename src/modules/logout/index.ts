@@ -1,4 +1,5 @@
 import { Module } from "../_module";
+import { goto } from "../utils";
 
 export default {
     name: "登出",
@@ -12,6 +13,7 @@ export default {
             "div.wrapper.wrapper-prompt > div > div > div.form__buttonbar > button",
         );
         await page.click("div.wrapper.wrapper-prompt > div > div > div.form__buttonbar > button");
+        await page.goto("https://www.gamer.com.tw/");
         await page
             .waitForSelector("div.TOP-my.TOP-nologin")
             .catch((...args: unknown[]) => logger.error(...args));
