@@ -2,7 +2,7 @@
     "name": "bahamut-automation",
     "version": "1.0.0-pre.7",
     "description": "免費開源的巴哈姆特自動化！",
-    "type": "module",
+    "type": "commonjs",
     "main": "dist/lib/core/index.js",
     "types": "dist/lib/core/index.d.ts",
     "bin": {
