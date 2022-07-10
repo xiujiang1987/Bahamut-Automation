@@ -8,7 +8,7 @@ main();
 async function main(): Promise<void> {
     const root = process.cwd();
     const lib = resolve(root, "dist", "lib");
-    const node_version = "16";
+    const node_version = "18";
     const platforms = ["win", "macos", "linux"];
 
     let state = ora("Clear old files... ").start();
