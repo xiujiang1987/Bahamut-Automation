@@ -57,5 +57,5 @@ deploy-npm:
     dependencies:
         - build
     script:
-        - echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > .npmrc
-        - npm publish --access public
+        - npm config set //registry.npmjs.org/:_authToken ${NPM_TOKEN}
+        - npm publish --verbose --access public
