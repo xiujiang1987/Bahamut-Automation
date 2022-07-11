@@ -1,6 +1,6 @@
 {
     "name": "bahamut-automation",
-    "version": "1.0.0-pre.7",
+    "version": "1.0.0-pre.8",
     "description": "免費開源的巴哈姆特自動化！",
     "type": "commonjs",
     "main": "dist/lib/core/index.js",
@@ -76,12 +76,12 @@
         ],
         "outputPath": "dist/binary"
     },
-    "homepage": "https://github.com/JacobLinCool/bahamut-automation#readme",
+    "homepage": "https://gitlab.com/JacobLinCool/bahamut-automation#readme",
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/JacobLinCool/bahamut-automation.git"
+        "url": "git+https://gitlab.com/JacobLinCool/bahamut-automation.git"
     },
     "bugs": {
-        "url": "https://github.com/JacobLinCool/bahamut-automation/issues"
+        "url": "https://gitlab.com/JacobLinCool/bahamut-automation/issues"
     }
 }
