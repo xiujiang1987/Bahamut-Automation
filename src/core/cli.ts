@@ -10,48 +10,49 @@ const readline = createInterface({
     output: process.stdout,
 });
 
+const package_json = JSON.parse(
+    fs.readFileSync(path.resolve(__dirname, "../../../package.json"), "utf8"),
+);
+
 program
-    .option("-m, --mode <mode>", "設定檔執行模式 (1 or 2)")
+    .version(package_json.version, "-V, --version", "版本資訊")
+    // .option("-m, --mode <mode>", "設定檔執行模式 (1 或 2)")
     .option("-c, --config <path>", "設定檔位置")
-    .addHelpText("after", "\nExample: bahamut-automation -m 1 -c ./config.yml")
-    .action(main)
+    .addHelpText("after", "\n範例: bahamut-automation -m 1 -c ./config.yml")
+    .action(run)
     .parse();
 
-async function main() {
-    const opts = program.opts();
-    let mode = opts.mode ? +opts.mode : null;
-    let config_path = opts.config || null;
+async function run() {
+    const logger = new Logger("CLI");
+    try {
+        const opts = program.opts();
 
-    if (mode !== 1 && mode !== 2) {
-        while (true) {
-            mode = +(
-                await ask(["選擇模式: ", "1. 設定檔執行", "2. 直接執行", ">> "].join("\n"))
-            ).trim();
-            if (mode === 1 || mode === 2) break;
+        if (!opts.config) {
+            throw new Error("請輸入設定檔位置");
         }
-    }
 
-    if (mode === 1) {
-        if (config_path) {
-            config_path = path.resolve(config_path);
-        }
-        while (!fs.existsSync(config_path)) {
-            config_path = path.resolve(remove_quotes((await ask("請輸入設定檔位置: ")).trim()));
-            if (fs.existsSync(config_path)) {
-                break;
-            }
-            console.log("設定檔不存在", config_path);
+        const config_path = path.resolve(opts.config);
+
+        if (!fs.existsSync(config_path)) {
+            throw new Error(`設定檔 "${config_path}" 不存在`);
         }
 
         const automation = BahamutAutomation.from(config_path);
         automation.setup_listeners();
         await automation.run();
-    } else if (mode === 2) {
-        console.log("抱歉，我還沒實作這個功能。 :(");
-    }
 
-    console.log("程式執行完畢");
-    process.exit(0);
+        logger.log("程式執行完畢");
+        process.exit(0);
+    } catch (err) {
+        logger.error((err as Error).message);
+        logger.info("查看 --help 取得更多資訊");
+        logger.info("或於以下管道尋求支援：");
+        logger.info("    Discord: https://discord.gg/Q2yWzcgv");
+        logger.info(
+            "    GitLab Issues: https://gitlab.com/JacobLinCool/bahamut-automation/-/issues",
+        );
+        process.exit(1);
+    }
 }
 
 function ask(question = ""): Promise<string> {

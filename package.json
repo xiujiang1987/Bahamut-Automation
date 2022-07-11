@@ -1,13 +1,14 @@
 {
     "name": "bahamut-automation",
-    "version": "1.0.0-pre.8",
+    "version": "1.0.0-pre.9",
     "description": "免費開源的巴哈姆特自動化！",
     "type": "commonjs",
     "main": "dist/lib/core/index.js",
     "types": "dist/lib/core/index.d.ts",
     "bin": {
         "ba": "./dist/lib/core/cli.js",
-        "baha": "./dist/lib/core/cli.js"
+        "baha": "./dist/lib/core/cli.js",
+        "bahamut-automation": "./dist/lib/core/cli.js"
     },
     "files": [
         "dist/lib",

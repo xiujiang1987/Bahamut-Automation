@@ -74,12 +74,8 @@ export class BahamutAutomation extends EventEmitter {
         });
 
         this.on("finished", (outputs: unknown, time: number) => {
-            self.emit(
-                "log",
-                `執行完畢 時間: ${second_to_time(time)}\n輸出: ${outputs}`,
-                outputs,
-                time,
-            );
+            self.emit("log", `執行完畢 時間: ${second_to_time(time)}`);
+            self.emit("log", `執行完畢 輸出:`, JSON.stringify(outputs, null, 4));
         });
 
         this.on("fatal", (err: Error) => {
