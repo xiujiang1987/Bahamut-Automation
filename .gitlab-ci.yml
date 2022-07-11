@@ -23,7 +23,7 @@ build:
 
 dev-deploy:
     stage: dev-deploy
-    image: docker:latest
+    image: docker:git
     services:
         - docker:dind
     dependencies:
@@ -38,7 +38,7 @@ deploy:
     stage: deploy
     only:
         - tags
-    image: docker:latest
+    image: docker:git
     services:
         - docker:dind
     dependencies:
