@@ -46,3 +46,14 @@ deploy:
         - git checkout main
         - docker buildx create --use
         - ./scripts/docker_release.sh
+
+deploy-npm:
+    stage: deploy
+    only:
+        - tags
+    image: node:lts
+    dependencies:
+        - build
+    script:
+        - echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > .npmrc
+        - npm publish --access public
