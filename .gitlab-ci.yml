@@ -45,7 +45,6 @@ deploy:
     before_script:
         - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD"
     script:
-        - git checkout main
         - docker buildx create --use
         - ./scripts/docker_release.sh
 
