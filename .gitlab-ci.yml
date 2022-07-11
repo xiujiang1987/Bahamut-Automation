@@ -56,6 +56,7 @@ deploy-npm:
     image: node:lts
     dependencies:
         - build
+    before_script:
+        - npm config set //registry.npmjs.org/:_authToken "$NPM_TOKEN"
     script:
-        - npm config set //registry.npmjs.org/:_authToken ${NPM_TOKEN}
         - npm publish --verbose --access public
