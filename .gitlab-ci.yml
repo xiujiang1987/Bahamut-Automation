@@ -19,6 +19,8 @@ build:
 
 dev-deploy:
     stage: dev-deploy
+    except:
+        - tags
     image: docker:git
     services:
         - docker:dind
