@@ -19,7 +19,7 @@
         "start": "node ./dist/lib/core/cli.js",
         "format": "prettier --write \"**/*.{js,ts,json,yml,yaml}\" \"!dist\"",
         "docs": "typedoc ./src/core/index.ts --tsconfig ./tsconfig/core.json --name 巴哈姆特自動化！ --lightHighlightTheme nord --out ./web/docs",
-        "build": "pnpm -s build:package && pnpm -s build:binary",
+        "build": "pnpm -s build:package",
         "build:package": "esmo --no-warnings scripts/build_package.ts",
         "build:binary": "esmo --no-warnings scripts/build_binary.ts",
         "docker:dev": "./scripts/docker_dev.sh",
