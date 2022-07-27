@@ -35,45 +35,31 @@
     "dependencies": {
         "@jacoblincool/puddle": "^0.1.1",
         "@types/html-to-text": "^8.1.0",
-        "commander": "^9.3.0",
+        "bahamut-automation": "workspace:*",
+        "commander": "^9.4.0",
         "countapi-js": "^1.0.2",
         "html-to-text": "^8.2.0",
+        "is-docker": "^3.0.0",
         "js-yaml": "^4.1.0",
         "markdown-it": "^13.0.1",
-        "node-fetch": "^2.6.7",
+        "node-fetch": "^3.2.9",
+        "ora": "^6.1.2",
         "otplib": "^12.0.1",
-        "playwright": "^1.23.2",
-        "turndown": "^7.1.1"
+        "playwright-core": "^1.24.1",
+        "turndown": "^7.1.1",
+        "yup": "^0.32.11",
+        "yup-i18n": "^0.1.0"
     },
     "devDependencies": {
-        "@trivago/prettier-plugin-sort-imports": "^3.2.0",
+        "@trivago/prettier-plugin-sort-imports": "^3.3.0",
         "@types/js-yaml": "^4.0.5",
-        "@types/markdown-it": "12.2.3",
-        "@types/node": "16.11.36",
-        "@types/node-fetch": "2.5.12",
-        "@types/turndown": "5.0.1",
-        "esno": "^0.14.1",
-        "ora": "5.4.1",
-        "pkg": "5.7.0",
-        "prettier": "2.5.1",
-        "tsup": "6.0.1",
-        "typedoc": "0.22.10",
-        "typescript": "4.5.2"
-    },
-    "pkg": {
-        "scripts": [
-            "dist/lib/**/*.js"
-        ],
-        "assets": [
-            "package.json"
-        ],
-        "targets": [
-            "node16-macos-x64",
-            "node16-macos-arm64",
-            "node16-linux-x64",
-            "node16-win-x64"
-        ],
-        "outputPath": "dist/binary"
+        "@types/markdown-it": "^12.2.3",
+        "@types/node": "^16.11.45",
+        "@types/turndown": "^5.0.1",
+        "prettier": "^2.7.1",
+        "tsup": "^6.2.0",
+        "typedoc": "^0.23.9",
+        "typescript": "^4.7.4"
     },
     "homepage": "https://gitlab.com/JacobLinCool/bahamut-automation#readme",
     "repository": {
