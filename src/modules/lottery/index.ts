@@ -282,9 +282,9 @@ async function checkInfo(page: Page, logger: Logger) {
 
 async function confirm(page: Page, logger: Logger) {
     try {
-        await page.waitForSelector("input[name='agreeConfirm']");
+        await page.waitForSelector("input[name='agreeConfirm']", { state: "attached" });
         if ((await (await page.$("input[name='agreeConfirm']")).getAttribute("checked")) === null) {
-            await page.check("input[name='agreeConfirm']");
+            await page.click("text=我已閱讀注意事項，並確認兌換此商品");
         }
         await page.waitForTimeout(100);
         await page.waitForSelector("a:has-text('確認兌換')");
