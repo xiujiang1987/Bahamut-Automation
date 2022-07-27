@@ -3,25 +3,23 @@
     "version": "1.0.0-pre.9",
     "description": "免費開源的巴哈姆特自動化！",
     "type": "module",
-    "main": "dist/lib/core/index.js",
-    "types": "dist/lib/core/index.d.ts",
+    "main": "dist/core/lib/index.js",
+    "types": "dist/index.d.ts",
     "bin": {
-        "ba": "./dist/lib/core/cli.js",
-        "baha": "./dist/lib/core/cli.js",
-        "bahamut-automation": "./dist/lib/core/cli.js"
+        "ba": "./dist/core/cli/index.js",
+        "baha": "./dist/core/cli/index.js",
+        "bahamut-automation": "./dist/core/cli/index.js"
     },
     "files": [
-        "dist/lib",
+        "dist",
         "example"
     ],
     "scripts": {
-        "prepare": "",
-        "start": "node ./dist/lib/core/cli.js",
-        "format": "prettier --write \"**/*.{js,ts,json,yml,yaml}\" \"!dist\"",
+        "start": "node ./dist/core/cli/index.js",
+        "format": "prettier --write '**/*.{js,ts,json,yml,yaml}' --ignore-path .gitignore",
         "docs": "typedoc ./src/core/index.ts --tsconfig ./tsconfig/core.json --name 巴哈姆特自動化！ --lightHighlightTheme nord --out ./web/docs",
         "build": "pnpm -s build:package",
-        "build:package": "esmo --no-warnings scripts/build_package.ts",
-        "build:binary": "esmo --no-warnings scripts/build_binary.ts",
+        "build:package": "tsup",
         "docker:dev": "./scripts/docker_dev.sh",
         "docker:release": "./scripts/docker_release.sh"
     },
