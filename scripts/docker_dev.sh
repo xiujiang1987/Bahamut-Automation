@@ -1,5 +1,5 @@
 #!/bin/sh
-docker buildx bake --push --set "*.platform=linux/arm/v7,linux/arm64/v8,linux/amd64"
+docker buildx bake --load --set "*.platform=linux/arm/v7,linux/arm64/v8,linux/amd64"
 commit=$(git rev-parse --short main)
 docker tag "jacoblincool/bahamut-automation:pure" "jacoblincool/bahamut-automation:pure-$commit"
 docker tag "jacoblincool/bahamut-automation:firefox" "jacoblincool/bahamut-automation:firefox-$commit"
