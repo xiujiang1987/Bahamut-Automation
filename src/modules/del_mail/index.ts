@@ -1,5 +1,5 @@
-import type { ElementHandle, Page } from "playwright";
-import Module from "../_module";
+import { Module } from "bahamut-automation";
+import type { ElementHandle, Page } from "playwright-core";
 
 interface MatchRule {
     title?: string;

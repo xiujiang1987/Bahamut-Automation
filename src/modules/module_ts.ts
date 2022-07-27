@@ -1,5 +1,5 @@
 // THIS IS AN EXAMPLE OF A MODULE
-import type { Module } from "./_module";
+import { Module } from "bahamut-automation";
 
 // See what a module should look like in "src/core/types.ts"
 // If you are using VS Code, the IntelliSense will help you

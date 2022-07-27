@@ -1,7 +1,8 @@
+import { Module, utils } from "bahamut-automation";
 import fetch from "node-fetch";
 import { authenticator } from "otplib";
-import { Module } from "../_module";
-import { goto } from "../utils";
+
+const { goto } = utils;
 
 export default {
     name: "Login",
@@ -33,7 +34,7 @@ export default {
                         body: query.toString(),
                     },
                 );
-                const body = await res.json();
+                const body: any = await res.json();
 
                 if (body.userid) {
                     const cookies = res.headers.get("set-cookie");

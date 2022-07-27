@@ -1,5 +1,5 @@
+import { Module } from "bahamut-automation";
 import fetch from "node-fetch";
-import Module from "../_module";
 
 export default {
     name: "Discord 通知",

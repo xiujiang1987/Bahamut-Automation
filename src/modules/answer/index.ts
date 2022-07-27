@@ -1,6 +1,6 @@
+import { Module } from "bahamut-automation";
 import countapi from "countapi-js";
 import node_fetch from "node-fetch";
-import Module from "../_module";
 
 export default {
     name: "動畫瘋答題",
@@ -47,14 +47,14 @@ export default {
                         "https://api.gamer.com.tw/mobile_app/bahamut/v1/home.php?owner=blackXblue&page=1",
                     )
                         .then((r) => r.json())
-                        .then((d) => d.creation[0].sn);
+                        .then((d: any) => d.creation[0].sn);
                     const ans = await node_fetch(
                         "https://api.gamer.com.tw/mobile_app/bahamut/v1/home_creation_detail.php?sn=" +
                             sn,
                     )
                         .then((r) => r.json())
                         .then(
-                            (d) =>
+                            (d: any) =>
                                 d.content
                                     .match(/<body[\s\w"-=]*>([\s\S]*)<\/body>/)[0]
                                     .match(/A[:：](\d)/gi)[0]

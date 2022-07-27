@@ -1,5 +1,6 @@
-import Module from "../_module";
-import { goto, template } from "../utils";
+import { Module, utils } from "bahamut-automation";
+
+const { goto, template } = utils;
 
 export default {
     name: "勇者大聲說",

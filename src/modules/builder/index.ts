@@ -1,5 +1,6 @@
-import Module from "../_module";
-import { template } from "../utils";
+import { Module, utils } from "bahamut-automation";
+
+const { template } = utils;
 
 export default {
     name: "自動回文",
@@ -12,7 +13,9 @@ export default {
         const builder = params.posts;
         if (builder == null) {
             if (shared.report) {
-                shared.report.reports["自動回文蓋樓"] = `# 自動回文蓋樓 \n\n❌ 未執行自動回文 沒有指定的文章`;
+                shared.report.reports[
+                    "自動回文蓋樓"
+                ] = `# 自動回文蓋樓 \n\n❌ 未執行自動回文 沒有指定的文章`;
             }
             return { success: false };
         }

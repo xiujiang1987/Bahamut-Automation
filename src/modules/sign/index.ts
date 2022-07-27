@@ -1,7 +1,8 @@
+import { Module, utils } from "bahamut-automation";
 import countapi from "countapi-js";
-import { Page } from "playwright";
-import { Module } from "../_module";
-import { goto } from "../utils";
+import { Page } from "playwright-core";
+
+const { goto } = utils;
 
 export default {
     name: "簽到",

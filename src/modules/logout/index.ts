@@ -1,5 +1,4 @@
-import { Module } from "../_module";
-import { goto } from "../utils";
+import { Module } from "bahamut-automation";
 
 export default {
     name: "登出",

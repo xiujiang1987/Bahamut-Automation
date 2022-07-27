@@ -1,7 +1,7 @@
+import { Logger, Module } from "bahamut-automation";
 import countapi from "countapi-js";
-import { ElementHandle, Page } from "playwright";
+import { ElementHandle, Page } from "playwright-core";
 import { Pool } from "@jacoblincool/puddle";
-import { Logger, Module } from "../_module";
 
 export default {
     name: "福利社",

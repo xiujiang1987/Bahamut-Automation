@@ -1,5 +1,5 @@
-import { Frame } from "playwright";
-import { Logger, Module } from "../_module";
+import { Logger, Module } from "bahamut-automation";
+import { Frame } from "playwright-core";
 
 type ad_handler_args = {
     ad_frame: Frame;

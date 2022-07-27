@@ -1,8 +1,9 @@
+import { Module, utils } from "bahamut-automation";
 import { convert as html_to_text } from "html-to-text";
 import markdownIt from "markdown-it";
 import TurndownService from "turndown";
-import Module from "../_module";
-import { template } from "../utils";
+
+const { template } = utils;
 
 const md = markdownIt();
 const td = new TurndownService({ headingStyle: "atx" });

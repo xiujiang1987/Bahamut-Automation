@@ -1,4 +1,4 @@
-import { Module } from "../_module";
+import { Module } from "bahamut-automation";
 
 export default {
     name: "公會簽到",

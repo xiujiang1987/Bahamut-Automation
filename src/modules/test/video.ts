@@ -1,4 +1,4 @@
-import { Page } from "playwright";
+import { Page } from "playwright-core";
 import { Logger } from "../../core";
 
 export default async function (page: Page, logger: Logger) {
