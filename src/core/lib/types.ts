@@ -1,5 +1,5 @@
-import type { LaunchOptions, Page } from "playwright";
-import Logger from "./logger";
+import type { LaunchOptions, Page } from "playwright-core";
+import Logger from "./logger.js";
 
 export type CustomValue = any;
 export type CustomOutput = any;
@@ -8,13 +8,13 @@ export type ModuleParams = Record<string, CustomValue>;
 
 export interface BahamutAutomationConfig {
     /** 所有模組皆可存取的共用參數 */
-    shared?: Record<string, CustomValue>;
+    shared: Record<string, CustomValue>;
 
     /** 使用的模組及其參數，可以是內建模組的名稱或是自製模組的路徑 */
-    modules?: Record<string, ModuleParams>;
+    modules: Record<string, ModuleParams>;
 
     /** 瀏覽器的設定，擴展自 playwright.LaunchOptions @see LaunchOptions */
-    browser?: LaunchOptions & { type?: "firefox" | "chromium" | "webkit" };
+    browser: LaunchOptions & { type?: "firefox" | "chromium" | "webkit" };
 }
 
 export interface Module {

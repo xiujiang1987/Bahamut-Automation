@@ -27,3 +27,18 @@ export function second_to_time(second: number): string {
 
     return `${hour} 小時 ${minute} 分 ${second_left} 秒`;
 }
+
+export function deep_merge(target: any, source: any): void {
+    for (const key in source) {
+        if (!source.hasOwnProperty(key)) {
+            continue;
+        }
+
+        target[key] =
+            typeof source[key] === "object" ? deep_merge(target[key], source[key]) : source[key];
+    }
+}
+
+export function get_root() {
+    return path.resolve(__dirname, "..", "..", "..");
+}
