@@ -11,11 +11,10 @@ export default {
         await page.waitForSelector(
             "div.wrapper.wrapper-prompt > div > div > div.form__buttonbar > button",
         );
-        await page.click("div.wrapper.wrapper-prompt > div > div > div.form__buttonbar > button");
-        await page.goto("https://www.gamer.com.tw/");
-        await page
-            .waitForSelector("div.TOP-my.TOP-nologin")
-            .catch((...args: unknown[]) => logger.error(...args));
+        await Promise.all([
+            page.click("div.wrapper.wrapper-prompt > div > div > div.form__buttonbar > button"),
+            page.waitForNavigation(),
+        ]);
 
         logger.log(`帳號已登出`);
         shared.flags.logged = false;
