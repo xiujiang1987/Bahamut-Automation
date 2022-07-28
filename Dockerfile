@@ -1,7 +1,7 @@
 FROM ubuntu:latest as base
 
 SHELL [ "/bin/bash", "-ic" ]
-RUN apt update && apt -y install curl libatomic1 && apt clean
+RUN apt update && apt -y --reinstall install libc-bin curl libatomic1
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
 RUN nvm install --lts
 RUN npm i -g pnpm
