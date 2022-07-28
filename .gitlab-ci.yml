@@ -58,4 +58,5 @@ deploy-npm:
     before_script:
         - npm config set //registry.npmjs.org/:_authToken "$NPM_TOKEN"
     script:
-        - npm publish --verbose --access public
+        - npm i -g pnpm
+        - pnpm publish --verbose --access public
