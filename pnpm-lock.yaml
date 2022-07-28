@@ -32,7 +32,6 @@ importers:
     dependencies:
       '@jacoblincool/puddle': 0.1.1
       '@types/html-to-text': 8.1.0
-      bahamut-automation: 'link:'
       commander: 9.4.0
       countapi-js: 1.0.2
       html-to-text: 8.2.0
@@ -52,6 +51,7 @@ importers:
       '@types/markdown-it': 12.2.3
       '@types/node': 16.11.45
       '@types/turndown': 5.0.1
+      bahamut-automation: 'link:'
       prettier: 2.7.1
       tsup: 6.2.0_typescript@4.7.4
       typedoc: 0.23.9_typescript@4.7.4

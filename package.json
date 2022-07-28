@@ -35,7 +35,6 @@
     "dependencies": {
         "@jacoblincool/puddle": "^0.1.1",
         "@types/html-to-text": "^8.1.0",
-        "bahamut-automation": "workspace:*",
         "commander": "^9.4.0",
         "countapi-js": "^1.0.2",
         "html-to-text": "^8.2.0",
@@ -56,6 +55,7 @@
         "@types/markdown-it": "^12.2.3",
         "@types/node": "^16.11.45",
         "@types/turndown": "^5.0.1",
+        "bahamut-automation": "workspace:*",
         "prettier": "^2.7.1",
         "tsup": "^6.2.0",
         "typedoc": "^0.23.9",
