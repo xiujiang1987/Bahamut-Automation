@@ -1,8 +1,10 @@
 import EventEmitter from "node:events";
 import fs from "node:fs";
 import path from "node:path";
+import { pathToFileURL } from "node:url";
 import countapi from "countapi-js";
 import { Browser, BrowserContext } from "playwright-core";
+import { VERBOSE } from "./constants.js";
 import { launch } from "./launcher.js";
 import { Logger } from "./logger.js";
 import type { BahamutAutomationConfig, CustomOutput, Module } from "./types.js";
@@ -89,7 +91,12 @@ export class BahamutAutomation extends EventEmitter {
                     if (!fs.existsSync(location)) {
                         throw new Error(`模組 ${module_id} (${location}) 不存在`);
                     }
-                    const _module = await import(location);
+
+                    if (VERBOSE) {
+                        console.log(`importing ${module_id} from ${pathToFileURL(location).href}`);
+                    }
+
+                    const _module = await import(pathToFileURL(location).href);
                     const module: Module = _module.default || _module;
 
                     this.emit(
