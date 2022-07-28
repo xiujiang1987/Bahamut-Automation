@@ -1,9 +1,9 @@
 services:
-    pure:
-        build:
-            context: .
-            target: pure
-        image: jacoblincool/bahamut-automation:pure
+    # pure:
+    #     build:
+    #         context: .
+    #         target: pure
+    #     image: jacoblincool/bahamut-automation:pure
     chromium:
         build:
             context: .
