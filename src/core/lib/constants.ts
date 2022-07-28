@@ -4,3 +4,5 @@ export const LINK = {
 } as const;
 
 export const BRWOSER_TYPES = ["chromium", "firefox", "webkit"] as const;
+
+export const VERBOSE = process.env.VERBOSE ? true : false;
