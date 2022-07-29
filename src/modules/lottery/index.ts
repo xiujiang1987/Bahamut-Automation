@@ -1,6 +1,7 @@
 import { Logger, Module } from "bahamut-automation";
 import countapi from "countapi-js";
 import { ElementHandle, Page } from "playwright-core";
+import { resolve } from "recaptcha-resolver";
 import { Pool } from "@jacoblincool/puddle";
 
 export default {
@@ -292,8 +293,19 @@ async function confirm(page: Page, logger: Logger) {
         await page.click("a:has-text('確認兌換')");
         await page.waitForSelector("button:has-text('確定')");
         await page.waitForTimeout(100);
-        await Promise.all([page.waitForNavigation(), page.click("button:has-text('確定')")]);
+        const next_navigation = page.waitForNavigation().catch(() => {});
+        await page.click("button:has-text('確定')");
         await page.waitForTimeout(300);
+        const recaptcha_frame_width = await page.$eval(
+            "iframe[src^='https://www.google.com/recaptcha/api2/bframe']",
+            (elm: HTMLIFrameElement) => getComputedStyle(elm).width,
+        );
+        if (recaptcha_frame_width !== "100%") {
+            logger.log("需要處理 reCAPTCHA");
+            await timeout_promise(resolve(page, { delay: 64, popped: true }), 30_000);
+            logger.log("reCAPTCHA 自動處理完成");
+        }
+        await next_navigation;
     } catch (err) {
         logger.error(page.url());
         logger.error(err);
@@ -319,4 +331,17 @@ function report({ lottery, unfinished }: { lottery: number; unfinished: { [key: 
 
     body += "\n";
     return body;
+}
+
+/**
+ * Force reject a promise after a certain amount of time.
+ * @param promise
+ * @param delay
+ * @returns
+ */
+function timeout_promise(promise: Promise<any>, delay: number) {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => reject("Timed Out"), delay);
+        promise.then(resolve).catch(resolve);
+    });
 }
