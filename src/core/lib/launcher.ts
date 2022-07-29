@@ -13,13 +13,8 @@ export async function launch(
         options.args = [...(options.args || []), "--mute-audio"];
     }
 
-    if (!is_docker() && !options.executablePath) {
-        options.executablePath =
-            type === "chromium"
-                ? find_chrome()
-                : type === "firefox"
-                ? find_firefox()
-                : find_webkit();
+    if (!is_docker() && !options.executablePath && type === "chromium") {
+        options.executablePath = find_chrome();
     }
 
     const browser = await playwright[type].launch(options);
