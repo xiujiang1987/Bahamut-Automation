@@ -35,7 +35,9 @@ export function deep_merge(target: any, source: any): void {
         }
 
         target[key] =
-            typeof source[key] === "object" ? deep_merge(target[key], source[key]) : source[key];
+            typeof source[key] === "object" && typeof target[key] === "object"
+                ? deep_merge(target[key], source[key])
+                : source[key];
     }
 }
 
