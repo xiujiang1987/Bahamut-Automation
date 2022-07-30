@@ -37,6 +37,24 @@ export default {
                 const { link, name } = draws[idx];
                 const task_page = await context.newPage();
 
+                const recaptcha = {
+                    process: false
+                };
+                task_page.on('response', async response => {
+                    if(response.url().includes("recaptcha/api2/userverify")) {
+                        const text = (await response.text()).replace(")]}'\n", "");
+                        const data = JSON.parse(text);
+                        // data[2]: 0 = failed reCAPTCHA, 1 = passed reCAPTCHA
+                        recaptcha.process = (data[2] === 0);
+                    }
+                    if(response.url().includes("recaptcha/api2/reload")) {
+                        const text = (await response.text()).replace(")]}'\n", "");
+                        const data = JSON.parse(text);
+                        // data[5]: Only equals to "nocaptcha" means passed reCAPTCHA
+                        recaptcha.process = (data[5] !== "nocaptcha");
+                    }
+                });
+
                 for (let attempts = 1; attempts <= max_attempts; attempts++) {
                     try {
                         await task_page.goto(link);
@@ -138,7 +156,7 @@ export default {
                             await checkInfo(task_page, logger).catch((...args: unknown[]) =>
                                 logger.error(...args),
                             );
-                            await confirm(task_page, logger).catch((...args: unknown[]) =>
+                            await confirm(task_page, logger, recaptcha).catch((...args: unknown[]) =>
                                 logger.error(...args),
                             );
                             if (
@@ -281,7 +299,7 @@ async function checkInfo(page: Page, logger: Logger) {
     }
 }
 
-async function confirm(page: Page, logger: Logger) {
+async function confirm(page: Page, logger: Logger, recaptcha: any) {
     try {
         await page.waitForSelector("input[name='agreeConfirm']", { state: "attached" });
         if ((await (await page.$("input[name='agreeConfirm']")).getAttribute("checked")) === null) {
@@ -292,15 +310,12 @@ async function confirm(page: Page, logger: Logger) {
         await page.waitForTimeout(100);
         await page.click("a:has-text('確認兌換')");
         await page.waitForSelector("button:has-text('確定')");
-        let passed = false;
-        const next_navigation = page
-            .waitForNavigation()
-            .then(() => (passed = true))
-            .catch(() => 0);
+        await page.waitForTimeout(100);
+        const next_navigation = page.waitForNavigation().catch(() => {});
         await page.click("button:has-text('確定')");
         await page.waitForTimeout(300);
 
-        if (passed === false) {
+        if (recaptcha.process === true) {
             const recaptcha_frame_width = await page.$eval(
                 "iframe[src^='https://www.google.com/recaptcha/api2/bframe']",
                 (elm: HTMLIFrameElement) => getComputedStyle(elm).width,
