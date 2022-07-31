@@ -38,20 +38,20 @@ export default {
                 const task_page = await context.newPage();
 
                 const recaptcha = {
-                    process: false
+                    process: false,
                 };
-                task_page.on('response', async response => {
-                    if(response.url().includes("recaptcha/api2/userverify")) {
+                task_page.on("response", async (response) => {
+                    if (response.url().includes("recaptcha/api2/userverify")) {
                         const text = (await response.text()).replace(")]}'\n", "");
                         const data = JSON.parse(text);
                         // data[2]: 0 = failed reCAPTCHA, 1 = passed reCAPTCHA
-                        recaptcha.process = (data[2] === 0);
+                        recaptcha.process = data[2] === 0;
                     }
-                    if(response.url().includes("recaptcha/api2/reload")) {
+                    if (response.url().includes("recaptcha/api2/reload")) {
                         const text = (await response.text()).replace(")]}'\n", "");
                         const data = JSON.parse(text);
                         // data[5]: Only equals to "nocaptcha" means passed reCAPTCHA
-                        recaptcha.process = (data[5] !== "nocaptcha");
+                        recaptcha.process = data[5] !== "nocaptcha";
                     }
                 });
 
@@ -156,8 +156,8 @@ export default {
                             await checkInfo(task_page, logger).catch((...args: unknown[]) =>
                                 logger.error(...args),
                             );
-                            await confirm(task_page, logger, recaptcha).catch((...args: unknown[]) =>
-                                logger.error(...args),
+                            await confirm(task_page, logger, recaptcha).catch(
+                                (...args: unknown[]) => logger.error(...args),
                             );
                             if (
                                 (await task_page.$(".card > .section > p")) &&
