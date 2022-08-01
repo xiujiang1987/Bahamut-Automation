@@ -2,7 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import is_docker from "is-docker";
 import playwright from "playwright-core";
-import { BRWOSER_TYPES } from "./constants.js";
+import { BRWOSER_TYPES, VERBOSE } from "./constants.js";
 import { booleanify, get_root } from "./utils.js";
 
 export async function launch(
@@ -21,8 +21,21 @@ export async function launch(
         options.headless = booleanify(options.headless);
     }
 
+    if (VERBOSE) {
+        console.log(`launching ${type} from ${options.executablePath || "default executable"}`);
+        console.log(`with args ${options.args?.join(" ") || "none"}`);
+    }
+
     const browser = await playwright[type].launch(options);
     const context = await browser.newContext();
+
+    if (VERBOSE) {
+        const test_page = await context.newPage();
+        const version = await test_page.evaluate(() => navigator.userAgent);
+        console.log(`launched ${type} (${version})`);
+        await test_page.close();
+    }
+
     return { browser, context };
 }
 
