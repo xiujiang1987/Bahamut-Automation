@@ -44,3 +44,11 @@ export function deep_merge(target: any, source: any): void {
 export function get_root() {
     return path.resolve(__dirname, "..", "..", "..");
 }
+
+export function booleanify(raw: string | number | boolean): boolean {
+    return typeof raw === "boolean"
+        ? raw
+        : typeof raw === "number"
+        ? raw !== 0
+        : ["true", "1", "on", "yes"].includes(raw.slice(0, 4).toLowerCase().trim());
+}

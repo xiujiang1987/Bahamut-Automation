@@ -24,6 +24,7 @@ program.command("install [type]").description("安裝瀏覽器").action(install)
 program
     .description("執行自動化")
     .option("-c, --config <path...>", "設定檔位置")
+    .option("-o, --override <field...>", "覆蓋設定檔欄位")
     .addHelpText("after", "\n範例: bahamut-automation -c ./config.yml")
     .action(run);
 

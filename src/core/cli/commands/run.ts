@@ -5,6 +5,7 @@ import {
     BahamutAutomationConfig,
     LINK,
     Logger,
+    VERBOSE,
     deep_merge,
     default_config,
     parse_config,
@@ -30,6 +31,28 @@ export async function run(opts: OptionValues, cmd: Command) {
                 deep_merge(config.browser, layer.browser);
             } catch (err) {
                 throw new Error(`設定檔 ${config_path} 解析失敗`);
+            }
+        }
+
+        if (Array.isArray(opts.override)) {
+            for (const override of opts.override) {
+                const [path, value] = override.split("=") as [string, string];
+                const parts = path.split(".");
+                let field = config;
+                for (let i = 0; i < parts.length; i++) {
+                    if (i < parts.length - 1) {
+                        if (field[parts[i]] === undefined) {
+                            field[parts[i]] = {};
+                        }
+                        field = field[parts[i]];
+                    } else {
+                        field[parts[i]] = value;
+                    }
+                }
+
+                if (VERBOSE) {
+                    logger.info(`Override ${path} = ${value}`);
+                }
             }
         }
 

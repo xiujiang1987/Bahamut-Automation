@@ -3,7 +3,7 @@ import path from "node:path";
 import is_docker from "is-docker";
 import playwright from "playwright-core";
 import { BRWOSER_TYPES } from "./constants.js";
-import { get_root } from "./utils.js";
+import { booleanify, get_root } from "./utils.js";
 
 export async function launch(
     type: typeof BRWOSER_TYPES[number] = "firefox",
@@ -15,6 +15,10 @@ export async function launch(
 
     if (!is_docker() && !options.executablePath && type === "chromium") {
         options.executablePath = find_chrome();
+    }
+
+    if (options.headless) {
+        options.headless = booleanify(options.headless);
     }
 
     const browser = await playwright[type].launch(options);

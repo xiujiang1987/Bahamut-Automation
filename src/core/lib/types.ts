@@ -15,6 +15,8 @@ export interface BahamutAutomationConfig {
 
     /** 瀏覽器的設定，擴展自 playwright.LaunchOptions @see LaunchOptions */
     browser: LaunchOptions & { type?: "firefox" | "chromium" | "webkit" };
+
+    [key: string]: any;
 }
 
 export interface Module {
