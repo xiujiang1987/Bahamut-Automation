@@ -1,6 +1,6 @@
 import { Logger, Module } from "bahamut-automation";
 import countapi from "countapi-js";
-import { ElementHandle, Page } from "playwright-core";
+import { ElementHandle, Frame, Page } from "playwright-core";
 import { solve } from "recaptcha-solver";
 import { Pool } from "@jacoblincool/puddle";
 
@@ -37,9 +37,7 @@ export default {
                 const { link, name } = draws[idx];
                 const task_page = await context.newPage();
 
-                const recaptcha = {
-                    process: false,
-                };
+                const recaptcha = { process: false };
                 task_page.on("response", async (response) => {
                     if (response.url().includes("recaptcha/api2/userverify")) {
                         const text = (await response.text()).replace(")]}'\n", "");
@@ -105,14 +103,14 @@ export default {
 
                         await Promise.all([
                             task_page
-                                .waitForResponse(/file\.(mp4|webm)/, { timeout: 5000 })
+                                .waitForSelector(".dialogify .dialogify__body p", { timeout: 5000 })
                                 .catch(() => {}),
                             task_page
-                                .waitForSelector(".dialogify .dialogify__body p", { timeout: 5000 })
+                                .waitForSelector("button:has-text('確定')", { timeout: 5000 })
                                 .catch(() => {}),
                         ]);
 
-                        let ad_status =
+                        const ad_status =
                             (await task_page
                                 .$eval(
                                     ".dialogify .dialogify__body p",
@@ -120,7 +118,7 @@ export default {
                                 )
                                 .catch(() => {})) || "";
 
-                        let ad_frame: any;
+                        let ad_frame: Frame;
                         if (ad_status.includes("廣告能量補充中")) {
                             logger.error("廣告能量補充中");
                             await task_page
@@ -165,9 +163,7 @@ export default {
                                     elm.innerText.includes("成功"),
                                 ))
                             ) {
-                                logger.success(
-                                    "已完成一次抽抽樂：" + name + " \u001b[92m✔\u001b[m",
-                                );
+                                logger.success(`已完成一次抽抽樂：${name} \u001b[92m✔\u001b[m`);
                                 lottery++;
                             } else {
                                 logger.error("發生錯誤，重試中 \u001b[91m✘\u001b[m");
@@ -307,11 +303,9 @@ async function confirm(page: Page, logger: Logger, recaptcha: any) {
         }
         await page.waitForTimeout(100);
         await page.waitForSelector("a:has-text('確認兌換')");
-        await page.waitForTimeout(100);
         await page.click("a:has-text('確認兌換')");
-        await page.waitForSelector("button:has-text('確定')");
-        await page.waitForTimeout(100);
         const next_navigation = page.waitForNavigation().catch(() => {});
+        await page.waitForSelector("button:has-text('確定')");
         await page.click("button:has-text('確定')");
         await page.waitForTimeout(300);
 
