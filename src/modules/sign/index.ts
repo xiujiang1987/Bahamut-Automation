@@ -50,7 +50,6 @@ export default {
                         }
 
                         logger.log("嘗試觀看廣告以獲得雙倍獎勵，可能需要多達 1 分鐘");
-                        await page.click("text=領取雙倍巴幣");
                         await Promise.all([
                             page.waitForResponse(/\gampad\/ads/),
                             page.click("text=領取雙倍巴幣"),
