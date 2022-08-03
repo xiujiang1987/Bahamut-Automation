@@ -9,24 +9,24 @@ importers:
       '@types/html-to-text': ^8.1.0
       '@types/js-yaml': ^4.0.5
       '@types/markdown-it': ^12.2.3
-      '@types/node': ^16.11.45
+      '@types/node': ^18.6.3
       '@types/turndown': ^5.0.1
       bahamut-automation: workspace:*
       commander: ^9.4.0
       countapi-js: ^1.0.2
-      html-to-text: ^8.2.0
+      html-to-text: ^8.2.1
       is-docker: ^3.0.0
       js-yaml: ^4.1.0
       markdown-it: ^13.0.1
-      node-fetch: ^3.2.9
+      node-fetch: ^3.2.10
       ora: ^6.1.2
       otplib: ^12.0.1
-      playwright-core: ^1.24.1
+      playwright-core: ^1.24.2
       prettier: ^2.7.1
-      recaptcha-solver: ^0.2.2
-      tsup: ^6.2.0
+      recaptcha-solver: ^0.2.3
+      tsup: ^6.2.1
       turndown: ^7.1.1
-      typedoc: ^0.23.9
+      typedoc: ^0.23.10
       typescript: ^4.7.4
       yup: ^0.32.11
       yup-i18n: ^0.1.0
@@ -35,15 +35,15 @@ importers:
       '@types/html-to-text': 8.1.0
       commander: 9.4.0
       countapi-js: 1.0.2
-      html-to-text: 8.2.0
+      html-to-text: 8.2.1
       is-docker: 3.0.0
       js-yaml: 4.1.0
       markdown-it: 13.0.1
-      node-fetch: 3.2.9
+      node-fetch: 3.2.10
       ora: 6.1.2
       otplib: 12.0.1
-      playwright-core: 1.24.1
-      recaptcha-solver: 0.2.2
+      playwright-core: 1.24.2
+      recaptcha-solver: 0.2.3
       turndown: 7.1.1
       yup: 0.32.11
       yup-i18n: 0.1.0
@@ -51,12 +51,12 @@ importers:
       '@trivago/prettier-plugin-sort-imports': 3.3.0_prettier@2.7.1
       '@types/js-yaml': 4.0.5
       '@types/markdown-it': 12.2.3
-      '@types/node': 16.11.45
+      '@types/node': 18.6.3
       '@types/turndown': 5.0.1
       bahamut-automation: 'link:'
       prettier: 2.7.1
-      tsup: 6.2.0_typescript@4.7.4
-      typedoc: 0.23.9_typescript@4.7.4
+      tsup: 6.2.1_typescript@4.7.4
+      typedoc: 0.23.10_typescript@4.7.4
       typescript: 4.7.4
 
 packages:
@@ -453,8 +453,8 @@ packages:
     resolution: {integrity: sha512-eC4U9MlIcu2q0KQmXszyn5Akca/0jrQmwDRgpAMJai7qBWq4amIQhZyNau4VYGtCeALvW1/NtjzJJ567aZxfKA==}
     dev: true
 
-  /@types/node/16.11.45:
-    resolution: {integrity: sha512-3rKg/L5x0rofKuuUt5zlXzOnKyIHXmIu5R8A0TuNDMF2062/AOIDBciFIjToLEJ/9F9DzkHNot+BpNsMI1OLdQ==}
+  /@types/node/18.6.3:
+    resolution: {integrity: sha512-6qKpDtoaYLM+5+AFChLhHermMQxc3TOEFIDzrZLPRGHPrLEwqFkkT5Kx3ju05g6X7uDPazz3jHbKPX0KzCjntg==}
     dev: true
 
   /@types/turndown/5.0.1:
@@ -1182,8 +1182,8 @@ packages:
     hasBin: true
     dev: false
 
-  /html-to-text/8.2.0:
-    resolution: {integrity: sha512-CLXExYn1b++Lgri+ZyVvbUEFwzkLZppjjZOwB7X1qv2jIi8MrMEvxWX5KQ7zATAzTvcqgmtO00M2kCRMtEdOKQ==}
+  /html-to-text/8.2.1:
+    resolution: {integrity: sha512-aN/3JvAk8qFsWVeE9InWAWueLXrbkoVZy0TkzaGhoRBC2gCFEeRLDDJN3/ijIGHohy6H+SZzUQWN/hcYtaPK8w==}
     engines: {node: '>=10.23.2'}
     hasBin: true
     dependencies:
@@ -1477,8 +1477,8 @@ packages:
       whatwg-url: 5.0.0
     dev: false
 
-  /node-fetch/3.2.9:
-    resolution: {integrity: sha512-/2lI+DBecVvVm9tDhjziTVjo2wmTsSxSk58saUYP0P/fRJ3xxtfMDY24+CKTkfm0Dlhyn3CSXNL0SoRiCZ8Rzg==}
+  /node-fetch/3.2.10:
+    resolution: {integrity: sha512-MhuzNwdURnZ1Cp4XTazr69K0BTizsBroX7Zx3UgDSVcZYKF/6p0CBe4EUb/hLqmzVhl0UpYfgRljQ4yxE+iCxA==}
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
     dependencies:
       data-uri-to-buffer: 4.0.0
@@ -1587,12 +1587,6 @@ packages:
     engines: {node: '>= 6'}
     dev: true
 
-  /playwright-core/1.24.1:
-    resolution: {integrity: sha512-1RoSDe/oTQS1Ct7Pb8i+vcFKbKYpmVIBXk0IUiD8RvCUMnNl7EJF1OSQ9E8TZ5RYamWkW2Psir9e8Doyz1FnhQ==}
-    engines: {node: '>=14'}
-    hasBin: true
-    dev: false
-
   /playwright-core/1.24.2:
     resolution: {integrity: sha512-zfAoDoPY/0sDLsgSgLZwWmSCevIg1ym7CppBwllguVBNiHeixZkc1AdMuYUPZC6AdEYc4CxWEyLMBTw2YcmRrA==}
     engines: {node: '>=14'}
@@ -1671,8 +1665,8 @@ packages:
       picomatch: 2.3.1
     dev: true
 
-  /recaptcha-solver/0.2.2:
-    resolution: {integrity: sha512-T2NhSVHEvt9HzQ6yK6ivNvyhgn9Y2hGNINEqZ7qAqJhelKwvHS9heuvO6vEp9a3Boi6KuTZvvFeRzWpGOCdNNQ==}
+  /recaptcha-solver/0.2.3:
+    resolution: {integrity: sha512-DwYK/tTkoIdZMUjiNmWImBxhj1QqoQXpiGPxg4bNEVtb/U7wEqrKyH8Auuv7YzK/X3UQ72hEu39kAxzSi8/HZQ==}
     requiresBuild: true
     dependencies:
       playwright-core: 1.24.2
@@ -1907,8 +1901,8 @@ packages:
     resolution: {integrity: sha512-Y/arvbn+rrz3JCKl9C4kVNfTfSm2/mEp5FSz5EsZSANGPSlQrpRI5M4PKF+mJnE52jOO90PnPSc3Ur3bTQw0gA==}
     dev: true
 
-  /tsup/6.2.0_typescript@4.7.4:
-    resolution: {integrity: sha512-PNRQY/eUrtQgPHITOa9qU1Qss2AKHZl9OJFMsQGF+rpcQBMIYh5i0BUh5Gam8C8J0OuNQOGazqBEQHWMFLJKlQ==}
+  /tsup/6.2.1_typescript@4.7.4:
+    resolution: {integrity: sha512-KhBhCqVA3bHrIWhkcqTUA7R69H05IcBlHEtCVLEu42XDGUzz+bDqCcfu5PwpkKJ8DqK5tpdgM/qmyk4DdUbkZw==}
     engines: {node: '>=14'}
     hasBin: true
     peerDependencies:
@@ -1949,8 +1943,8 @@ packages:
       domino: 2.1.6
     dev: false
 
-  /typedoc/0.23.9_typescript@4.7.4:
-    resolution: {integrity: sha512-rvWci2KHwteVUufZjjtIy/4PIHiE66t4VW4Ob6pezV//GHZ9Px0CHE5iq032GZzKONJWnNb+EJsrQv32INRvxA==}
+  /typedoc/0.23.10_typescript@4.7.4:
+    resolution: {integrity: sha512-03EUiu/ZuScUBMnY6p0lY+HTH8SwhzvRE3gImoemdPDWXPXlks83UGTx++lyquWeB1MTwm9D9Ca8RIjkK3AFfQ==}
     engines: {node: '>= 14.14'}
     hasBin: true
     peerDependencies:
