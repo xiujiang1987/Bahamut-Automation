@@ -1,7 +1,7 @@
 import { Logger, Module } from "bahamut-automation";
 import countapi from "countapi-js";
 import { ElementHandle, Frame, Page } from "playwright-core";
-import { solve } from "recaptcha-solver";
+import { NotFoundError, solve } from "recaptcha-solver";
 import { Pool } from "@jacoblincool/puddle";
 
 export default {
@@ -316,8 +316,14 @@ async function confirm(page: Page, logger: Logger, recaptcha: any) {
             );
             if (recaptcha_frame_width !== "100%") {
                 logger.log("需要處理 reCAPTCHA");
-                // @ts-ignore I don't know why page type is incorrect though they are both from playwright
-                await timeout_promise(solve(page, { delay: 64 }), 30_000);
+                try {
+                    await timeout_promise(solve(page, { delay: 64 }), 30_000);
+                } catch (err) {
+                    if (err instanceof NotFoundError) {
+                        logger.error("reCAPTCHA [Try it later]");
+                    }
+                    throw err;
+                }
                 logger.log("reCAPTCHA 自動處理完成");
             }
         }
