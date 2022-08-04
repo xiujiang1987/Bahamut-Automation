@@ -37,6 +37,7 @@ CMD ba -c /config.yml
 # Not available for arm/v7
 FROM jacoblincool/playwright:chromium-light as chromium-light
 
-RUN pnpm i -g bahamut-automation
+RUN apk add python3 make gcc g++
+RUN npm i -g bahamut-automation
 COPY example/config.yml /config.yml
 CMD ba -c /config.yml -o browser.type=chromium -o browser.executablePath=/usr/bin/chromium
