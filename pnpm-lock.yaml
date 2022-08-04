@@ -23,7 +23,7 @@ importers:
       otplib: ^12.0.1
       playwright-core: ^1.24.2
       prettier: ^2.7.1
-      recaptcha-solver: ^0.2.4
+      recaptcha-solver: ^0.2.5
       tsup: ^6.2.1
       turndown: ^7.1.1
       typedoc: ^0.23.10
@@ -43,7 +43,7 @@ importers:
       ora: 6.1.2
       otplib: 12.0.1
       playwright-core: 1.24.2
-      recaptcha-solver: 0.2.4
+      recaptcha-solver: 0.2.5
       turndown: 7.1.1
       yup: 0.32.11
       yup-i18n: 0.1.0
@@ -493,10 +493,6 @@ packages:
     resolution: {integrity: sha512-HGyxoOTYUyCM6stUe6EJgnd4EoewAI7zMdfqO+kGjnlZmBDz/cR5pf8r/cR4Wq60sL/p0IkcjUEEPwS3GFrIyw==}
     engines: {node: '>=8'}
     dev: true
-
-  /async/3.2.4:
-    resolution: {integrity: sha512-iAB+JbDEGXhyIUavoDl9WP/Jj106Kz9DEn1DPgYw5ruDn0e3Wgi3sKFm55sASdGBNOQB8F59d9qQ7deqrHA8wQ==}
-    dev: false
 
   /balanced-match/1.0.2:
     resolution: {integrity: sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==}
@@ -1390,10 +1386,6 @@ packages:
     engines: {node: '>= 8'}
     dev: true
 
-  /mic/2.1.2:
-    resolution: {integrity: sha512-rpl4tgdXX24sAzYwjRc5OZfGNAuhUIIjdd0cw8+Ubq7rp3iGhi40AdqcwurDWhEZADk60tPOxb3E2MpoeLeyxw==}
-    dev: false
-
   /micromatch/4.0.5:
     resolution: {integrity: sha512-DMy+ERcEW2q8Z2Po+WNXuw3c5YaUSFjAO5GsJqfEl7UjvtIuFKO6ZrKvcItdy98dwFI2N1tg3zNIdKaQT+aNdA==}
     engines: {node: '>=8.6'}
@@ -1665,12 +1657,12 @@ packages:
       picomatch: 2.3.1
     dev: true
 
-  /recaptcha-solver/0.2.4:
-    resolution: {integrity: sha512-/39PlMmQsFqz/L/TBt1thR6Kw2BNrowtiIT26Ij92+NN/3UzvyOZACQKKPxA1CmovLeR4uRKQy3o167DnNdpYA==}
+  /recaptcha-solver/0.2.5:
+    resolution: {integrity: sha512-bGEitMl3Vq6lK5B4o3PTYiaJtaW5mCkLf+tb82DIvIRlQGvtx4Q+A0XkyUu5W5Eno0edFjPotnfrkDKpyQtCvA==}
     requiresBuild: true
     dependencies:
       playwright-core: 1.24.2
-      vosk: 0.3.39
+      vosk-lib: 0.1.1
       wav: 1.0.2
       yauzl: 2.10.0
     transitivePeerDependencies:
@@ -1982,15 +1974,13 @@ packages:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
     dev: false
 
-  /vosk/0.3.39:
-    resolution: {integrity: sha512-/pWD6KLLxV/0Pu/ZfovNWadFC6q01hyvzY5DTEQY5r/6QlQMg60FaY1bjK0qcWN42roNOOnRrBxtAOqk7/OGkw==}
-    engines: {node: '>= 12.x.x'}
+  /vosk-lib/0.1.1:
+    resolution: {integrity: sha512-g+BzTOv/F9YJ2NmwNc0xbPq5EoS19Q54/+UyVIORbrExcmL2bKTOUqkJ1hthWLhgcuehTotZOK23T41/ppmvpg==}
+    requiresBuild: true
     dependencies:
-      async: 3.2.4
       ffi-napi: 4.0.3
-      mic: 2.1.2
       ref-napi: 3.0.3
-      wav: 1.0.2
+      yauzl: 2.10.0
     transitivePeerDependencies:
       - supports-color
     dev: false
