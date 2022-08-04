@@ -1,9 +1,4 @@
 services:
-    # pure:
-    #     build:
-    #         context: .
-    #         target: pure
-    #     image: jacoblincool/bahamut-automation:pure
     chromium:
         build:
             context: .
@@ -19,8 +14,24 @@ services:
             context: .
             target: webkit
         image: jacoblincool/bahamut-automation:webkit
+    chrome:
+        build:
+            context: .
+            target: chrome
+        image: jacoblincool/bahamut-automation:chrome
+    msedge:
+        build:
+            context: .
+            target: msedge
+        image: jacoblincool/bahamut-automation:msedge
     all:
         build:
             context: .
             target: all
         image: jacoblincool/bahamut-automation:all
+
+    chromium-light:
+        build:
+            context: .
+            target: chromium-light
+        image: jacoblincool/bahamut-automation:chromium-light

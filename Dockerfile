@@ -1,57 +1,42 @@
-FROM ubuntu:latest as base
+FROM jacoblincool/playwright:chromium as chromium
 
-SHELL [ "/bin/bash", "-ic" ]
-RUN bash -c 'rm /var/cache/ldconfig/aux-cache && /sbin/ldconfig.real && apt update && apt -y install curl libatomic1'
-RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
-RUN nvm install --lts && npm i -g pnpm
-
-FROM base as builder
-
-WORKDIR /app
-COPY . .
-RUN pnpm i && pnpm build && pnpm i -P
-
-FROM base as chromium-base
-RUN pnpm dlx playwright-core install --with-deps chromium
-
-FROM base as firefox-base
-RUN pnpm dlx playwright-core install --with-deps firefox
-
-FROM base as webkit-base
-RUN pnpm dlx playwright-core install --with-deps webkit
-
-FROM chromium-base as all-base
-RUN pnpm dlx playwright-core install --with-deps firefox
-RUN pnpm dlx playwright-core install --with-deps webkit
-
-FROM chromium-base as chromium
-
-WORKDIR /app
-COPY --from=builder /app .
-
+RUN pnpm i -g bahamut-automation
 COPY example/config.yml /config.yml
-CMD node dist/core/cli/index.js -c /config.yml
+CMD ba -c /config.yml -o browser.type=chromium -o browser.executablePath=$(echo /root/.cache/ms-playwright/chromium-*/chrome-linux/chrome)
 
-FROM firefox-base as firefox
+FROM jacoblincool/playwright:firefox as firefox
 
-WORKDIR /app
-COPY --from=builder /app .
-
+RUN pnpm i -g bahamut-automation
 COPY example/config.yml /config.yml
-CMD node dist/core/cli/index.js -c /config.yml
+CMD ba -c /config.yml -o browser.type=firefox -o browser.executablePath=$(echo /root/.cache/ms-playwright/firefox-*/firefox/firefox)
 
-FROM webkit-base as webkit
+FROM jacoblincool/playwright:webkit as webkit
 
-WORKDIR /app
-COPY --from=builder /app .
-
+RUN pnpm i -g bahamut-automation
 COPY example/config.yml /config.yml
-CMD node dist/core/cli/index.js -c /config.yml
+CMD ba -c /config.yml -o browser.type=webkit -o browser.executablePath=$(echo /root/.cache/ms-playwright/webkit-*/minibrowser-wpe/MiniBrowser)
 
-FROM all-base as all
+FROM jacoblincool/playwright:chrome as chrome
 
-WORKDIR /app
-COPY --from=builder /app .
-
+RUN pnpm i -g bahamut-automation
 COPY example/config.yml /config.yml
-CMD node dist/core/cli/index.js -c /config.yml
+CMD ba -c /config.yml -o browser.type=chromium -o browser.executablePath=/usr/bin/google-chrome -o browser.channel=chrome
+
+FROM jacoblincool/playwright:msedge as msedge
+
+RUN pnpm i -g bahamut-automation
+COPY example/config.yml /config.yml
+CMD ba -c /config.yml -o browser.type=chromium -o browser.executablePath=/usr/bin/microsoft-edge -o browser.channel=msedge
+
+FROM jacoblincool/playwright:all as all
+
+RUN pnpm i -g bahamut-automation
+COPY example/config.yml /config.yml
+CMD ba -c /config.yml
+
+# Not available for arm/v7
+FROM jacoblincool/playwright:chromium-light as chromium-light
+
+RUN pnpm i -g bahamut-automation
+COPY example/config.yml /config.yml
+CMD ba -c /config.yml -o browser.type=chromium -o browser.executablePath=/usr/bin/chromium

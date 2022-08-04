@@ -1,26 +1,37 @@
 services:
-    # pure:
-    #     build:
-    #         context: .
-    #         target: pure
-    #     image: jacoblincool/bahamut-automation:dev-pure
     chromium:
         build:
             context: .
             target: chromium
-        image: jacoblincool/bahamut-automation:dev-chromium
+        image: jacoblincool/bahamut-automation:chromium-dev
     firefox:
         build:
             context: .
             target: firefox
-        image: jacoblincool/bahamut-automation:dev-firefox
+        image: jacoblincool/bahamut-automation:firefox-dev
     webkit:
         build:
             context: .
             target: webkit
-        image: jacoblincool/bahamut-automation:dev-webkit
+        image: jacoblincool/bahamut-automation:webkit-dev
+    chrome:
+        build:
+            context: .
+            target: chrome
+        image: jacoblincool/bahamut-automation:chrome-dev
+    msedge:
+        build:
+            context: .
+            target: msedge
+        image: jacoblincool/bahamut-automation:msedge-dev
     all:
         build:
             context: .
             target: all
-        image: jacoblincool/bahamut-automation:dev-all
+        image: jacoblincool/bahamut-automation:all-dev
+
+    chromium-light:
+        build:
+            context: .
+            target: chromium-light
+        image: jacoblincool/bahamut-automation:chromium-light-dev
