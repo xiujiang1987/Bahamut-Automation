@@ -4,6 +4,5 @@
 **/.DS_Store
 .git/
 .github/
-node_modules/
 scrips/
 docs/
