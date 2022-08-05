@@ -21,7 +21,7 @@ dev-deploy:
     stage: dev-deploy
     except:
         - tags
-    image: docker:git
+    image: ghcr.io/jacoblincool/gitlab-ci-container:latest
     services:
         - docker:dind
     dependencies:
@@ -37,7 +37,7 @@ deploy:
     stage: deploy
     only:
         - tags
-    image: docker:git
+    image: ghcr.io/jacoblincool/gitlab-ci-container:latest
     services:
         - docker:dind
     dependencies:
