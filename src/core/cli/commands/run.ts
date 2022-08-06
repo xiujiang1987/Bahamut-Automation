@@ -1,5 +1,8 @@
 import fs from "node:fs";
+import os from "node:os";
+import path from "node:path";
 import { Command, OptionValues } from "commander";
+import fetch from "node-fetch";
 import {
     BahamutAutomation,
     BahamutAutomationConfig,
@@ -16,11 +19,36 @@ export async function run(opts: OptionValues, cmd: Command) {
     try {
         const config: BahamutAutomationConfig = { ...default_config };
 
-        if (!opts.config) {
+        if (!opts.config || opts.config.length === 0) {
             throw new Error("請輸入設定檔位置");
         }
 
-        for (const config_path of opts.config) {
+        for (let config_path of opts.config) {
+            try {
+                const url = new URL(config_path);
+
+                if (VERBOSE) {
+                    logger.log("Trying to load config from URL", url.href);
+                }
+
+                const file = await fetch(url.href).then((res) => res.text());
+
+                const temp = path.resolve(
+                    os.tmpdir(),
+                    `ba-config-${url.href.replace(/[^a-zA-Z0-9]/g, "-")}.yml`,
+                );
+                fs.writeFileSync(temp, file);
+                config_path = temp;
+
+                if (VERBOSE) {
+                    logger.log("Config downloaded", temp);
+                }
+            } catch (err) {
+                if (VERBOSE) {
+                    logger.info("Config is not constructable from URL", (err as Error).message);
+                }
+            }
+
             if (!fs.existsSync(config_path)) {
                 throw new Error(`設定檔 "${config_path}" 不存在`);
             }
@@ -30,6 +58,9 @@ export async function run(opts: OptionValues, cmd: Command) {
                 config.modules = layer.modules;
                 deep_merge(config.browser, layer.browser);
             } catch (err) {
+                if (VERBOSE) {
+                    logger.error(err);
+                }
                 throw new Error(`設定檔 ${config_path} 解析失敗`);
             }
         }
