@@ -36,6 +36,9 @@ build() {
         docker buildx bake --push --set "*.platform=linux/arm/v7,linux/arm64/v8,linux/amd64" --file $compose ${normal_images[@]}
         for tag in ${normal_images[@]}; do
             regctl image copy "jacoblincool/bahamut-automation:$tag" "jacoblincool/bahamut-automation:$tag-$version"
+            if [[ $tag == "all" ]]; then
+                regctl image copy "jacoblincool/bahamut-automation:$tag" "jacoblincool/bahamut-automation:latest"
+            fi
         done
     fi
 }
