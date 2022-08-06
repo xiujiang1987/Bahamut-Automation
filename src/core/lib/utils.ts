@@ -1,5 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
+import nfetch from "node-fetch";
+import { VERBOSE } from "./constants.js";
 
 export async function sleep(ms: number): Promise<void> {
     new Promise((resolve) => setTimeout(resolve, ms));
@@ -51,4 +53,18 @@ export function booleanify(raw: string | number | boolean): boolean {
         : typeof raw === "number"
         ? raw !== 0
         : ["true", "1", "on", "yes"].includes(raw.slice(0, 4).toLowerCase().trim());
+}
+
+export async function fetch(...args: Parameters<typeof nfetch>) {
+    if (VERBOSE) {
+        console.log("Fetching", args?.[1]?.method || "GET", args[0], args[1]?.body);
+        console.time(`${args?.[1]?.method || "GET"} ${args[0]}`);
+    }
+    const res = await nfetch(...args);
+    if (VERBOSE) {
+        const cloned = res.clone();
+        console.log(`Fetched ${args[0]}`, cloned.status, (await cloned.text()).slice(0, 120));
+        console.timeEnd(`${args?.[1]?.method || "GET"} ${args[0]}`);
+    }
+    return res;
 }

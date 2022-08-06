@@ -1,5 +1,4 @@
-import { Module, utils } from "bahamut-automation";
-import fetch from "node-fetch";
+import { Module, fetch, utils } from "bahamut-automation";
 import { authenticator } from "otplib";
 
 const { goto } = utils;

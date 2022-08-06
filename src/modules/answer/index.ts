@@ -1,6 +1,5 @@
-import { Module } from "bahamut-automation";
+import { Module, fetch as node_fetch } from "bahamut-automation";
 import countapi from "countapi-js";
-import node_fetch from "node-fetch";
 
 export default {
     name: "動畫瘋答題",

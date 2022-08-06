@@ -2,7 +2,6 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { Command, OptionValues } from "commander";
-import fetch from "node-fetch";
 import {
     BahamutAutomation,
     BahamutAutomationConfig,
@@ -11,6 +10,7 @@ import {
     VERBOSE,
     deep_merge,
     default_config,
+    fetch,
     parse_config,
 } from "../../lib/index.js";
 
