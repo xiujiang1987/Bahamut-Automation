@@ -25,7 +25,7 @@ export default {
             method: "POST",
             headers: { Authorization: `Bearer ${params.token}` },
             body: new URLSearchParams({ message: `${shared.report.title}\n${msg}` }),
-        }).then((res) => res.json());
+        });
 
         if (response.status === 200) {
             logger.success("已發送 Line Notify");

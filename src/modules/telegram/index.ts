@@ -27,7 +27,7 @@ export default {
         const { ok } = await fetch("https://automia.jacob.workers.dev/", {
             method: "POST",
             body: JSON.stringify({ id: params.channel, send: msg }),
-        }).then((r) => r.json());
+        });
 
         if (ok) {
             logger.success("已發送 Telegram 報告！");
