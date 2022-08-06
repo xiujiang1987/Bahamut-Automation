@@ -164,6 +164,20 @@ docker run --rm -v "$(pwd)/config.yml:/config.yml" jacoblincool/bahamut-automati
 #     你可以改成任何主機上指向設定檔的位置，但要掛在 `/config.yml` 上
 ```
 
+對應的 tag 有： `latest` = `all`, `chromium`, `firefox`, `webkit`, `chrome`, `msedge`
+
+**只包含單一瀏覽器的 image 會覆寫 `browser.type` 及 `browser.executablePath` 至該 image 相對應的設定**
+
+## 支援的架構
+
+| Browser  | ARMv7 (`armv7l`) | ARMv8 (`aarch64`) | AMD64 (`x86_64`) |
+| -------- | :--------------: | :---------------: | :--------------: |
+| Chromium |        ✅         |         ✅         |        ✅         |
+| Firefox  |        ✅         |         ✅         |        ✅         |
+| WebKit   |        ❌         |         ✅         |        ✅         |
+| Chrome   |        ❌         |         ❌         |        ✅         |
+| Edge     |        ❌         |         ❌         |        ✅         |
+
 <a id="use-other-platforms"></a>
 
 ### 其他雲端平台 （☁️）
