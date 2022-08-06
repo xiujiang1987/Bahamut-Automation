@@ -240,4 +240,5 @@ deploy-npm:
     before_script:
         - npm config set //registry.npmjs.org/:_authToken "$NPM_TOKEN"
     script:
+        - pnpm i && pnpm build
         - pnpm publish --verbose --access public --no-git-checks
