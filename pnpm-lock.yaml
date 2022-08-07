@@ -23,7 +23,7 @@ importers:
       otplib: ^12.0.1
       playwright-core: ^1.24.2
       prettier: ^2.7.1
-      recaptcha-solver: ^0.2.7
+      recaptcha-solver: ^0.2.8
       tsup: ^6.2.1
       turndown: ^7.1.1
       typedoc: ^0.23.10
@@ -44,7 +44,7 @@ importers:
       ora: 6.1.2
       otplib: 12.0.1
       playwright-core: 1.24.2
-      recaptcha-solver: 0.2.7
+      recaptcha-solver: 0.2.8
       turndown: 7.1.1
       yup: 0.32.11
       yup-i18n: 0.1.0
@@ -1677,8 +1677,8 @@ packages:
       picomatch: 2.3.1
     dev: true
 
-  /recaptcha-solver/0.2.7:
-    resolution: {integrity: sha512-ESnySB2tm514aMX/UU58lT6mfEpRx6RISnlK47aPBqeXuM1U25N0+ZtKdDqFtoAiboHc2TiWOwz4eawXNN+6og==}
+  /recaptcha-solver/0.2.8:
+    resolution: {integrity: sha512-5PHJKsWzpX9cdbSIzsmFMpPaDNpZVcWiUdgpPL1AZ/zFBG5CUrT/u0hYtMaF+QlGhO4T85ceyBcgho/hyYnchw==}
     hasBin: true
     requiresBuild: true
     dependencies:
