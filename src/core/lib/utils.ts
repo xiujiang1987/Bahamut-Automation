@@ -60,7 +60,7 @@ export async function fetch(...args: Parameters<typeof nfetch>) {
         console.log("Fetching", args?.[1]?.method || "GET", args[0], args[1]?.body);
         console.time(`${args?.[1]?.method || "GET"} ${args[0]}`);
     }
-    const res = await nfetch(...args);
+    const res = await nfetch(args[0], { highWaterMark: 1024 * 1024, ...args[1] });
     if (VERBOSE) {
         const cloned = res.clone();
         console.log(`Fetched ${args[0]}`, cloned.status, (await cloned.text()).slice(0, 120));
