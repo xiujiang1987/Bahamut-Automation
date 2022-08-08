@@ -1,7 +1,7 @@
 import { Logger, Module } from "bahamut-automation";
 import { authenticator } from "otplib";
 import { Page } from "playwright-core";
-import { solve } from "recaptcha-solver";
+import { MAIN_FRAME, solve } from "recaptcha-solver";
 
 export default {
     name: "Login",
@@ -34,7 +34,9 @@ export default {
                     await precheck;
 
                     await check_2fa(page, params.twofa, logger);
-                    await solve(page);
+                    if (await page.isVisible(MAIN_FRAME)) {
+                        await solve(page).catch((err) => logger.info((err as Error).message));
+                    }
                     await page.click("#form-login #btn-login");
                     await page.waitForNavigation({ timeout: 3000 });
                 } else {
