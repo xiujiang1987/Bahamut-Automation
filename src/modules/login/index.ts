@@ -1,7 +1,9 @@
-import { Logger, Module } from "bahamut-automation";
+import { Logger, Module, utils } from "bahamut-automation";
 import { authenticator } from "otplib";
 import { Page } from "playwright-core";
 import { MAIN_FRAME, solve } from "recaptcha-solver";
+
+const { wait_for_cloudflare } = utils;
 
 export default {
     name: "Login",
@@ -9,6 +11,7 @@ export default {
     run: async ({ page, params, shared, logger }) => {
         let success = false;
         await page.goto("https://www.gamer.com.tw/");
+        await wait_for_cloudflare(page);
 
         const max_attempts = +params.max_attempts || +shared.max_attempts || 3;
         for (let i = 0; i < max_attempts; i++) {
