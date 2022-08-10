@@ -1,5 +1,5 @@
 import { Page } from "playwright-core";
-import { VERBOSE } from "../constants";
+import { VERBOSE } from "../constants.js";
 
 export async function wait_for_cloudflare(page: Page) {
     const spiiner = await page.$("#cf-spinner-please-wait");
