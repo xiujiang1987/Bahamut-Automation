@@ -67,13 +67,33 @@ export default {
 
                         logger.log(`[${idx + 1} / ${draws.length}] (${attempts}) ${name}`);
 
-                        await Promise.all([
-                            task_page
-                                .waitForResponse(/ajax\/check_ad.php/, { timeout: 5000 })
-                                .catch(() => {}),
-                            task_page.click("text=看廣告免費兌換").catch(() => {}),
-                        ]);
-
+                        const MAX_CHANGING_TEST = 5;
+                        for (let chargingTest = 1; chargingTest <= MAX_CHANGING_TEST; chargingTest++) {
+                            await Promise.all([
+                                task_page
+                                    .waitForResponse(/ajax\/check_ad.php/, { timeout: 5000 })
+                                    .catch(() => {}),
+                                task_page.click("text=看廣告免費兌換").catch(() => {}),
+                                task_page
+                                    .waitForSelector(".fuli-ad__qrcode", {
+                                        timeout: 5000,
+                                    })
+                                    .catch(() => {}),
+                            ]);
+                            const chargingText =
+                                (await task_page
+                                    .$eval(
+                                        ".dialogify .dialogify__body p",
+                                        (elm: HTMLElement) => elm.innerText,
+                                    )
+                                    .catch(() => {})) || "";
+                            if (chargingText.includes("廣告能量補充中")) {
+                                logger.info(`廣告能量補充中，重試 (${chargingTest}/${MAX_CHANGING_TEST})`);
+                                await task_page.click("button:has-text('關閉')");
+                                continue;
+                            }
+                            break;
+                        }
                         if (
                             await task_page
                                 .$eval(".dialogify", (elm) =>
