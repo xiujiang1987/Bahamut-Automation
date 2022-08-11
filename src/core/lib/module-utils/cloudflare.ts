@@ -13,10 +13,7 @@ export async function wait_for_cloudflare(page: Page, tried = 0) {
     }
 
     if (blocked) {
-        await page.waitForNavigation({ timeout: 10_000 }).catch(() => {
-            throw new Error("Cloudflare blocked (auto navigation timeout)");
-        });
-
+        await page.waitForTimeout(10_000);
         await wait_for_cloudflare(page, tried + 1);
     }
 }
