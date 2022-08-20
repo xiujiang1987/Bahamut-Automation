@@ -24,12 +24,13 @@ export default {
             unfinished[name] = link;
         });
 
-        const parrallel = +params.max_parallel || 1;
-        const max_attempts = +params.max_attempts || +shared.max_attempts || 20;
+        const PARRALLEL = +params.max_parallel || 1;
+        const MAX_ATTEMPTS = +params.max_attempts || +shared.max_attempts || 20;
+        const CHANGING_RETRY = +params.changing_retry || +shared.changing_retry || 3;
 
         const context = page.context();
 
-        const pool = new Pool(parrallel);
+        const pool = new Pool(PARRALLEL);
 
         for (let i = 0; i < draws.length; i++) {
             pool.push(async () => {
@@ -53,7 +54,7 @@ export default {
                     }
                 });
 
-                for (let attempts = 1; attempts <= max_attempts; attempts++) {
+                for (let attempts = 1; attempts <= MAX_ATTEMPTS; attempts++) {
                     try {
                         await task_page.goto(link);
                         await task_page.waitForSelector("#BH-master > .BH-lbox.fuli-pbox h1");
@@ -67,8 +68,7 @@ export default {
 
                         logger.log(`[${idx + 1} / ${draws.length}] (${attempts}) ${name}`);
 
-                        const MAX_CHANGING_TEST = 5;
-                        for (let chargingTest = 1; chargingTest <= MAX_CHANGING_TEST; chargingTest++) {
+                        for (let retried = 1; retried <= CHANGING_RETRY; retried++) {
                             await Promise.all([
                                 task_page
                                     .waitForResponse(/ajax\/check_ad.php/, { timeout: 5000 })
@@ -88,7 +88,7 @@ export default {
                                     )
                                     .catch(() => {})) || "";
                             if (chargingText.includes("廣告能量補充中")) {
-                                logger.info(`廣告能量補充中，重試 (${chargingTest}/${MAX_CHANGING_TEST})`);
+                                logger.info(`廣告能量補充中，重試 (${retried}/${CHANGING_RETRY})`);
                                 await task_page.click("button:has-text('關閉')");
                                 continue;
                             }
