@@ -146,7 +146,7 @@
 
 ***已編譯的執行檔有可能會被防毒軟體擋掉。***
 
-***已編譯的執行檔是使用 gitlab Action 從 main branch 的原始碼編譯的，相關編譯方法可以在 main branch 中查看。但搞不好 gitlab Action 出了什麼問題，沒有人知道。***
+***已編譯的執行檔是使用 Gitlab CI 從 main branch 的原始碼編譯的，相關編譯方法可以在 main branch 中查看。但搞不好 Gitlab CI 出了什麼問題，沒有人知道。***
 
 ***總而言之，如果你下載並使用這些程式，代表你同意自行承擔所有責任，包括但不限於使用程式導致的任何損失。***
 
@@ -184,7 +184,7 @@ docker run --rm -v "$(pwd)/config.yml:/config.yml" jacoblincool/bahamut-automati
 
 嘗試過可以免費成功定時執行 Docker Image 的雲端平台：
 
-- gitlab Actions
+- Gitlab CI
 - Oracle Cloud Always Free (Ampere 1 CPU / 6G RAM)
 
 有想法嗎？發個 PR 吧！
