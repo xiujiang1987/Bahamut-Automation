@@ -1,5 +1,4 @@
 import { Module, utils } from "bahamut-automation";
-import countapi from "countapi-js";
 import { Page } from "playwright-core";
 
 const { goto } = utils;
@@ -94,10 +93,6 @@ export default {
         }
 
         const final = await sign_status(page);
-
-        if (!initial_signin && final.signin) {
-            countapi.update("Bahamut-Automation", "sign", 1);
-        }
 
         const result = {
             signed: !!final.signin,

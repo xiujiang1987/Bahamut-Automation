@@ -1,5 +1,3 @@
-import countapi from "countapi-js";
-
 export async function stats() {
     const keys: Record<string, string[]> = {
         run: ["自動化執行次數", "次"],
@@ -9,8 +7,5 @@ export async function stats() {
     };
 
     console.log("匿名數據統計資料");
-    for (const key in keys) {
-        const result = await countapi.get("Bahamut-Automation", key);
-        console.log(`  ${keys[key][0]}: ${result.value} ${keys[key][1]}`);
-    }
+    console.log("目前統計數據不可用 QQ");
 }

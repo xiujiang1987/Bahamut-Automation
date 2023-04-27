@@ -2,7 +2,6 @@ import EventEmitter from "node:events";
 import fs from "node:fs";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
-import countapi from "countapi-js";
 import { Browser, BrowserContext } from "playwright-core";
 import { VERBOSE } from "./constants.js";
 import { launch } from "./launcher.js";
@@ -34,7 +33,6 @@ export class BahamutAutomation extends EventEmitter {
         const self = this;
         this.on("start", () => {
             self.emit("log", `開始執行巴哈姆特自動化 ${VERSION}`);
-            countapi.update("Bahamut-Automation", "run", 1);
         });
 
         this.on("module_start", (module_name: string, module_path: string) => {

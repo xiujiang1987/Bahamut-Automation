@@ -1,5 +1,4 @@
 import { Logger, Module } from "bahamut-automation";
-import countapi from "countapi-js";
 import { ElementHandle, Frame, Page } from "playwright-core";
 import { NotFoundError, solve } from "recaptcha-solver";
 import { Pool } from "@jacoblincool/puddle";
@@ -205,10 +204,6 @@ export default {
 
         await page.waitForTimeout(2000);
         logger.log(`執行完畢 ✨`);
-
-        if (lottery) {
-            countapi.update("Bahamut-Automation", "lottery", lottery);
-        }
 
         if (shared.report) {
             shared.report.reports["福利社抽獎"] = report({ lottery, unfinished });

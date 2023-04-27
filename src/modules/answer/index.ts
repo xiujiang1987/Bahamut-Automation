@@ -1,5 +1,4 @@
 import { Module, fetch as node_fetch } from "bahamut-automation";
-import countapi from "countapi-js";
 
 export default {
     name: "動畫瘋答題",
@@ -107,10 +106,6 @@ export default {
             }
         }
         logger.log(`執行完畢 ✨`);
-
-        if (reward) {
-            countapi.update("Bahamut-Automation", "answer", reward);
-        }
 
         const result = { answered: question.error === 1 || !!reward, reward };
 
