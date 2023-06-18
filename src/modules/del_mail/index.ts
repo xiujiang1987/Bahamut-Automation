@@ -32,11 +32,11 @@ export default {
 
         logger.log("正在搜集站內信... ");
         let mails = filtered_mails(await get_mails(page), del_mail_match).map((mail) => mail.id);
-        while ((await page.$$(".nextPage")).length > 0 && mails.length < 10000) {
+        while ((await page.$$(".next")).length > 0 && mails.length < 10000) {
             logger.log(`已搜集 ${mails.length} 封符合條件的站內信`);
             await Promise.all([
                 page.waitForResponse("https://mailbox.gamer.com.tw/ajax/inboxList.php"),
-                page.click(".nextPage"),
+                page.click(".next"),
             ]);
             mails = [
                 ...mails,
