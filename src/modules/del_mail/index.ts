@@ -64,7 +64,7 @@ name: "清除站內信",
         }
       }
 
-      logger.log(`第 ${repeat + 1} 執行完成`);
+      logger.log(`第 ${repeat + 1} 次執行完成`);
     }
   }
 };
