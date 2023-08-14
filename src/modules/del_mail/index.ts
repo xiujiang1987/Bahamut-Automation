@@ -17,55 +17,57 @@ interface Mail {
 }
 
 export default {
-    name: "清除站內信",
-    description: "依給定 pattern 清除站內信",
-    async run({ page, shared, params, logger }) {
-        if (!shared.flags.logged) throw new Error("使用者未登入");
+name: "清除站內信",
+  description: "依給定 pattern 清除站內信",
+  async run({ page, shared, params, logger }) {
+    if (!shared.flags.logged)
+      throw new Error("使用者未登入");
 
-        const del_mail_match = params.match as MatchRule[];
-        if (del_mail_match.length < 1) return { success: false };
+    const repeatCount = getrepeatcount(params) || 1; 
 
-        await Promise.all([
-            page.waitForResponse("https://mailbox.gamer.com.tw/ajax/inboxList.php"),
-            page.goto("https://mailbox.gamer.com.tw/?l=1"),
-        ]);
+    for (let repeat = 0; repeat < repeatCount; repeat++) {
+      logger.log(`開始執行第 ${repeat + 1} 次執行`);
 
-        logger.log("正在搜集站內信... ");
-        let mails = filtered_mails(await get_mails(page), del_mail_match).map((mail) => mail.id);
-        while ((await page.$$(".next")).length > 0 && mails.length < 10000) {
-            logger.log(`已搜集 ${mails.length} 封符合條件的站內信`);
-            await Promise.all([
-                page.waitForResponse("https://mailbox.gamer.com.tw/ajax/inboxList.php"),
-                page.click(".next"),
-            ]);
-            mails = [
-                ...mails,
-                ...filtered_mails(await get_mails(page), del_mail_match).map((mail) => mail.id),
-            ];
-        }
+      const del_mail_match = params.match;
+      if (del_mail_match.length < 1)
+        return { success: false };
+      await Promise.all([
+        page.waitForResponse("https://mailbox.gamer.com.tw/ajax/inboxList.php"),
+        page.goto("https://mailbox.gamer.com.tw/?l=1")
+      ]);
+      logger.log("正在搜集站內信...");
+      let mails = filtered_mails(await get_mails(page), del_mail_match).map((mail) => mail.id);
+      while ((await page.$$(".next")).length > 0 && mails.length < 1e4) {
         logger.log(`已搜集 ${mails.length} 封符合條件的站內信`);
-
-        const csrf = await (await page.$("#delFrm input[name='csrfToken']")).getAttribute("value");
-
-        for (let i = 0; i < mails.length; i += 100) {
-            logger.log(`正在刪除第 ${i + 1} 到 ${Math.min(i + 100, mails.length)} 封站內信...`);
-            const res = await delete_mails(page, mails.slice(i, i + 100), csrf);
-
-            if (res.code === 0) {
-                logger.log(`已成功刪除第 ${i + 1} 到 ${Math.min(i + 100, mails.length)} 封站內信`);
-            } else {
-                logger.error(
-                    `刪除第 ${i + 1} 到 ${Math.min(i + 100, mails.length)} 封站內信失敗 (${
+        await Promise.all([
+          page.waitForResponse("https://mailbox.gamer.com.tw/ajax/inboxList.php"),
+          page.click(".next")
+        ]);
+        mails = [
+          ...mails,
+          ...filtered_mails(await get_mails(page), del_mail_match).map((mail) => mail.id)
+        ];
+      }
+      logger.log(`已搜集 ${mails.length} 封符合條件的站內信`);
+      const csrf = await (await page.$("#delFrm input[name='csrfToken']")).getAttribute("value");
+      for (let i = 0; i < mails.length; i += 100) {
+        logger.log(`正在刪除第 ${i + 1} 到 ${Math.min(i + 100, mails.length)} 封站內信...`);
+        const res = await delete_mails(page, mails.slice(i, i + 100), csrf);
+        if (res.code === 0) {
+          logger.log(`已成功刪除第 ${i + 1} 到 ${Math.min(i + 100, mails.length)} 封站內信`);
+        } else {
+          logger.error(
+            `刪除第 ${i + 1} 到 ${Math.min(i + 100, mails.length)} 封站內信失敗 (${
                         res.code
-                    })`,
-                );
-            }
+                    })`
+          );
         }
+      }
 
-        return { success: true, deleted: mails.length };
-    },
-} as Module;
-
+      logger.log(`第 ${repeat + 1} 執行完成`);
+    }
+  }
+};
 async function get_mails(page: Page): Promise<Mail[]> {
     const Mails: Mail[] = [];
     const mails = (await page.$$(".readR, .readU")) as ElementHandle<HTMLElement>[];
