@@ -1,0 +1,115 @@
+#@title #config.yml 產生器
+
+#@markdown #感謝[crocodile](https://github.com/crocodilehs)提供程式碼
+
+#@markdown ##登入資訊
+#@markdown 1. 輸入你的巴哈帳號及密碼。
+#@markdown 2. 如果有開啟兩步驟驗證，記得輸入兩步驟驗證種子碼（不是那六位數字，應該是一串大寫英文）。
+username = "khamrai" #@param {type: 'string'}
+password = "5p8j35xcsb@A" #@param {type: 'string'}
+twofa = "P5MSYJQZADBVAYG4" #@param {type: 'string'}
+#@markdown ---
+#@markdown ##抽獎嘗試次數
+lottery = 20 #@param {type: 'number'}
+#@markdown ---
+#@markdown ##寄報告的部分
+#@markdown >如果要啟用 **Telegram Report** 請依照以下步驟：
+#@markdown 1. 點擊「 [機器人](https://t.me/automia_bot) 」按鈕
+#@markdown 2. 開啟 Telegram 應用程式並與機器人「 **Automia** 」開始對話
+#@markdown 3. 傳送「**ID**」給機器人「 **Automia** 」
+#@markdown 4. 複製像「 **1010101010** 」的通道 ID 到對應的產生器欄位
+telegram = "5518801669" #@param {type: 'string'}
+#@markdown >如果要啟用 **Discord Report** 請依照以下步驟：
+#@markdown 1. 建立一個自己的 **Discord** 伺服器，在你想要發送的文字頻道按 齒輪 設定
+#@markdown 2. 點擊 **整合 -> Webhook -> 新 Webhook**
+#@markdown 3. 點擊 複製 **Webhook 網址** 並貼到到對應的產生器欄位
+discord = "https://discord.com/api/webhooks/1156640851070554192/L8yshySXZXHrPILOaE1b_d6RziOsZHczvrYtHSsE2xjbM4EpyQ23T6XZhV_tmxZ6Ln6g" #@param {type: 'string'}
+#@markdown >如果要啟用 **Line Notify Report** 請依照以下步驟：
+#@markdown 1. 進入 [Line Notify](https://notify-bot.line.me/zh_TW/)
+#@markdown 2. 點擊右上方登入 Line 帳號
+#@markdown 3. 點擊右上方 **自己的 ID -> 個人頁面 -> 發行權杖**
+#@markdown 4. 填入名稱(會顯示在訊息上)，並選擇要接收訊息的聊天室或群組，建議選擇 **透過1對1聊天接收LINE Notify的通知**，若選擇群組的話，需將 Line Notify 官方帳號加入群組後才收的到訊息
+#@markdown 5. 按下發行
+#@markdown 6. 點擊 **複製**，並將權杖代碼貼到對應的產生器欄位
+line = "bB4Idqjluu9XFk7zLui71mqg3Dhn2GMrJXCgJ7asID4" #@param {type: 'string'}
+# 寫入檔案
+with open("config.yml", "w") as f:
+    f.write("# 所有模組皆可存取的共用參數\n")
+    f.write("shared:\n")
+    f.write("  shared_key: shared_val\n")
+    f.write("\n")
+    f.write("# 使用的模組及其參數，可以是內建的模組或是自製模組的路徑\n")
+    f.write("# 內建模組列表：https://gitlab.com/JacobLinCool/bahamut-automation/-/blob/main/src/modules/README.md\n")
+    f.write("modules:\n")
+    f.write("  # 註冊一些通用函式到 shared\n")
+    f.write("  utils:\n")
+    f.write("  report:\n")
+    f.write("  ad_handler:\n")
+    f.write("\n")
+    f.write("# 主要功能模組\n")
+    f.write("  login:\n")
+    f.write("    username: \"{}\"\n".format(username))
+    f.write("    password: \"{}\"\n".format(password))
+    f.write("    twofa: \"{}\"\n".format(twofa))
+    f.write("  sign:\n")
+    f.write("  guild:\n")
+    f.write("  answer:\n")
+    f.write("  lottery:\n")
+    f.write("    max_attempts: {}\n".format(lottery))
+    f.write("    max_parallel: 5\n")
+    f.write("  del_mail:\n")
+    f.write("    match:\n")
+    f.write("      - title: \"【勇者福利社】成功獲得抽獎資格通知信\"\n")
+    f.write("  logout:\n")
+    f.write("\n")
+    f.write("# 以下是寄報告的部分\n")
+    f.write("  telegram:\n")
+    f.write("    channel: \"{}\"\n".format(telegram))
+    f.write("  discord:\n")
+    f.write("    webhook: \"{}\"\n".format(discord))
+    f.write("  line_notify:\n")
+    f.write("    token: \"{}\"\n".format(line))
+    f.write("\n")
+    f.write("# 自製模組（範例）\n")
+    f.write("# /path/to/module:\n")
+    f.write("#   param1: value1\n")
+    f.write("#   param2: value2\n")
+    f.write("\n")
+    f.write("# 瀏覽器的設定\n")
+    f.write("browser:\n")
+    f.write("  type: firefox\n")
+    f.write("  headless: true\n")
+    f.write("  firefoxUserPrefs:\n")
+    f.write("    dom.webaudio.enabled: false\n")
+    f.write("    media.volume_scale: 0\n")
+    f.write("    media.default_volume: 0\n")
+    f.write("# executablePath: /path/to/browser\n")
+
+from google.colab import output, files
+import threading
+!apt install nodejs
+!npm install -g n
+!n latest
+
+
+def job():
+  !npm install -g bahamut-automation
+
+
+t = threading.Thread(target=job)
+t.start()
+!npm install playwright
+alltype = ['firefox', 'webkit', 'chrome', 'chromium']
+for i in alltype:
+  !npx playwright install {i} --with-deps
+t.join()
+!rm /usr/local/lib/node_modules/bahamut-automation/dist/modules/ad_handler/index.js
+!rm /usr/local/lib/node_modules/bahamut-automation/dist/modules/del_mail/index.js
+!rm /usr/local/lib/node_modules/bahamut-automation/dist/modules/login/index.js
+!rm /usr/local/lib/node_modules/bahamut-automation/dist/modules/lottery/index.js
+!wget https://raw.githubusercontent.com/chikenscrach/myba/main/ad_handler/index.js -P /usr/local/lib/node_modules/bahamut-automation/dist/modules/ad_handler
+!wget https://raw.githubusercontent.com/chikenscrach/myba/main/del_mail/index.js -P /usr/local/lib/node_modules/bahamut-automation/dist/modules/del_mail
+!wget https://raw.githubusercontent.com/chikenscrach/myba/main/login/index.js -P /usr/local/lib/node_modules/bahamut-automation/dist/modules/login
+!wget https://raw.githubusercontent.com/chikenscrach/myba/main/lottery/index.js -P /usr/local/lib/node_modules/bahamut-automation/dist/modules/lottery
+output.clear()
+!ba -c config.yml
