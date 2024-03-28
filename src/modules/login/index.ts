@@ -70,7 +70,7 @@ async function check_2fa(page: Page, twofa: string | undefined, logger: Logger) 
         }
         const code = authenticator.generate(twofa);
         await page.fill("#form-login #input-2sa", code);
-        await page.evaluate(() => document.forms[0].submit());
+        "await page.evaluate(() => document.forms[0].submit());"
     } else {
         logger.log("沒有啟用 2FA");
     }
